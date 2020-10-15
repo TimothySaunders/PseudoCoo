@@ -1,3 +1,31 @@
+# MVP:
+- [ ] display a Sudoku grid
+- [ ] be able to add/edit numbers in the grid
+- [ ] have the app solve the Sudoku upon button press.
+- [ ] feedback if current game is solvable
+- [ ] have the app take an image and recognise the sudoku, populating the grid
+
+## Possible extensions: 
+- [ ] add to the grid(play the game)
+- [ ] save games, load games
+- [ ] validate grid state (is is still solvable?)
+- [ ] hint ( random, or for selected cell, what cell is, or isnt or range)
+- [ ] have notes within grid, when specific syntax used?
+- [ ] draw numbers - grid recognises as a number
+- [ ] resize grid/fonts together
+- [ ] get library of sudokus / generate library / export library 
+- [ ] generate sudokus:
+- - various difficulties
+- [ ] voice recognition ()
+- - solve on voice command
+- - populate fields with voice
+- - hint on voice request
+- - text to voice!
+- [ ] progressive WEB app
+- [ ] sound feedback on victory - maybe on wrong move?
+
+![wireframes](images/wireframes.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
