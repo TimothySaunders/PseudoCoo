@@ -15,36 +15,36 @@ public class ProcessImage {
 
     public static void main(String[] args) {
 
-        // Read an image.
+        // Read an image. (grayscale)
         Mat sudoku = imread("/Users/Jonny/codeclan/week_14_react_&&_project/project/PseudoCoo/backEnd/images/sudoku.jpg", 0);
+        // show it
         display(sudoku, "original");
+
+        // create a blank image to put the processed image in
         Mat outerBox = new Mat(sudoku.size(), CV_8UC1);
-//        display(sudoku, "my sudoku pic");
 
-
-        Mat blurred = new Mat();
+        // run a gaussian blur to filter out noise
         GaussianBlur(sudoku, sudoku, new Size(11, 11), 0);
-//        display(blurred, "blurry");
-//        final Mat bw = new Mat();
-//        cvtColor(blurred, bw, Imgproc.COLOR_RGB2GRAY);
-//        cvtColor(outerBox, outerBox, Imgproc.COLOR_RGB2GRAY);
 
+        // run adaptive threshold to improve contrast
         adaptiveThreshold(sudoku, outerBox, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 3, 2);
+
+        // invert colours
         bitwise_not(outerBox, outerBox);
 
-        int kernelSize = 3;
-//        Mat kernel = new Mat(kernelSize, kernelSize, );
-        int kernel_size = 3;
+        // embiggens edges
         Mat kernel = Mat.ones(3, 3, CV_32F).asMat();
         dilate(outerBox, outerBox, kernel);
-//        display(outerBox, "edited");
+
+        // warp perspective
         outerBox = warpPerspectivePuzzle(outerBox);
 
-//        Vec4iVector lines = new Vec4iVector();
-//        HoughLinesP(outerBox, lines, 1, CV_PI/180, 200, 200, 200);
-
+        // invert back to black on white
         bitwise_not(outerBox, outerBox);
+
+        // display the processed image
         display(outerBox, "extracted");
+        
 
 
 
