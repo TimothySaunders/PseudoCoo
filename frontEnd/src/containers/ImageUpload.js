@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './ImageUpload.css';
+import uploadImage from "../helpers/requests.js";
 
 export default class ImageUpload extends Component{
     constructor(props){
@@ -27,6 +28,8 @@ export default class ImageUpload extends Component{
             document.getElementById("preview").src = fileReader.result;
         }
         fileReader.readAsDataURL(this.state.imageFile);
+        // console.log(this.state.imageFile);
+        uploadImage(this.state.imageFile);
     }
 
     createUpload = () => {
