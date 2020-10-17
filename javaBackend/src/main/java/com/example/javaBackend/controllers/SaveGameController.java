@@ -1,7 +1,7 @@
-package com.codeclan.example.backend.controllers;
+package com.example.javaBackend.controllers;
 
-import com.codeclan.example.backend.models.SaveGame;
-import com.codeclan.example.backend.repositories.SaveGameRepository;
+import com.example.javaBackend.models.SaveGame;
+import com.example.javaBackend.repositories.SaveGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

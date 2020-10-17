@@ -1,4 +1,4 @@
-package com.codeclan.example.backend.models;
+package com.example.javaBackend.models;
 
 import javax.persistence.*;
 

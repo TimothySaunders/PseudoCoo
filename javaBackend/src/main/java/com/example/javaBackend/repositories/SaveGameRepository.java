@@ -1,6 +1,6 @@
-package com.codeclan.example.backend.repositories;
+package com.example.javaBackend.repositories;
 
-import com.codeclan.example.backend.models.SaveGame;
+import com.example.javaBackend.models.SaveGame;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SaveGameRepository extends JpaRepository<SaveGame, Long> {

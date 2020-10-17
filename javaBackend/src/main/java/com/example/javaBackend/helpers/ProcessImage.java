@@ -1,4 +1,4 @@
-package com.codeclan.example.backend.helpers;
+package com.example.javaBackend.helpers;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
