@@ -8,6 +8,7 @@ const MenuView = (props) => {
             props.chooseMenu(event.target.value)
         }
 
+        
         switch (props.viewOption) {
             case "mainMenu":
                 return (
@@ -28,7 +29,7 @@ const MenuView = (props) => {
 
                     <Fragment>
                         <p> I am Difficulty Menu view -- case</p>
-                        <Difficulty chooseMenu={props.chooseMenu} />
+                        <Difficulty chooseMenu={props.chooseMenu} creategameStringFromDifficulty={props.creategameStringFromDifficulty} />
                     </Fragment>
                 )
                 break
