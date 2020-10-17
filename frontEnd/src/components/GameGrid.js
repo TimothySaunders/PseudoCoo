@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-import Parser from "../helpers/StringParser";
 import GridCell from "./GridCell";
-
 import "./GameGrid.css";
 
 
+import Parser from "../helpers/StringParser";
 const sp = new Parser();
 
 
@@ -15,22 +14,30 @@ export default class GameGrid extends Component {
         this.state = {
             gameState: []
         }
+        this.handleNumberInput = this.handleNumberInput.bind(this);
     }
 
 
     componentDidMount() {
-        if (this.props.gameString.length === 81) {
-            const gameState = sp.getObjects(this.props.gameString);
-            this.setState({ gameState: gameState });
+        let gameState;
+        if (this.props.gameState.length === 81) {
+            gameState = sp.getObjects(this.props.gameState);
         } else {
-            this.setState({ gameState: this.props.gameString });
+            gameState = sp.getObjectsFromSavedString(this.props.gameState);
         }
+        this.setState({ gameState: gameState });
+    }
+
+    handleNumberInput(index, newCell) {
+        let updated = this.state.gameState;
+        updated[index] = newCell;
+        this.setState({gameState: updated});
     }
 
     render() {
         const gridCells = this.state.gameState.map((cell, i) => {
             return (
-                <GridCell key={i} index={i} cell={cell} />
+                <GridCell key={i} index={i} cell={cell} onNumberImput={this.handleNumberInput} />
             )
         });
         return (
