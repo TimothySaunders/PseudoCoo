@@ -1,18 +1,17 @@
 # MVP:
-- [ ] display a Sudoku grid
+- [x] display a Sudoku grid
 - [ ] be able to add/edit numbers in the grid
-- [ ] have the app solve the Sudoku upon button press.
-- [ ] feedback if current game is solvable
-- [ ] have the app take an image and recognise the sudoku, populating the grid
+- [x] have the app solve the Sudoku upon button press.
+- [x] feedback if current game is solvable
+- [x] have the app take an image and recognise the sudoku, populating the grid
 
 ## Possible extensions: 
 - [ ] add to the grid(play the game)
 - [ ] save games, load games
-- [ ] validate grid state (is is still solvable?)
+- [x] validate grid state (is is still solvable?)
 - [ ] hint ( random, or for selected cell, what cell is, or isnt or range)
-- [ ] have notes within grid, when specific syntax used?
-- [ ] draw numbers - grid recognises as a number
-- [ ] resize grid/fonts together
+- [x] have notes within grid, when specific syntax used?
+- [x] draw numbers - grid recognises as a number
 - [ ] get library of sudokus / generate library / export library 
 - [ ] generate sudokus:
 - - various difficulties
@@ -33,6 +32,11 @@
 
 3. Components/containers outline
 ![planing connections](frontEnd/images/planning3.png)
+
+
+#### Tech used: 
+
+1. tesseract.js 
 
 using sudoku.js 
 
