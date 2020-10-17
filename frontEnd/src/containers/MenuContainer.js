@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react'
+import {getSaves} from '../helpers/Requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -14,10 +15,17 @@ export default class MenuContainer extends Component{
        
 
     };
+
+    componentDidMount(){
+        getSaves()
+        // const saveGames = 
+    }
+
     chooseMenu = (choice) => {
         const chosen = choice; 
         this.setState({viewOption:chosen})
     }
+
     creategameStringFromDifficulty = (choice) => {
         const chosenDifficulty = choice; 
         this.setState({gameString:chosenDifficulty})
