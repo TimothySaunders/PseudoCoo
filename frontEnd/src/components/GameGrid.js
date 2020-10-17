@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 
@@ -12,26 +12,31 @@ export default class GameGrid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameState: []
+            gameState: [],
+            writeNotes: false
         }
         this.handleNumberInput = this.handleNumberInput.bind(this);
+        this.toggleNotes = this.toggleNotes.bind(this);
     }
 
 
     componentDidMount() {
         let gameState;
-        if (this.props.gameState.length === 81) {
-            gameState = sp.getObjects(this.props.gameState);
+        if (this.props.gameString.length === 81) {
+            gameState = sp.getObjects(this.props.gameString);
         } else {
-            gameState = sp.getObjectsFromSavedString(this.props.gameState);
+            gameState = sp.getObjectsFromSavedString(this.props.gameString);
         }
         this.setState({ gameState: gameState });
     }
 
+    toggleNotes() {
+        this.setState({ writeNotes: !this.state.writeNotes });
+    }
     handleNumberInput(index, newCell) {
         let updated = this.state.gameState;
         updated[index] = newCell;
-        this.setState({gameState: updated});
+        this.setState({ gameState: updated });
     }
 
     render() {
@@ -41,8 +46,11 @@ export default class GameGrid extends Component {
             )
         });
         return (
-            <div id="game-grid">
-                {gridCells}
+            <div id="game-container">
+                <div id="game-grid">
+                    {gridCells}
+                </div>
+                <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
             </div>
         )
     }
