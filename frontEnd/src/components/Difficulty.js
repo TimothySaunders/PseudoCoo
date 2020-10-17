@@ -1,15 +1,11 @@
 import React, {Fragment} from 'react'
 
-const Difficulty = (props) => {
-
-    const difficultyLevel = ""; 
+const Difficulty = (props) => {  
 
     function setDifficulty(event){
-        difficultyLevel = event.target.value;
-        if (difficultyLevel !=""){
-            // this will need to send the difficulty to the game 
-            // props.chooseMenu();
-        }
+        
+        props.creategameStringFromDifficulty(event.target.value);
+        
     }
 
     function makeChoice(event) {
