@@ -59,6 +59,11 @@ export default class GameGrid extends Component {
         let updated = this.state.gameState;
         updated[index] = newCell;
         this.setState({ gameState: updated });
+        const raw = sp.getRawStringFromObjects(this.state.gameState);
+        const solution = sudoku.sudoku.solve(raw);
+        if (raw === solution) {
+            console.log("WOOHOO");
+        }
     }
 
     render() {

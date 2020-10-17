@@ -24,4 +24,4 @@ yarn-error.log*
 
 eng.traineddata
 .vscode
-.db
+*.db
