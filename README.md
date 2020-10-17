@@ -24,7 +24,7 @@
 - [ ] progressive WEB app
 - [ ] sound feedback on victory - maybe on wrong move?
 
-![wireframes](images/wireframes.png)
+![wireframes](frontEnd/images/wireframes.png)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
