@@ -18,3 +18,16 @@
 .editable {
     cursor: pointer;
 }
+
+.left {
+    border-left: 2px solid black;
+}
+.right {
+    border-right: 2px solid black;
+}
+.top {
+    border-top: 2px solid black;
+}
+.bottom {
+    border-bottom: 2px solid black;
+}

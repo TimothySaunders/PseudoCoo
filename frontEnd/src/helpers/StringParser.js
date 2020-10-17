@@ -10,7 +10,7 @@
 */
 
 
-const parser = function () {
+export default class Parser  {
 
 }
 
@@ -20,7 +20,7 @@ const parser = function () {
  * @param {str} inputString
  * @returns ["0|e|#", "1|n|#", "7|n|#", "4|n|#", "8|n|#", "0|e|#".....]
  */
-parser.prototype.formatRawStringToCells = function (inputString) {
+Parser.prototype.formatRawStringToCells = function (inputString) {
     // make sure you've got a correct length string
     if (inputString.length === 81) {
         // make sure you've got only numbers present
@@ -56,7 +56,7 @@ parser.prototype.formatRawStringToCells = function (inputString) {
  * @param {array} inputArray 
  * @output "0|e|#1|n|#7|n|#4|n|#8|n|#0|e|#...."
  */
-parser.prototype.formatCellsToString = function(inputArray) {
+Parser.prototype.formatCellsToString = function(inputArray) {
     let outputString = inputArray.join("");
     return outputString;
 }
@@ -67,7 +67,7 @@ parser.prototype.formatCellsToString = function(inputArray) {
  * @param {string} parsedInputString 
  * @output [{value: 0, editable: true, notes: []}, {value:1, editable: false, notes: []},....]
  */
-parser.prototype.getObjectsFromSavedString = function (parsedInputString) {
+Parser.prototype.getObjectsFromSavedString = function (parsedInputString) {
     const split = parsedInputString.split("#");
     const cellObjects = [];
     split.pop(); //removes the last element - it was blank. length now 81
@@ -89,7 +89,7 @@ parser.prototype.getObjectsFromSavedString = function (parsedInputString) {
  * @param {array[{}]} inputObjectArray 
  * @return "0|e|15#1|n|#7|n|#4|n|#8|n|#0|e|279#...."
  */
-parser.prototype.convertObjectsToSaveString = function (inputObjectArray) {
+Parser.prototype.convertObjectsToSaveString = function (inputObjectArray) {
     let saveString = "";
     inputObjectArray.forEach(cell => {
         let value = cell.value;
@@ -106,7 +106,7 @@ parser.prototype.convertObjectsToSaveString = function (inputObjectArray) {
  * @param {array[{}]} inputObjectArray 
  * @output "017480....."
  */
-parser.prototype.getRawStringFromObjects = function (inputObjectArray) {
+Parser.prototype.getRawStringFromObjects = function (inputObjectArray) {
     let outputString = "";
     inputObjectArray.forEach(cell => {
         outputString += cell.value;
@@ -120,7 +120,7 @@ parser.prototype.getRawStringFromObjects = function (inputObjectArray) {
  * @param {string} inputCellsString 
  * @output "017480....."
  */
-parser.prototype.getRawStringFromCells = function (inputCellsString) {
+Parser.prototype.getRawStringFromCells = function (inputCellsString) {
     const split = inputCellsString.split("#");
     split.pop(); //removes the last element - it was blank. length now 81
     let outputString = "";
@@ -131,8 +131,8 @@ parser.prototype.getRawStringFromCells = function (inputCellsString) {
 
 }
 
-parser.prototype.getObjects = function (rawInput) {
+Parser.prototype.getObjects = function (rawInput) {
     return this.getObjectsFromSavedString(this.formatCellsToString(this.formatRawStringToCells(rawInput)));
 }
 
-export default parser;
+// export default Parser;
