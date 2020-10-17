@@ -59,7 +59,7 @@ export default class GameGrid extends Component {
 
     handleNumberInput(index, newCell) {
         let updated = this.state.gameState;
-        let a = psc.validateEntry(this.props.gameString);
+        let a = psc.validateEntry(index,this.state.gameState);
         console.log(a);
         // console.log("gamestate: "+ this.state.gameState)
 
