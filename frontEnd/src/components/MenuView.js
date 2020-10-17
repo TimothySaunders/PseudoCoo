@@ -29,9 +29,6 @@ const MenuView = (props) => {
                     <Fragment>
                         <p> I am Difficulty Menu view -- case</p>
                         <Difficulty chooseMenu={props.chooseMenu} />
-                        <br />
-
-
                     </Fragment>
                 )
                 break
