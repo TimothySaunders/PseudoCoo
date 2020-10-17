@@ -1,4 +1,11 @@
-#upload-container {
-    width: 250;
-    height: 250;
+.image {
+    width: 200px;
+    height: 200px;
+    border: 3px lightblue solid;
+    border-radius: 5px;
+    padding: 0;
+}
+
+.on-droppable {
+    border: 6px maroon solid;
 }
