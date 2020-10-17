@@ -22,7 +22,6 @@ export default class GridCell extends Component {
     }
 
     showNotes() {
-        // if (this.props.cell.value && true && !this.props.cell.value.match(/[1-9]/)) {
         if (this.display.textContent === "0" || this.display.textContent === "") {
             for (let value of this.props.cell.notes) {
                 document.querySelector("#notes_" + this.props.index + "_" + value).textContent = value;
@@ -77,7 +76,7 @@ export default class GridCell extends Component {
             editable: this.props.cell.editable,
             notes: this.props.cell.notes
         };
-        this.props.onNumberImput(this.props.index, newCell);
+        this.props.onNumberInput(this.props.index, newCell);
 
 
         this.showNotes();
@@ -88,7 +87,6 @@ export default class GridCell extends Component {
     }
 
     render() {
-        console.log(this.props.cell.value)
         let className = this.getClassName();
         return (
             <div className={className}>

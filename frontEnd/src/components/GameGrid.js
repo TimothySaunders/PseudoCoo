@@ -35,25 +35,24 @@ export default class GameGrid extends Component {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
     solve = () => {
-
         const solution = sudoku.sudoku.solve(this.props.gameString);
-        console.log(solution);
         let prevState = this.state.gameState;
-
         let gameState = sp.getObjects(solution);
-
         prevState = prevState.map((cell, index) => {
-            cell.value = gameState[index].value
+            cell.value = gameState[index].value;
             return cell;
-        })
-
-        let result = sp.getObjectsFromSavedString(sp.convertObjectsToSaveString(prevState))
-
-        console.log(" --- - - -" + prevState[0].value);
-
-        this.setState({ gameState: result });
-
-
+        });
+        this.setState({ gameState: prevState });
+    }
+    clear = () => {
+        let cells = this.state.gameState;
+        cells = cells.map(cell => {
+            if (cell.editable) {
+                cell.value = "0";
+            }
+            return cell;
+        });
+        this.setState({ gameState: cells });
     }
 
     handleNumberInput(index, newCell) {
@@ -65,7 +64,7 @@ export default class GameGrid extends Component {
     render() {
         const gridCells = this.state.gameState.map((cell, i) => {
             return (
-                <GridCell key={i} index={i} cell={cell} onNumberImput={this.handleNumberInput} />
+                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} />
             )
         });
         return (
@@ -75,6 +74,7 @@ export default class GameGrid extends Component {
                 </div>
                 <button onClick={this.solve} > Solve</button>
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
+                <button onClick={this.clear} >Clear</button>
             </div>
         )
     }
