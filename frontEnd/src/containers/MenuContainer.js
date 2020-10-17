@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import MenuView from '../components/MenuView'
+import ImageUpload from './ImageUpload'
 
 
 export default class MenuContainer extends Component{
@@ -44,7 +45,7 @@ export default class MenuContainer extends Component{
                 <button onClick={this.importImage}> Extract from Image </button><br/>
                 <button onClick={this.viewSavedGames}> Continue game </button> */}
                 <MenuView chooseMenu={this.chooseMenu} viewOption={this.state.viewOption}   > </MenuView>
-
+                <ImageUpload />
             </Fragment>
         )
     }
