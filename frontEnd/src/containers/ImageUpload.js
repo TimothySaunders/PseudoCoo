@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './ImageUpload.css';
 
 export default class ImageUpload extends Component{
     constructor(props){
@@ -41,11 +42,36 @@ export default class ImageUpload extends Component{
         document.getElementById("preview").src = "uploadDefault.png";
     }
 
+    handleDragEnter = (event) => {
+        event.preventDefault()
+    }
+
+    handleDragLeave = (event) => {
+        event.preventDefault()
+    }
+
+    handleDragOver = (event) => {
+        event.preventDefault()
+    }
+
+    handleOnDrop = async (event) => {
+        event.preventDefault()
+        if (event.dataTransfer.files[0].type.includes("image")) {
+            await this.setState({imageFile : event.dataTransfer.files[0]});
+        this.createPreview()
+        } else {
+            this.handleClear();
+        }
+    }
 
     render(){
+
         return(
             <div>
-                <img id="preview" src="uploadDefault.png" alt="uploadImage" width="200" height="200" onClick={this.handleImageClick}/>
+                <p>//grid component will go here</p>
+                <p>//validate button will appear here once upload complete and image parsed</p>
+                <img id="preview" src="uploadDefault.png" alt="uploadImage" width="200" height="200" draggable="false"
+                onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
             </div>
             
         )

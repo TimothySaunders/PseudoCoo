@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import MenuView from '../components/MenuView'
-import ImageUpload from './ImageUpload'
 
 
 export default class MenuContainer extends Component{
