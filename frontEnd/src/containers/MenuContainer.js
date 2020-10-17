@@ -47,23 +47,8 @@ export default class MenuContainer extends Component{
             )
         }
 
-<<<<<<< HEAD
-    render(){
-        return(
-            <Fragment>
-                I am the menus container.
-                {/* <br/>
-                <button onClick={this.newGame} value="newGame"> Play </button><br/>
-                <button onClick={this.importImage}> Extract from Image </button><br/>
-                <button onClick={this.viewSavedGames}> Continue game </button> */}
-                <MenuView chooseMenu={this.chooseMenu} viewOption={this.state.viewOption}   > </MenuView>
-                <ImageUpload />
-            </Fragment>
-        )
-=======
 
         
->>>>>>> develop
     }
 
 

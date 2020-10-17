@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
 import React, { Fragment } from 'react'
+import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
 
 const MenuView = (props) => {
@@ -38,7 +39,7 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <p> I am ImportImage view (case)</p>
+                        <ImageUpload />
                         <br />
                         <button onClick={makeChoice} value="DifficultyMenu"> PLAY   </button><br />
                         <button onClick={makeChoice} value="ImportImage"> get PseudoCoo from Image   </button><br />
