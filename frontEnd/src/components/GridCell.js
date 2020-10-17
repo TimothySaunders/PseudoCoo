@@ -88,11 +88,12 @@ export default class GridCell extends Component {
     }
 
     render() {
+        console.log(this.props.cell.value)
         let className = this.getClassName();
         return (
             <div className={className}>
                 <div ref={(div) => this.display = div} className="display">
-                    {this.props.cell.editable ? null : this.props.cell.value}
+                {this.props.cell.value.match(/[1-9]/) ? this.props.cell.value : null}
                 </div>
                 <input
                     min="1"
