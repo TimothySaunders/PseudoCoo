@@ -12,21 +12,13 @@ export default class GridCell extends Component {
         }
     }
 
+
+
     render() {
-        if (this.state.editable) {
-            return (
-                <div class="grid-cell">
-
-                </div>
-            )
-
-        } else {
-            return (
-                <div class="grid-cell">
-
-                </div>
-            )
-
-        }
+        return (
+            <div className={(this.props.cell.editable) ? "grid-cell editable" : "grid-cell locked"}>
+                {(!this.props.cell.editable) ? this.props.cell.value : null}
+            </div>
+        )
     }
 }

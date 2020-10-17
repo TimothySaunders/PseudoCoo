@@ -1,3 +1,20 @@
 .grid-cell {
-    backrgound-color: blue;
+    user-select: none;
+    background-color: hotpink;
+    border: 1px solid black;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2em;
+
+}
+
+.locked {
+    font-weight: bold;
+}
+
+.editable {
+    cursor: pointer;
 }
