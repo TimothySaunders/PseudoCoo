@@ -132,6 +132,7 @@ Parser.prototype.getRawStringFromCells = function (inputCellsString) {
 }
 
 Parser.prototype.getObjects = function (rawInput) {
+    console.log(this.formatCellsToString(this.formatRawStringToCells(rawInput)))
     return this.getObjectsFromSavedString(this.formatCellsToString(this.formatRawStringToCells(rawInput)));
 }
 

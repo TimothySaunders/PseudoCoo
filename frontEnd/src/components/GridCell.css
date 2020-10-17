@@ -10,6 +10,7 @@
 }
 
 .editable {
+    color: darkgreen;
     cursor: pointer;
 }
 
@@ -74,4 +75,10 @@ input:disabled {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 0px;
+}
+.notes-cell {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
 }
