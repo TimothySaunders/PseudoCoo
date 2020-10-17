@@ -24,7 +24,16 @@
 - [ ] progressive WEB app
 - [ ] sound feedback on victory - maybe on wrong move?
 
+#### sketches:
+1. Wireframes for the app UI
 ![wireframes](frontEnd/images/wireframes.png)
+
+2. UI relation map
+![plannig relations](frontEnd/images/planning2.png)
+
+3. Components/containers outline
+![planing connections](frontEnd/images/planning3.png)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
