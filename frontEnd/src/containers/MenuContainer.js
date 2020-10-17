@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import MenuView from '../components/MenuView'
+import GameGrid from '../components/GameGrid'
 
 
 export default class MenuContainer extends Component{
@@ -10,21 +11,19 @@ export default class MenuContainer extends Component{
             viewOption: "mainMenu",
             savedGames: []
         }
-        this.chooseMenu=this.chooseMenu.bind(this);
-        this.creategameStringFromDifficulty=this.creategameStringFromDifficulty.bind(this);
-        this.reset=this.reset.bind(this);
+       
 
     };
-    chooseMenu(choice){
+    chooseMenu = (choice) => {
         const chosen = choice; 
         this.setState({viewOption:chosen})
     }
-    creategameStringFromDifficulty(choice) {
+    creategameStringFromDifficulty = (choice) => {
         const chosenDifficulty = choice; 
         this.setState({gameString:chosenDifficulty})
     }
 
-    reset(){
+    reset = () => {
         const val = "";
         this.setState({gameString:val});
     }
@@ -40,7 +39,7 @@ export default class MenuContainer extends Component{
         } else {
             return (
                 <Fragment>
-                    <div> you have chosen difficulty {this.state.gameString}</div>
+                    <GameGrid gameString={this.state.gameString}></GameGrid>
                     <button onClick={this.reset}> Return to menu</button>
                 </Fragment>
             )
