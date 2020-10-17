@@ -11,9 +11,9 @@ export default class MenuContainer extends Component{
             savedGames: []
         }
 
-        this.newGame=this.newGame.bind(this);
-        this.importImage=this.importImage.bind(this);
-        this.viewSavedGames=this.viewSavedGames.bind(this);
+        // this.newGame=this.newGame.bind(this);
+        // this.importImage=this.importImage.bind(this);
+        // this.viewSavedGames=this.viewSavedGames.bind(this);
         this.chooseMenu=this.chooseMenu.bind(this);
 
     };
@@ -28,7 +28,8 @@ export default class MenuContainer extends Component{
         this.setState({viewOption:"savedGames"})
     }
     chooseMenu(choice){
-        this.setState({viewOption:choice})
+        const chosen = choice; 
+        this.setState({viewOption:chosen})
 
     }
 
@@ -42,7 +43,7 @@ export default class MenuContainer extends Component{
                 <button onClick={this.newGame} value="newGame"> Play </button><br/>
                 <button onClick={this.importImage}> Extract from Image </button><br/>
                 <button onClick={this.viewSavedGames}> Continue game </button> */}
-                <MenuView chooseMenu={this.chooseMenu}> </MenuView>
+                <MenuView chooseMenu={this.chooseMenu} viewOption={this.state.viewOption}   > </MenuView>
 
             </Fragment>
         )
