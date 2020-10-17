@@ -20,10 +20,10 @@ export default class GameGrid extends Component {
 
     componentDidMount() {
         let gameState;
-        if (this.props.gameState.length === 81) {
-            gameState = sp.getObjects(this.props.gameState);
+        if (this.props.gameString.length === 81) {
+            gameState = sp.getObjects(this.props.gameString);
         } else {
-            gameState = sp.getObjectsFromSavedString(this.props.gameState);
+            gameState = sp.getObjectsFromSavedString(this.props.gameString);
         }
         this.setState({ gameState: gameState });
     }
