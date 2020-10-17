@@ -51,9 +51,9 @@ export default class GridCell extends Component {
 
     render() {
         let className = this.getClassName();
-        if (this.props.showNotes = true) {
+        // if (this.props.showNotes = true) {
 
-        }
+        // }
         return (
             <div className={className}>
                 <div ref={(div) => this.display = div} className="display">

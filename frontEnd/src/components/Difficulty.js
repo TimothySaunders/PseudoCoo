@@ -1,15 +1,14 @@
 import React, {Fragment} from 'react'
 import sudoku from '../helpers/sudoku'
-import StringParser from '../helpers/StringParser'
 
 const Difficulty = (props) => {  
 
     function setDifficulty(event){
         
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
-
+        console.log(generatedString);
         props.creategameStringFromDifficulty(generatedString);
-        
+
     }
 
     function makeChoice(event) {

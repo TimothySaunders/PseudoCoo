@@ -13,7 +13,7 @@ export default class GameGrid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameState: ""
+            gameState: []
         }
     }
 
