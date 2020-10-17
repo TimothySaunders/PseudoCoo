@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
-import sudoku from '../helpers/sudoku'
+import sudoku from '../helpers/sudoku';
+import PsChecker from '../helpers/PsChecker';
 
 
 import Parser from "../helpers/StringParser";
 const sp = new Parser();
+const psc = new PsChecker();
 
 
 export default class GameGrid extends Component {
@@ -57,6 +59,10 @@ export default class GameGrid extends Component {
 
     handleNumberInput(index, newCell) {
         let updated = this.state.gameState;
+        let a = psc.validateEntry(this.props.gameString);
+        console.log(a);
+        // console.log("gamestate: "+ this.state.gameState)
+
         updated[index] = newCell;
         this.setState({ gameState: updated });
     }
