@@ -9,13 +9,18 @@
     ^value      ^divider     ^editable    ^divider     ^notes(1, 6)   ^end of cell
 */
 
+
+export default function stringParse() {
+
+}
+
 /**
  * takes an 81 char input string and converts to cell array
  * @input "017480....."
  * @param {str} inputString
  * @returns ["0|e|#", "1|n|#", "7|n|#", "4|n|#", "8|n|#", "0|e|#".....]
  */
-const formatRawStringToCells = function (inputString) {
+stringParse.prototype.formatRawStringToCells(inputString) {
     // make sure you've got a correct length string
     if (inputString.length === 81) {
         // make sure you've got only numbers present
@@ -51,7 +56,7 @@ const formatRawStringToCells = function (inputString) {
  * @param {array} inputArray 
  * @output "0|e|#1|n|#7|n|#4|n|#8|n|#0|e|#...."
  */
-const formatCellsToString = function (inputArray) {
+stringParse.prototype.formatCellsToString(inputArray) {
     let outputString = inputArray.join("");
     return outputString;
 }
