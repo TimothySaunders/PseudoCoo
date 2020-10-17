@@ -10,43 +10,44 @@ export default class MenuContainer extends Component{
             viewOption: "mainMenu",
             savedGames: []
         }
-
-        // this.newGame=this.newGame.bind(this);
-        // this.importImage=this.importImage.bind(this);
-        // this.viewSavedGames=this.viewSavedGames.bind(this);
         this.chooseMenu=this.chooseMenu.bind(this);
+        this.creategameStringFromDifficulty=this.creategameStringFromDifficulty.bind(this);
+        this.reset=this.reset.bind(this);
 
     };
-    
-    newGame(){
-        this.setState({viewOption:"new"})
-    }
-    importImage(){
-        this.setState({viewOption:"importImage"})
-    }
-    viewSavedGames(){
-        this.setState({viewOption:"savedGames"})
-    }
     chooseMenu(choice){
         const chosen = choice; 
         this.setState({viewOption:chosen})
-
+    }
+    creategameStringFromDifficulty(choice) {
+        const chosenDifficulty = choice; 
+        this.setState({gameString:chosenDifficulty})
     }
 
-
+    reset(){
+        const val = "";
+        this.setState({gameString:val});
+    }
 
     render(){
-        return(
-            <Fragment>
-                I am the menus container.
-                {/* <br/>
-                <button onClick={this.newGame} value="newGame"> Play </button><br/>
-                <button onClick={this.importImage}> Extract from Image </button><br/>
-                <button onClick={this.viewSavedGames}> Continue game </button> */}
-                <MenuView chooseMenu={this.chooseMenu} viewOption={this.state.viewOption}   > </MenuView>
 
-            </Fragment>
-        )
+        if(this.state.gameString===""){
+            return(
+                <Fragment>
+                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}  viewOption={this.state.viewOption}   > </MenuView>
+                </Fragment>
+            )
+        } else {
+            return (
+                <Fragment>
+                    <div> you have chosen difficulty {this.state.gameString}</div>
+                    <button onClick={this.reset}> Return to menu</button>
+                </Fragment>
+            )
+        }
+
+
+        
     }
 
 
