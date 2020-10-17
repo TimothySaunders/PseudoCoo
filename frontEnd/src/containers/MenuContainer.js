@@ -10,21 +10,19 @@ export default class MenuContainer extends Component{
             viewOption: "mainMenu",
             savedGames: []
         }
-        this.chooseMenu=this.chooseMenu.bind(this);
-        this.creategameStringFromDifficulty=this.creategameStringFromDifficulty.bind(this);
-        this.reset=this.reset.bind(this);
+       
 
     };
-    chooseMenu(choice){
+    chooseMenu = (choice) => {
         const chosen = choice; 
         this.setState({viewOption:chosen})
     }
-    creategameStringFromDifficulty(choice) {
+    creategameStringFromDifficulty = (choice) => {
         const chosenDifficulty = choice; 
         this.setState({gameString:chosenDifficulty})
     }
 
-    reset(){
+    reset = () => {
         const val = "";
         this.setState({gameString:val});
     }
