@@ -7,22 +7,29 @@ const basicString = "00302060090030500100180640000810290070000000800670820000260
  * @param {str} inputString
  */
 const formatStringToCells = function (inputString) {
+    const regex = /([A-Za-z])+/;
+    // make sure you've got a correct length string
     if (inputString.length === 81) {
-        let chunks = inputString.split("");
-        let output = [];
-        for (let chunk of chunks) {
-            let outputString = "";
-            // if it's a 0 or . it's user (e)ditable
-            if (chunk === "0" || chunk === ".") {
-                outputString += chunk + "|e|#";
-            } else {
-                // it's part of the original grid, make it (n)ot editable
-                outputString += chunk + "|n|#";
+        // make sure you've got only numbers present
+        if (!inputString.match(regex)) {
+            let chunks = inputString.split("");
+            let output = [];
+            for (let chunk of chunks) {
+                let outputString = "";
+                // if it's a 0 or . it's user (e)ditable
+                if (chunk === "0" || chunk === ".") {
+                    outputString += chunk + "|e|#";
+                } else {
+                    // it's part of the original grid, make it (n)ot editable
+                    outputString += chunk + "|n|#";
+                }
+                output.push(outputString);
             }
-            output.push(outputString);
+            return output;
+        } else {
+            console.log("Input has got letters in it! it should only be numbers!");
+            return false;
         }
-
-        return output;
     } else {
         console.log(`Input is not the right length! It's ${inputString.length} not 81`);
         return false;
@@ -35,9 +42,8 @@ const formatCellsToString = function (inputArray) {
 
 }
 
-let parsed = formatStringToCells(basicString);
 
-formatCellsToString(parsed);
-let foo = parsed.join("");
+// formatCellsToString(parsed);
+// let foo = parsed.join("");
 // console.log(foo);
 
