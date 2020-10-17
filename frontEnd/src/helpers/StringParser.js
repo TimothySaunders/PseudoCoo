@@ -1,11 +1,19 @@
+// helpers to convert strings
 
-// example string:
-const basicString = "003020600900305001001806400008102900700000008006708200002609500800203009005010300";
-const formatString = "0|e|512#0|e|12#3|n|#0|e|#2|n|#0|e|#6|n|#0|e|#0|e|#9|n|#0|e|#0|e|#3|n|#0|e|#5|n|#0|e|#0|e|#1|n|#0|e|#0|e|#1|n|#8|n|#0|e|#6|n|#4|n|#0|e|#0|e|#0|e|#0|e|#8|n|#1|n|#0|e|#2|n|#9|n|#0|e|#0|e|#7|n|#0|e|#0|e|#0|e|#0|e|#0|e|#0|e|#0|e|#8|n|#0|e|#0|e|#6|n|#7|n|#0|e|#8|n|#2|n|#0|e|#0|e|#0|e|#0|e|#2|n|#6|n|#0|e|#9|n|#5|n|#0|e|#0|e|#8|n|#0|e|#0|e|#2|n|#0|e|#3|n|#0|e|#0|e|#9|n|#0|e|#0|e|#5|n|#0|e|#1|n|#0|e|#3|n|#0|e|#0|e|#";
+/*
+    - A game can be represented by a string of 81 numbers. Blank spaces can be represented by a '0', '.' or ' ' (space).
+    - Parsing the string will create a string of cells.
+    - Cells are separated by '#'
+    - Interally, cells are separated by '|'
+    0            |            e            |            16            #
+    ^value      ^divider     ^editable    ^divider     ^notes(1, 6)   ^end of cell
+*/
 
 /**
  * takes an 81 char input string and converts to cell array
+ * @input "017480....."
  * @param {str} inputString
+ * @returns ["0|e|#", "1|n|#", "7|n|#", "4|n|#", "8|n|#", "0|e|#".....]
  */
 const formatRawStringToCells = function (inputString) {
     // make sure you've got a correct length string
@@ -18,7 +26,7 @@ const formatRawStringToCells = function (inputString) {
             for (let chunk of chunks) {
                 let outputString = "";
                 // if it's a 0 or . it's user (e)ditable
-                if (chunk === "0" || chunk === ".") {
+                if (chunk === "0" || chunk === "." || chunk === " ") {
                     outputString += chunk + "|e|#";
                 } else {
                     // it's part of the original grid, make it (n)ot editable
@@ -39,7 +47,9 @@ const formatRawStringToCells = function (inputString) {
 
 /**
  * takes the output from formatRawStringToCells and converts to a string
+ * @input ["0|e|#", "1|n|#", "7|n|#", "4|n|#", "8|n|#", "0|e|#".....]
  * @param {array} inputArray 
+ * @output "0|e|#1|n|#7|n|#4|n|#8|n|#0|e|#...."
  */
 const formatCellsToString = function (inputArray) {
     let outputString = inputArray.join("");
@@ -48,7 +58,9 @@ const formatCellsToString = function (inputArray) {
 
 /**
  * takes a formatted input string from formatCellsToString and returns an array of cell objects
+ * @input "0|e|#1|n|#7|n|#4|n|#8|n|#0|e|#...."
  * @param {string} parsedInputString 
+ * @output [{value: 0, editable: true, notes: []}, {value:1, editable: false, notes: []},....]
  */
 const getObjectsFromSavedString = function (parsedInputString) {
     const split = parsedInputString.split("#");
@@ -68,7 +80,9 @@ const getObjectsFromSavedString = function (parsedInputString) {
 
 /**
  * takes the object array from getObjectsFromSavedString and returns a formatted string
+ * @input [{value: 0, editable: true, notes: [1, 5]}, {value:1, editable: false, notes: []},....]
  * @param {array[{}]} inputObjectArray 
+ * @return "0|e|15#1|n|#7|n|#4|n|#8|n|#0|e|279#...."
  */
 const convertObjectsToSaveString = function (inputObjectArray) {
     let saveString = "";
@@ -83,7 +97,9 @@ const convertObjectsToSaveString = function (inputObjectArray) {
 
 /**
  * output an 81 char string from an array of cell objects
+ * @input [{value: 0, editable: true, notes: [1, 5]}, {value:1, editable: false, notes: []},....]
  * @param {array[{}]} inputObjectArray 
+ * @output "017480....."
  */
 const getRawStringFromObjects = function (inputObjectArray) {
     let outputString = "";
@@ -95,7 +111,9 @@ const getRawStringFromObjects = function (inputObjectArray) {
 
 /**
  * output an 81 char string from a formatted cells string
+ * @input "0|e|15#1|n|#7|n|#4|n|#8|n|#0|e|279#...."
  * @param {string} inputCellsString 
+ * @output "017480....."
  */
 const getRawStringFromCells = function (inputCellsString) {
     const split = inputCellsString.split("#");
@@ -107,18 +125,4 @@ const getRawStringFromCells = function (inputCellsString) {
     console.log(outputString);
 
 }
-
-
-
-// let parsed = formatRawStringToCells(basicString);
-// parsed = formatCellsToString(parsed);
-// getRawStringFromCells(parsed);
-
-
-// let foo = formatCellsToString(parsed);
-// // let foo = parsed.join("");
-// // console.log(foo);
-// let bar = getObjectsFromSavedString(formatString);
-// console.log(foo);
-// console.log(convertObjectsToSaveString(bar));
 
