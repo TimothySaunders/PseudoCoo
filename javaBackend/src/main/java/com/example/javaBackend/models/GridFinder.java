@@ -45,7 +45,7 @@ public class GridFinder {
         return image;
     }
 
-    public Mat convert() throws IOException {
+    public byte[] convert() throws IOException {
         byte[] stream = image.getBytes();
         System.out.println("1" + "  " + ts());
         Mat pic = imdecode(new Mat(stream), 0);
@@ -67,7 +67,10 @@ public class GridFinder {
         erodeImage(outerBox);
         System.out.println("10" + "  " + ts());
         System.out.println(alt.isContinuous());
-        return alt;
+//        return alt;
+        byte[] bytes = new byte[alt.cols() * alt.rows() * alt.channels()];
+        imencode(".jpg", alt, bytes);
+        return bytes;
     }
 
     public Mat resizeImage(Mat imported) {
