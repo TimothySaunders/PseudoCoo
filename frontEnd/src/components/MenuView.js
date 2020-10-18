@@ -2,13 +2,15 @@ import { render } from '@testing-library/react'
 import React, { Fragment } from 'react'
 import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
+import LoadGame from './LoadGame'
+
+/* eslint-disable */
 
 const MenuView = (props) => {
 
         function makeChoice(event) {
             props.chooseMenu(event.target.value)
         }
-
         
         switch (props.viewOption) {
             case "mainMenu":
@@ -53,7 +55,7 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <p> I am SavedGames view (case)</p>
+                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame}/>
                         <br />
                         <button onClick={makeChoice} value="DifficultyMenu"> PLAY   </button><br />
                         <button onClick={makeChoice} value="ImportImage"> get PseudoCoo from Image   </button><br />

@@ -13,12 +13,18 @@ export default class MenuContainer extends Component{
             savedGames: []
         }
        
-
     };
 
     async componentDidMount(){
         const saveGames =  await getSaves();
         this.setState({savedGames: saveGames})
+    }
+
+    loadGame = (event) => {
+        const targetId = event.target.id;
+        const gameIndex = targetId.substring(targetId.length-1);
+        const gameString = this.state.savedGames[gameIndex].gridValues;
+        this.setState({gameString: gameString});
     }
 
     chooseMenu = (choice) => {
@@ -42,7 +48,7 @@ export default class MenuContainer extends Component{
             return(
                 <Fragment>
                     <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
-                      viewOption={this.state.viewOption} saveGames={this.saveGames}  > </MenuView>
+                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} > </MenuView>
                 </Fragment>
             )
         } else {
