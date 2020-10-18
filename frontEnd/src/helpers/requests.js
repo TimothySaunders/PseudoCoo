@@ -8,8 +8,8 @@
         .then(res => console.log(res));
     }
 
-    export function getSaves(){
-        return fetch("api/saves")
+    export function get(url){
+        return fetch(url)
         .then(res => res.json())
     }
 
