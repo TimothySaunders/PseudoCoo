@@ -8,7 +8,11 @@ export default class MenuContainer extends Component{
     constructor(props){
         super(props);
         this.state={
-            gameString:"",
+            game: {
+                id: null,
+                gridValues: "",
+                timeStamp: ""
+            },
             viewOption: "mainMenu",
             savedGames: []
         }
@@ -20,11 +24,13 @@ export default class MenuContainer extends Component{
         this.setState({savedGames: saveGames})
     }
 
+    // saveGame
+
     loadGame = (event) => {
         const targetId = event.target.id;
         const gameIndex = targetId.substring(targetId.length-1);
-        const gameString = this.state.savedGames[gameIndex].gridValues;
-        this.setState({gameString: gameString});
+        const game = this.state.savedGames[gameIndex];
+        this.setState({game: game});
     }
 
     chooseMenu = (choice) => {
@@ -38,13 +44,12 @@ export default class MenuContainer extends Component{
     }
 
     reset = () => {
-        const val = "";
-        this.setState({gameString:val});
+        this.setState({game: {}});
     }
 
     render(){
 
-        if(this.state.gameString===""){
+        if(this.state.game.gridValues === ""){
             return(
                 <Fragment>
                     <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
@@ -54,7 +59,7 @@ export default class MenuContainer extends Component{
         } else {
             return (
                 <Fragment>
-                    <GameGrid gameString={this.state.gameString}></GameGrid>
+                    <GameGrid game={this.state.game} gameString={this.state.game.gridValues}></GameGrid>
                     <button onClick={this.reset}> Return to menu</button>
                 </Fragment>
             )
