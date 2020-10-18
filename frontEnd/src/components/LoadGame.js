@@ -3,8 +3,9 @@ import React from 'react';
 export default function LoadGame(props){
 
     const getIdFromEvent = (event) => {
-        const targetId = event.target.id;
-        return targetId.substring(targetId.length-1);
+        const stringIndexofID = event.target.id.indexOf("-")+1;
+        const targetId = event.target.id.slice(stringIndexofID);
+        return targetId;
     }
 
     const handleLoadGame = (event) => {
@@ -14,14 +15,15 @@ export default function LoadGame(props){
 
     const handleDeleteGame = (event) => {
         const gameIndex = getIdFromEvent(event)
+
         props.removeGame(gameIndex);
     }
 
     const saveNodes = props.savedGames.map((game, index) => {
         return (
-            <div>
-                <button id={"save-"+index} key={"sav"+index} onClick={handleLoadGame}>{game.timeStamp}</button>
-                <button id={"del-"+index} key={"del"+index} onClick={handleDeleteGame}>Delete</button>
+            <div key={index}>
+                <button id={"save-"+game.id} onClick={handleLoadGame}>{game.timeStamp}</button>
+                <button id={"del-"+game.id} onClick={handleDeleteGame}>Delete</button>
                 <br/>
             </div>
                 

@@ -35,7 +35,6 @@ export function patch(url, data){
 
 export function remove(url){
     return fetch(url, { 
-        method: "DELETE"
+        method: "DELETE",
     })
-    .then(res => res.json())
 }
