@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {get, post} from '../helpers/requests'
+import {get, post, patch} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -33,7 +33,10 @@ export default class MenuContainer extends Component{
             const savedGame = await post("api/saves", saveGame)
             this.setState({game: savedGame})
         } else {
-            //patch request using id of game
+            saveGame.id = this.state.game.id;
+            const savedGame = await patch("api/saves/"+saveGame.id, saveGame)
+            console.log(savedGame)
+            // this.setState({game: savedGame})
         }
     }
 
