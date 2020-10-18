@@ -78,9 +78,9 @@ public class HoughLines {
             double a = Math.cos((double) theta), b = Math.sin((double) theta);
             double x0 = a * rho, y0 = b * rho;
             CvPoint pt1 = cvPoint((int) Math.round(x0 + 1000 * (-b)), (int) Math.round(y0 + 1000 * (a))), pt2 = cvPoint((int) Math.round(x0 - 1000 * (-b)), (int) Math.round(y0 - 1000 * (a)));
-            System.out.println("Line spotted: ");
-            System.out.println("\t rho= " + rho);
-            System.out.println("\t theta= " + theta);
+//            System.out.println("Line spotted: ");
+//            System.out.println("\t rho= " + rho);
+//            System.out.println("\t theta= " + theta);
             cvLine(colorDst, pt1, pt2, CV_RGB(255, 0, 0), 1, CV_AA, 0);
         }
 
@@ -94,26 +94,32 @@ public class HoughLines {
     }
 
     public CvSeq mergeSimilarLines(CvSeq lines, IplImage image) {
+
+        // loop over all the lines we found
         for (int i = 0; i < lines.total(); i++) {
 
+            // get rho (p) and theta for that line
             CvPoint2D32f current = new CvPoint2D32f(cvGetSeqElem(lines, i));
             CvPoint p1  = new CvPoint(current).position(0);
             CvPoint theta1  = new CvPoint(current).position(1);
 
             if (p1.get() == 0 && theta1.get() == -100) {
-                continue;
+                continue; // skip it if rho == 0 and theta == -100
             }
 
             Point pt1Current = new Point(0, 0);
             Point pt2Current = new Point(0, 0);
 
+            // calculate the normals for the line
             if (theta1.get() > CV_PI * 45 / 100 && theta1.get() < CV_PI * 135 / 180) {
+                // line is vertical
                 pt1Current.x(0);
                 pt1Current.y((int) (p1.get() / Math.sin(theta1.get())));
 
                 pt2Current.x(image.width());
                 pt2Current.y((int) (-pt2Current.x() / Math.tan(theta1.get()) + p1.get() / Math.sin(theta1.get())));
             } else {
+                // line is horizontal
                 pt1Current.y(0);
                 pt1Current.x((int) (p1.get() / Math.cos(theta1.get())));
 
@@ -121,6 +127,7 @@ public class HoughLines {
                 pt2Current.x((int) (-pt2Current.y() / Math.tan(theta1.get()) + p1.get() / Math.cos(theta1.get())));
             }
 
+            // merge lines - loop through them all and compare to the current
             for (int j = 0; j < lines.total(); j++) {
                 CvPoint2D32f pos = new CvPoint2D32f(cvGetSeqElem(lines, j));
                 if (pos == current) {
@@ -149,9 +156,12 @@ public class HoughLines {
                     if (((double)(pt1.x() - pt1Current.x()) * (pt1.x() - pt1Current.x()) + (pt1.y() - pt1Current.y()) * (pt1.y() - pt1Current.y()) < 64 * 64) && ((double)(pt1.x() - pt1Current.x()) * (pt1.x() - pt1Current.x()) + (pt1.y() - pt1Current.y()) * (pt1.y() - pt1Current.y()) < 64 * 64)) {
                         float pMean = (p.get() + p1.get()) / 2f;
                         float thetaMean = (theta.get() + theta1.get()) / 2f;
+                        // set current line to mean position of current and iterated
+                        System.out.println(cvGetSeqElem(lines, i).position(0);
                         cvGetSeqElem(lines, i).position(0).put((byte) pMean);
+//                        System.out.println(cvGetSeqElem(lines, i).position(0).get());
                         cvGetSeqElem(lines, i).position(1).put((byte) thetaMean);
-
+                        // set iterated line to stupid values so it won't get used again
                         cvGetSeqElem(lines, j).position(0).put((byte) 0);
                         cvGetSeqElem(lines, j).position(1).put((byte) -100);
                     }
