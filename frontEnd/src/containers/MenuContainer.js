@@ -19,9 +19,13 @@ export default class MenuContainer extends Component{
        
     };
 
-    async componentDidMount(){
+    componentDidMount(){
+        this.getSaveGames();
+    }
+
+    getSaveGames = async () => {
         const saveGames =  await get("api/saves");
-        this.setState({savedGames: saveGames})
+        this.setState({savedGames: saveGames});
     }
 
     saveGame = async (gridValues) => {
@@ -37,6 +41,7 @@ export default class MenuContainer extends Component{
             const savedGame = await patch("api/saves/"+saveGame.id, saveGame)
             this.setState({game: savedGame})
         }
+        this.getSaveGames();
     }
 
     loadGame = (event) => {
