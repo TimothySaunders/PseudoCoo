@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {getSaves} from '../helpers/Requests'
+import {getSaves} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './ImageUpload.css';
-import uploadImage from "../helpers/requests.js";
+import {uploadImage} from "../helpers/requests.js";
 
 export default class ImageUpload extends Component{
     constructor(props){

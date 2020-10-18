@@ -76,7 +76,8 @@ export default class GridCell extends Component {
             editable: this.props.cell.editable,
             notes: this.props.cell.notes
         };
-        this.props.onNumberInput(this.props.index, newCell);
+        this.props.onNumberInput(this.props.index, newCell, this.display);
+        
 
 
         this.showNotes();
