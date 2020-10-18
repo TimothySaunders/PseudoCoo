@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {get, post, patch} from '../helpers/requests'
+import {get, post, patch, remove} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -49,8 +49,9 @@ export default class MenuContainer extends Component{
         this.setState({game: game});
     }
 
-    removeGame = () => {
-
+    removeGame = async (id) => {
+        await remove("/api/saves/"+id);
+        this.getSaveGames();
     }
 
     chooseMenu = (choice) => {
