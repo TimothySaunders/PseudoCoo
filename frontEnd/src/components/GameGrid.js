@@ -25,10 +25,10 @@ export default class GameGrid extends Component {
 
     componentDidMount() {
         let gameState;
-        if (this.props.gameString.length === 81) {
-            gameState = sp.getObjects(this.props.gameString);
+        if (this.props.game.gridValues.length === 81) {
+            gameState = sp.getObjects(this.props.game.gridValues);
         } else {
-            gameState = sp.getObjectsFromSavedString(this.props.gameString);
+            gameState = sp.getObjectsFromSavedString(this.props.game.gridValues);
         }
         this.setState({ gameState: gameState });
     }
@@ -37,7 +37,7 @@ export default class GameGrid extends Component {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
     solve = () => {
-        const solution = sudoku.sudoku.solve(this.props.gameString);
+        const solution = sudoku.sudoku.solve(this.props.game.gridValues);
         let prevState = this.state.gameState;
         let gameState = sp.getObjects(solution);
         prevState = prevState.map((cell, index) => {

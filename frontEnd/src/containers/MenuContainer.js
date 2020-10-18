@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {getSaves} from '../helpers/requests'
+import {get} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -8,17 +8,27 @@ export default class MenuContainer extends Component{
     constructor(props){
         super(props);
         this.state={
-            gameString:"",
+            game: {
+                id: null,
+                gridValues: "",
+                timeStamp: ""
+            },
             viewOption: "mainMenu",
             savedGames: []
         }
        
-
     };
 
-    componentDidMount(){
-        getSaves()
-        // const saveGames = 
+    async componentDidMount(){
+        const saveGames =  await get("api/saves");
+        this.setState({savedGames: saveGames})
+    }
+
+    loadGame = (event) => {
+        const targetId = event.target.id;
+        const gameIndex = targetId.substring(targetId.length-1);
+        const game = this.state.savedGames[gameIndex];
+        this.setState({game: game});
     }
 
     chooseMenu = (choice) => {
@@ -27,27 +37,28 @@ export default class MenuContainer extends Component{
     }
 
     creategameStringFromDifficulty = (choice) => {
-        const chosenDifficulty = choice; 
-        this.setState({gameString:chosenDifficulty})
+        const newGame = this.state.game;
+        newGame.gridValues = choice;
+        this.setState({game:newGame})
     }
 
     reset = () => {
-        const val = "";
-        this.setState({gameString:val});
+        this.setState({game: {}});
     }
 
     render(){
 
-        if(this.state.gameString===""){
+        if(this.state.game.gridValues === ""){
             return(
                 <Fragment>
-                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}  viewOption={this.state.viewOption}   > </MenuView>
+                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
+                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} > </MenuView>
                 </Fragment>
             )
         } else {
             return (
                 <Fragment>
-                    <GameGrid gameString={this.state.gameString}></GameGrid>
+                    <GameGrid game={this.state.game}></GameGrid>
                     <button onClick={this.reset}> Return to menu</button>
                 </Fragment>
             )
