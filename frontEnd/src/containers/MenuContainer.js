@@ -44,11 +44,13 @@ export default class MenuContainer extends Component{
         this.getSaveGames();
     }
 
-    loadGame = (event) => {
-        const targetId = event.target.id;
-        const gameIndex = targetId.substring(targetId.length-1);
-        const game = this.state.savedGames[gameIndex];
+    loadGame = (id) => {
+        const game = this.state.savedGames[id];
         this.setState({game: game});
+    }
+
+    removeGame = () => {
+
     }
 
     chooseMenu = (choice) => {
