@@ -16,7 +16,6 @@ export default class MenuContainer extends Component{
             viewOption: "mainMenu",
             savedGames: []
         }
-       
     };
 
     componentDidMount(){
@@ -79,7 +78,7 @@ export default class MenuContainer extends Component{
             return(
                 <Fragment>
                     <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
-                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} > </MenuView>
+                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                 </Fragment>
             )
         } else {
@@ -90,10 +89,6 @@ export default class MenuContainer extends Component{
                 </Fragment>
             )
         }
-
-
-        
     }
-
 
 }
