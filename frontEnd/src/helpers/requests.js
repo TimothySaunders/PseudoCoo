@@ -10,8 +10,8 @@ export function uploadImage(file) {
         .then(res => res.blob());
 }
 
-export function getSaves() {
-    return fetch("api/saves")
+    export function get(url){
+        return fetch(url)
         .then(res => res.json())
 }
 
