@@ -13,7 +13,7 @@ export default class PsChecker {
     stringGrid += element.value;
 });
     // console.log(stringGrid.length)
-    if (stringGrid.length!=81) {
+    if (stringGrid.length!==81) {
     console.log("you have made changes gamestate format")
     return false;
 } else {
@@ -49,10 +49,10 @@ export default class PsChecker {
 
     //extension: 
     var stringOfUniques ="";
-    for (var i=0; i<combined.length; i++) {
+    for (var j=0; j<combined.length; j++) {
        
-        if (stringOfUniques.indexOf(combined[i]) === -1 && combined[i] != ".") {
-                stringOfUniques += combined[i];
+        if (stringOfUniques.indexOf(combined[j]) === -1 && combined[j] !== ".") {
+                stringOfUniques += combined[j];
         }
     }
 

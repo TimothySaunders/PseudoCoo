@@ -22,6 +22,7 @@ export default class GridCell extends Component {
     }
 
     showNotes() {
+        
         if (this.display.textContent === "0" || this.display.textContent === "") {
             for (let value of this.props.cell.notes) {
                 document.querySelector("#notes_" + this.props.index + "_" + value).textContent = value;
@@ -61,6 +62,7 @@ export default class GridCell extends Component {
         this.display.style.backgroundColor = "rgba(255, 255, 255, 0.3";
     }
     setDisplay(event) {
+        
         let val = event.target.value;
         if (val.length > 1) {
             val = val.substr(1);
@@ -77,10 +79,9 @@ export default class GridCell extends Component {
             notes: this.props.cell.notes
         };
         this.props.onNumberInput(this.props.index, newCell, this.display);
-        
-
-
         this.showNotes();
+        // setTimeout((console.log()),200);
+
     }
 
     noScroll(event) {

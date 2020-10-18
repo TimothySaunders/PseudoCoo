@@ -51,6 +51,7 @@ export default class GameGrid extends Component {
         cells = cells.map(cell => {
             if (cell.editable) {
                 cell.value = "0";
+                cell.notes = [];
             }
             return cell;
         });
@@ -60,14 +61,41 @@ export default class GameGrid extends Component {
     handleNumberInput(index, newCell, display) {
         let updated = this.state.gameState;
 
+        if(!this.state.writeNotes){
+            
+            updated[index] = newCell;
+            this.setState({ gameState: updated });
+        } else {
+
+            if (newCell.value.match(/[1-9]/) ) {
+                if( !newCell.notes.includes(newCell.value)){
+                newCell.notes.push(newCell.value);
+                newCell.value="."
+                }
+                if ( newCell.notes.includes(newCell.value)){
+                    const r = newCell.notes.pop(newCell.value);
+                    newCell.value=".";
+                }
+            }
+            display.textContent =""
+            
+            
+            // --- ORIGINAL CODE: 
+            // newCell.notes.push(newCell.value);
+            // newCell.value="."
+            // display.textContent ="";
+        }
+        
+        
+        
+
         //! prevent invalid input being entered into cell // rephrase to validae all inputs
         // if(!psc.validateEntry(index,this.state.gameState,newCell.value)) {
         //     newCell.value =".";
         //      display.textContent ="";
         // }
 
-        updated[index] = newCell;
-        this.setState({ gameState: updated });
+        
 
        
     }
