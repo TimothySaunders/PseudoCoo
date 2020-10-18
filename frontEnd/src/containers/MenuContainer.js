@@ -20,7 +20,34 @@ export default class MenuContainer extends Component{
 
     componentDidMount(){
         this.getSaveGames();
+        this.inactivityTime()
     }
+
+    inactivityTime = () => {
+        let time;
+        window.onload = resetTimer;
+        
+
+        // document.onkeypress = resetTimer;
+        // document.onmousemove = resetTimer;
+    
+        function newJoke() {
+            // tell joke
+            resetTimer();
+        }
+        
+        //returns a random time in millisenconds between a min and max (seconds)
+        function randomInterval(min, max) {
+            return 1000 * Math.floor(min + (Math.random()*(max-min)));
+        }
+
+        function resetTimer() {
+            clearTimeout(time);
+            let interval = randomInterval(15, 30);
+            console.log(interval/1000)
+            time = setTimeout(newJoke, interval);
+        }
+    };
 
     getSaveGames = async () => {
         const saveGames =  await get("api/saves");
