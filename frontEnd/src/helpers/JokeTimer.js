@@ -4,6 +4,7 @@ export default function JokeTimer(min, max){
 
     let time;
     let cowJokes = [];
+    getCowJokes();
     window.onload = resetTimer;
 
     async function getCowJokes() {
@@ -11,12 +12,12 @@ export default function JokeTimer(min, max){
     }
 
     function tellJoke() {
-        if (cowJokes.length === 0){
-            getCowJokes();
-        }
         const selectedJoke = randomItemFromList(cowJokes);
         const selectedIndex = cowJokes.findIndex((joke) => joke === selectedJoke);
         cowJokes.splice(selectedIndex,1);
+        if (cowJokes.length === 0){
+            getCowJokes();
+        }
         resetTimer();
         console.log(selectedJoke)
     }
