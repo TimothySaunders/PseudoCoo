@@ -37,7 +37,13 @@ export default class GameGrid extends Component {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
     solve = () => {
-        const solution = sudoku.sudoku.solve(this.props.game.gridValues);
+        // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
+        let toConvert = sp.getRawStringFromObjects(this.state.gameState)
+        toConvert.replace("0",".");
+        const solution = sudoku.sudoku.solve(toConvert);
+
+        // const solution = sudoku.sudoku.solve(sp.getRawStringFromObjects(this.state.gameState));
+
         let prevState = this.state.gameState;
         let gameState = sp.getObjects(solution);
         prevState = prevState.map((cell, index) => {
@@ -50,7 +56,7 @@ export default class GameGrid extends Component {
         let cells = this.state.gameState;
         cells = cells.map(cell => {
             if (cell.editable) {
-                cell.value = "0";
+                cell.value = ".";
                 cell.notes = [];
             }
             return cell;
