@@ -33,6 +33,8 @@ export default class MenuContainer extends Component{
     
         function newJoke() {
             // tell joke
+            // ask if they want a hint?
+            // moo at them to wake them up
             resetTimer();
         }
         
