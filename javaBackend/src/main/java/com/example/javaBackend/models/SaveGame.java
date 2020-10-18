@@ -1,8 +1,6 @@
 package com.example.javaBackend.models;
 
 import javax.persistence.*;
-import java.util.Date;
-
 
 @Entity
 @Table(name="games")
@@ -13,7 +11,7 @@ public class SaveGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="grid_values")
+    @Column(name="grid_values", length=1024)
     private String gridValues;
 
     @Column(name="timestamp")

@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {get} from '../helpers/requests'
+import {get, post, patch} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -24,6 +24,21 @@ export default class MenuContainer extends Component{
         this.setState({savedGames: saveGames})
     }
 
+    saveGame = async (gridValues) => {
+        const saveGame = {
+            gridValues: gridValues,
+            timeStamp: new Date().toLocaleString()
+        }
+        if (this.state.game.id === null){
+            const savedGame = await post("api/saves", saveGame)
+            this.setState({game: savedGame})
+        } else {
+            saveGame.id = this.state.game.id;
+            const savedGame = await patch("api/saves/"+saveGame.id, saveGame)
+            this.setState({game: savedGame})
+        }
+    }
+
     loadGame = (event) => {
         const targetId = event.target.id;
         const gameIndex = targetId.substring(targetId.length-1);
@@ -43,7 +58,11 @@ export default class MenuContainer extends Component{
     }
 
     reset = () => {
-        this.setState({game: {}});
+        this.setState({game: {
+            id: null,
+            gridValues: "",
+            timeStamp: ""
+        }});
     }
 
     render(){
@@ -58,7 +77,7 @@ export default class MenuContainer extends Component{
         } else {
             return (
                 <Fragment>
-                    <GameGrid game={this.state.game}></GameGrid>
+                    <GameGrid game={this.state.game} saveGame={this.saveGame}></GameGrid>
                     <button onClick={this.reset}> Return to menu</button>
                 </Fragment>
             )
