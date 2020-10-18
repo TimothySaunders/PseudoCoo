@@ -10,7 +10,7 @@ public class CowJoke {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="setup")
+    @Column(name="setup", length=1024)
     private String setup;
 
     @Column(name="puchline")
