@@ -1,5 +1,6 @@
 package com.example.javaBackend.models;
 
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.indexer.UByteBufferIndexer;
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.OpenCVFrameConverter;
@@ -16,7 +17,6 @@ import java.io.IOException;
 
 
 import static org.bytedeco.opencv.global.opencv_core.bitwise_not;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imdecode;
 
 import org.bytedeco.javacpp.indexer.UByteRawIndexer;
 import org.bytedeco.opencv.opencv_core.*;
@@ -30,19 +30,46 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imencode;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 public class GridFinder {
 
     public MultipartFile image;
+    public String imageLoc;
 
     public GridFinder(MultipartFile image) {
         this.image = image;
     }
 
+    public GridFinder(String fileLoc) {
+        this.imageLoc = fileLoc;
+    }
+
     public MultipartFile getImage() {
         return image;
+    }
+
+    public void testConvert() {
+        Mat imported = imread(this.imageLoc, 0);
+        Mat sudoku = resizeImage(imported);
+        System.out.println("3" + "  " + ts());
+        Mat outerBox = sudoku.clone();
+        System.out.println("4" + "  " + ts());
+        outerBox = denoise(sudoku);
+        outerBox = invertImage(outerBox);
+        System.out.println("5" + "  " + ts());
+        dilateImage(outerBox);
+        System.out.println("6" + "  " + ts());
+        Mat alt = outerBox.clone();
+        System.out.println("7" + "  " + ts());
+        alt = findGrid(outerBox, alt);
+        System.out.println("8" + "  " + ts());
+        erodeImage(alt);
+        System.out.println("9" + "  " + ts());
+        erodeImage(outerBox);
+        System.out.println("10" + "  " + ts());
+        System.out.println(alt.isContinuous());
     }
 
     public byte[] convert() throws IOException {
@@ -54,7 +81,8 @@ public class GridFinder {
         System.out.println("3" + "  " + ts());
         Mat outerBox = sudoku.clone();
         System.out.println("4" + "  " + ts());
-        denoise(sudoku, outerBox);
+        outerBox = denoise(sudoku);
+        outerBox = invertImage(outerBox);
         System.out.println("5" + "  " + ts());
         dilateImage(outerBox);
         System.out.println("6" + "  " + ts());
@@ -98,13 +126,19 @@ public class GridFinder {
         return sudoku;
     }
 
-    public void denoise(Mat sudoku, Mat outerBox) {
+    public Mat denoise(Mat sudoku) {
+        Mat image = sudoku.clone();
         // run a gaussian blur to filter out noise
-        GaussianBlur(sudoku, sudoku, new Size(13, 13), 0);
+        GaussianBlur(sudoku, image, new Size(13, 13), 0);
         // run adaptive threshold to improve contrast
-        adaptiveThreshold(sudoku, outerBox, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 3, 2);
+        adaptiveThreshold(image, image, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 3, 2);
+        return image;
+    }
+
+    public Mat invertImage(Mat image) {
         // invert colours
-        bitwise_not(outerBox, outerBox);
+        bitwise_not(image, image);
+        return image;
     }
 
     public void dilateImage(Mat image) {
@@ -118,34 +152,57 @@ public class GridFinder {
     }
 
     public Mat findGrid(Mat outerBox, Mat alt) {
+        Rect bound = getLargestRect(outerBox);
+        int count = 0;
         int max = -1;
         Point maxPt = new Point(0, 0);
+        ArrayList<Point> smallPoints = new ArrayList<>();
         UByteRawIndexer sI = outerBox.createIndexer();
-        for (int y = 0; y < outerBox.rows(); y++) {
-            for (int x = 0; x < outerBox.cols(); x++) {
-                if (sI.get(y, x) > 200) {
-                    int area = floodFill(alt, new Point(x, y), Scalar.GRAY);
+        for (int y = bound.y(); y < bound.y() + bound.height(); y += 2) {
+            BytePointer row = outerBox.ptr(y);
+            for (int x = bound.x(); x < bound.x() + bound.width(); x += 2) {
+//                System.out.println(row.get(x));
+                if (row.get(x) < 0) {
+//                if (sI.get(y, x) > 200) {
+                    count += 1;
+//                    int area = -2;
+                    Point pt = new Point(x, y);
+                    int area = floodFill(outerBox, pt, Scalar.GRAY);
                     if (area > max) {
-                        maxPt = new Point(x, y);
+                        maxPt = pt;
                         max = area;
+                    }
+                    if (area < 50) {
+                        smallPoints.add(pt);
                     }
                 }
             }
         }
+        for (Point pt : smallPoints) {
+            floodFill(alt, pt, Scalar.BLACK);
+        }
+        System.out.println("floodfilled " + count + " times");
         System.out.println("first step" + "  " + ts());
 //        System.out.println("x: " + maxPt.x() + "  " + ts());
 //        System.out.println("y: " + maxPt.y() + "  " + ts());
-        floodFill(alt, maxPt, Scalar.WHITE);
-        sI = alt.createIndexer();
+        floodFill(outerBox, maxPt, Scalar.WHITE);
+
+        sI = outerBox.createIndexer();
+        int toBlackCount = 0;
         for (int y = 0; y < outerBox.rows(); y++) {
             for (int x = 0; x < outerBox.cols(); x++) {
                 if (sI.get(y, x) < 255 && sI.get(y, x) > 0) {
-                    int area = floodFill(alt, new Point(x, y), Scalar.BLACK);
+                    toBlackCount++;
+                    floodFill(outerBox, new Point(x, y), Scalar.BLACK);
                 }
             }
         }
+        System.out.println(toBlackCount);
         System.out.println("second step" + "  " + ts());
-        alt = warpPerspectivePuzzle(alt, outerBox, maxPt);
+
+        alt = warpPerspectivePuzzle(outerBox, alt, maxPt);
+        display(alt, "floodfilled");
+        display(outerBox, "outerbox");
         System.out.println("third step" + "  " + ts());
         sI = alt.createIndexer();
         for (int x = 0; x < alt.cols(); x++) {
@@ -166,9 +223,15 @@ public class GridFinder {
         return alt;
     }
 
+
     public Mat warpPerspectivePuzzle(Mat image, Mat output, Point gridPoint) {
-        image = deskewImage(image);
-        output = deskewImage(output);
+        floodFill(output, gridPoint, Scalar.BLACK);
+//        image = deskewImage(image);
+//        output = deskewImage(output);
+        float skewAngle = getDeSkewAngle(image);
+        RotatedRect minAreaRect = getDeSkewRotatedRect(image);
+        output = deskewImage(output, skewAngle, minAreaRect);
+        image = deskewImage(image, skewAngle, minAreaRect);
         Rect rect = getLargestRect(image);
         Point2f srcPts = new Point2f(4);
         srcPts.position(0).x((float) rect.x()).y((float) rect.y());
@@ -180,14 +243,14 @@ public class GridFinder {
         dstPts.position(1).x(500 - 1).y(0);
         dstPts.position(2).x(500 - 1).y(500 - 1);
         dstPts.position(3).x(0).y(500 - 1);
-        floodFill(output, gridPoint, Scalar.BLACK);
+
         Mat p = getPerspectiveTransform(srcPts.position(0), dstPts.position(0));
         Mat img = new Mat(new Size(500, 500), image.type());//image.size()
         warpPerspective(output, img, p, img.size());
         return img;
     }
 
-    public Mat deskewImage(Mat img) {
+    public float getDeSkewAngle(Mat img) {
         MatVector countours = new MatVector();
         List<Double> araes = new ArrayList<>();
         findContours(img, countours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, new Point(0, 0));
@@ -196,23 +259,37 @@ public class GridFinder {
             double area = contourArea(c);
             araes.add(area);
         }
-        if (araes.isEmpty()) {
-            return img;
+        Double d = Collections.max(araes);
+        RotatedRect minAreaRect = minAreaRect(countours.get(araes.indexOf(d)));
+        float angle = minAreaRect.angle();
+        if (angle < -45) {
+            angle = -(90 + angle);
         } else {
-            Double d = Collections.max(araes);
-            RotatedRect minAreaRect = minAreaRect(countours.get(araes.indexOf(d)));
-            float angle = minAreaRect.angle();
-            if (angle < -45) {
-                angle = -(90 + angle);
-            } else {
-                angle = -angle;
-            }
-            Mat rot = getRotationMatrix2D(minAreaRect.center(), angle, 1);
-//            Mat dst = new Mat(img.size(), img.type());
-            warpAffine(img, img, rot, img.size(), WARP_INVERSE_MAP | INTER_LINEAR, 0, new Scalar(0, 0, 0, 0));
-            return img;
+            angle = -angle;
         }
+        return angle;
     }
+
+    public RotatedRect getDeSkewRotatedRect(Mat img) {
+        MatVector countours = new MatVector();
+        List<Double> araes = new ArrayList<>();
+        findContours(img, countours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, new Point(0, 0));
+        for (int i = 0; i < countours.size(); i++) {
+            Mat c = countours.get(i);
+            double area = contourArea(c);
+            araes.add(area);
+        }
+        Double d = Collections.max(araes);
+        return minAreaRect(countours.get(araes.indexOf(d)));
+    }
+
+    public Mat deskewImage(Mat img, float angle, RotatedRect minAreaRect) {
+        Mat rot = getRotationMatrix2D(minAreaRect.center(), angle, 1);
+//            Mat dst = new Mat(img.size(), img.type());
+        warpAffine(img, img, rot, img.size(), WARP_INVERSE_MAP | INTER_LINEAR, 0, new Scalar(0, 0, 0, 0));
+        return img;
+    }
+
 
     /*Get the largest Rectangle of an image*/
     public Rect getLargestRect(Mat img) {
@@ -237,6 +314,17 @@ public class GridFinder {
 
     public static String ts() {
         return "Timestamp: " + new Timestamp(new java.util.Date().getTime());
+    }
+
+    public void display(Mat image, String caption) {
+        // Create image window named "My Image".
+        final CanvasFrame canvas = new CanvasFrame(caption, 1.0);
+        // Request closing of the application when the image window is closed.
+        canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // Convert from OpenCV Mat to Java Buffered image for display
+        final OpenCVFrameConverter<Mat> converter = new OpenCVFrameConverter.ToMat();
+        // Show image on window.
+        canvas.showImage(converter.convert(image));
     }
 
 
