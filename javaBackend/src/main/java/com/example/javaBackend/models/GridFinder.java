@@ -109,16 +109,16 @@ public class GridFinder {
         int wid = imported.cols();
         int hei = imported.rows();
         int bigger = Math.max(wid, hei);
-        if (bigger > 800) {
+        if (bigger > 1000) {
             int newX;
             int newY;
             if (bigger == wid) {
-                newX = 800;
-                double scale = 800 / (double) wid;
+                newX = 1000;
+                double scale = 1000 / (double) wid;
                 newY = (int) (hei * scale);
             } else {
-                newY = 800;
-                double scale = 800 / (double) hei;
+                newY = 1000;
+                double scale = 1000 / (double) hei;
                 newX = (int) (wid * scale);
             }
             resize(imported, sudoku, new Size(newX, newY), 0, 0, INTER_AREA);
