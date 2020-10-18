@@ -35,8 +35,7 @@ export default class MenuContainer extends Component{
         } else {
             saveGame.id = this.state.game.id;
             const savedGame = await patch("api/saves/"+saveGame.id, saveGame)
-            console.log(savedGame)
-            // this.setState({game: savedGame})
+            this.setState({game: savedGame})
         }
     }
 
