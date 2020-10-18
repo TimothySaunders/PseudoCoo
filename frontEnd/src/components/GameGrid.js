@@ -100,6 +100,11 @@ export default class GameGrid extends Component {
        
     }
 
+    handleSaveGame = () => {
+        const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
+        this.props.saveGame(gridValues);
+    }
+
     render() {
         const gridCells = this.state.gameState.map((cell, i) => {
             return (
@@ -114,6 +119,7 @@ export default class GameGrid extends Component {
                 <button onClick={this.solve} > Solve</button>
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                 <button onClick={this.clear} >Clear</button>
+                <button onClick={this.handleSaveGame} >Save</button>
             </div>
         )
     }
