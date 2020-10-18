@@ -1,6 +1,6 @@
 
     export function uploadImage(file) {
-        fetch("api/images", {
+        return fetch("api/images", {
             method: "POST",
             headers: {"Content-Type": "image/jpg"},
             body: file
@@ -9,9 +9,8 @@
     }
 
     export function getSaves(){
-        fetch("api/saves")
+        return fetch("api/saves")
         .then(res => res.json())
-        .then(data => console.log(data))
     }
 
 

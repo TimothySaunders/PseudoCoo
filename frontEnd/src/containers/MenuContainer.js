@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {getSaves} from '../helpers/Requests'
+import {getSaves} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -13,12 +13,18 @@ export default class MenuContainer extends Component{
             savedGames: []
         }
        
-
     };
 
-    componentDidMount(){
-        getSaves()
-        // const saveGames = 
+    async componentDidMount(){
+        const saveGames =  await getSaves();
+        this.setState({savedGames: saveGames})
+    }
+
+    loadGame = (event) => {
+        const targetId = event.target.id;
+        const gameIndex = targetId.substring(targetId.length-1);
+        const gameString = this.state.savedGames[gameIndex].gridValues;
+        this.setState({gameString: gameString});
     }
 
     chooseMenu = (choice) => {
@@ -41,7 +47,8 @@ export default class MenuContainer extends Component{
         if(this.state.gameString===""){
             return(
                 <Fragment>
-                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}  viewOption={this.state.viewOption}   > </MenuView>
+                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
+                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} > </MenuView>
                 </Fragment>
             )
         } else {
