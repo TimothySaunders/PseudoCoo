@@ -1,5 +1,6 @@
 package com.example.javaBackend.models;
 
+import com.example.javaBackend.helpers.HoughLines;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.indexer.UByteBufferIndexer;
 import org.bytedeco.javacv.CanvasFrame;
@@ -50,7 +51,7 @@ public class GridFinder {
         return image;
     }
 
-    public void testConvert() {
+    public Mat testConvert() {
         Mat imported = imread(this.imageLoc, 0);
         Mat sudoku = resizeImage(imported);
         System.out.println("3" + "  " + ts());
@@ -70,6 +71,7 @@ public class GridFinder {
         erodeImage(outerBox);
         System.out.println("10" + "  " + ts());
         System.out.println(alt.isContinuous());
+        return alt;
     }
 
     public byte[] convert() throws IOException {
@@ -158,9 +160,12 @@ public class GridFinder {
         Point maxPt = new Point(0, 0);
         ArrayList<Point> smallPoints = new ArrayList<>();
         UByteRawIndexer sI = outerBox.createIndexer();
-        for (int y = bound.y(); y < bound.y() + bound.height(); y += 2) {
+//        for (int y = bound.y(); y < bound.y() + bound.height(); y += 2) {
+//            BytePointer row = outerBox.ptr(y);
+//            for (int x = bound.x(); x < bound.x() + bound.width(); x += 2) {
+        for (int y = 0; y < outerBox.rows(); y+=2) {
             BytePointer row = outerBox.ptr(y);
-            for (int x = bound.x(); x < bound.x() + bound.width(); x += 2) {
+            for (int x = 0; x < outerBox.cols(); x+=2) {
 //                System.out.println(row.get(x));
                 if (row.get(x) < 0) {
 //                if (sI.get(y, x) > 200) {
@@ -200,6 +205,14 @@ public class GridFinder {
         System.out.println(toBlackCount);
         System.out.println("second step" + "  " + ts());
 
+
+        HoughLines hl = new HoughLines(outerBox);
+        CvSeq lines = hl.lines();
+
+
+
+
+
         alt = warpPerspectivePuzzle(outerBox, alt, maxPt);
         System.out.println("third step" + "  " + ts());
         sI = alt.createIndexer();
@@ -220,7 +233,6 @@ public class GridFinder {
         System.out.println("finish warp" + "  " + ts());
         return alt;
     }
-
 
     public Mat warpPerspectivePuzzle(Mat image, Mat output, Point gridPoint) {
         floodFill(output, gridPoint, Scalar.BLACK);
@@ -288,7 +300,6 @@ public class GridFinder {
         return img;
     }
 
-
     /*Get the largest Rectangle of an image*/
     public Rect getLargestRect(Mat img) {
         MatVector contours = new MatVector();
@@ -312,6 +323,17 @@ public class GridFinder {
 
     public static String ts() {
         return "Timestamp: " + new Timestamp(new java.util.Date().getTime());
+    }
+
+    public void display(Mat image, String caption) {
+        // Create image window named "My Image".
+        final CanvasFrame canvas = new CanvasFrame(caption, 1.0);
+        // Request closing of the application when the image window is closed.
+        canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // Convert from OpenCV Mat to Java Buffered image for display
+        final OpenCVFrameConverter<Mat> converter = new OpenCVFrameConverter.ToMat();
+        // Show image on window.
+        canvas.showImage(converter.convert(image));
     }
 }
 
