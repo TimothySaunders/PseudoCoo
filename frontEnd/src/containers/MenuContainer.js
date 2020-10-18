@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {get, post, patch} from '../helpers/requests'
+import {get, post, patch, remove} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 
@@ -16,12 +16,15 @@ export default class MenuContainer extends Component{
             viewOption: "mainMenu",
             savedGames: []
         }
-       
     };
 
-    async componentDidMount(){
+    componentDidMount(){
+        this.getSaveGames();
+    }
+
+    getSaveGames = async () => {
         const saveGames =  await get("api/saves");
-        this.setState({savedGames: saveGames})
+        this.setState({savedGames: saveGames});
     }
 
     saveGame = async (gridValues) => {
@@ -37,13 +40,17 @@ export default class MenuContainer extends Component{
             const savedGame = await patch("api/saves/"+saveGame.id, saveGame)
             this.setState({game: savedGame})
         }
+        this.getSaveGames();
     }
 
-    loadGame = (event) => {
-        const targetId = event.target.id;
-        const gameIndex = targetId.substring(targetId.length-1);
-        const game = this.state.savedGames[gameIndex];
+    loadGame = (id) => {
+        const game = this.state.savedGames[id];
         this.setState({game: game});
+    }
+
+    removeGame = async (id) => {
+        await remove("/api/saves/"+id);
+        this.getSaveGames();
     }
 
     chooseMenu = (choice) => {
@@ -71,7 +78,7 @@ export default class MenuContainer extends Component{
             return(
                 <Fragment>
                     <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
-                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} > </MenuView>
+                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                 </Fragment>
             )
         } else {
@@ -82,10 +89,6 @@ export default class MenuContainer extends Component{
                 </Fragment>
             )
         }
-
-
-        
     }
-
 
 }

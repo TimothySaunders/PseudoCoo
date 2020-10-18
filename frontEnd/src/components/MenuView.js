@@ -55,7 +55,7 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame}/>
+                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame} removeGame={props.removeGame} />
                         <br />
                         <button onClick={makeChoice} value="DifficultyMenu"> PLAY   </button><br />
                         <button onClick={makeChoice} value="ImportImage"> get PseudoCoo from Image   </button><br />

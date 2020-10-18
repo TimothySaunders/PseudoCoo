@@ -32,3 +32,9 @@ export function patch(url, data){
     })
     .then(res => res.json())
 }
+
+export function remove(url){
+    return fetch(url, { 
+        method: "DELETE",
+    })
+}
