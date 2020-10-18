@@ -201,8 +201,6 @@ public class GridFinder {
         System.out.println("second step" + "  " + ts());
 
         alt = warpPerspectivePuzzle(outerBox, alt, maxPt);
-        display(alt, "floodfilled");
-        display(outerBox, "outerbox");
         System.out.println("third step" + "  " + ts());
         sI = alt.createIndexer();
         for (int x = 0; x < alt.cols(); x++) {
@@ -315,18 +313,5 @@ public class GridFinder {
     public static String ts() {
         return "Timestamp: " + new Timestamp(new java.util.Date().getTime());
     }
-
-    public void display(Mat image, String caption) {
-        // Create image window named "My Image".
-        final CanvasFrame canvas = new CanvasFrame(caption, 1.0);
-        // Request closing of the application when the image window is closed.
-        canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        // Convert from OpenCV Mat to Java Buffered image for display
-        final OpenCVFrameConverter<Mat> converter = new OpenCVFrameConverter.ToMat();
-        // Show image on window.
-        canvas.showImage(converter.convert(image));
-    }
-
-
 }
 
