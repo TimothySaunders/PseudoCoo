@@ -1,8 +1,11 @@
 package com.example.javaBackend.controllers;
 
 import com.example.javaBackend.models.GridFinder;
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.opencv.opencv_core.Mat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,16 +34,16 @@ public class ImageControlller {
 
 //            InputStream fileData = file.getInputStream();
         GridFinder grid = new GridFinder(file);
-        Mat output = null;
+        byte[] output = null;
         try {
             output = grid.convert();
-            System.out.println("res: " + output.cols() + " x " + output.rows());
-            byte[] bytes = output.data().getStringBytes();
 
-//            MultipartEntityBuilder form = new MultipartEntityBuilder();
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+
             System.out.println("finished the conversion");
             System.out.println("sending response...");
-            return new ResponseEntity(bytes, HttpStatus.OK);
+            return new ResponseEntity(output, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("____________________________________");
