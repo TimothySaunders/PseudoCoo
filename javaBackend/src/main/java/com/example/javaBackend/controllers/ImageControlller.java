@@ -37,7 +37,7 @@ public class ImageControlller {
             System.out.println("res: " + output.cols() + " x " + output.rows());
             byte[] bytes = output.data().getStringBytes();
 
-            MultipartEntityBuilder form = new MultipartEntityBuilder();
+//            MultipartEntityBuilder form = new MultipartEntityBuilder();
             System.out.println("finished the conversion");
             System.out.println("sending response...");
             return new ResponseEntity(bytes, HttpStatus.OK);
