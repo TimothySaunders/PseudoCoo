@@ -29,15 +29,17 @@ function buildTemplate(url, includeMargin, includeFudgeFactor){
 
   grid.forEach((row, index) => {
     for (let x=0; x<9; x++){
+      console.log("1"+fudgeFactor)
         row.push({
-            left: (x * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((x+1)/3)+1),
-            top: (index * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((index+1)/3)+1),
-            width: cellHeight-margin,
-            height: cellHeight-margin,
+            left: (x * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((x)/3)+1),
+            top: (index * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((index)/3)+1),
+            width: cellHeight-margin-fudgeFactor,
+            height: cellHeight-margin-fudgeFactor,
           })
+          console.log("2"+fudgeFactor)
     }
   })
-
+  console.log(grid)
   return grid
 }
 
