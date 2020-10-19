@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react'
 import {get, post, patch, remove} from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
+import JokeTimer from '../helpers/JokeTimer'
 
 
 export default class MenuContainer extends Component{
@@ -20,6 +21,7 @@ export default class MenuContainer extends Component{
 
     componentDidMount(){
         this.getSaveGames();
+        const jokeGenerator = new JokeTimer(15,30)
     }
 
     getSaveGames = async () => {

@@ -15,7 +15,6 @@ export default function LoadGame(props){
 
     const handleDeleteGame = (event) => {
         const gameIndex = getIdFromEvent(event)
-
         props.removeGame(gameIndex);
     }
 
