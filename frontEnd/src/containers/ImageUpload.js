@@ -45,7 +45,8 @@ export default class ImageUpload extends Component{
 
         let fileReader2 = new FileReader();
         fileReader2.onload = function (){
-            const output = ImageParser(fileReader2.result)
+            const output = ImageParser(fileReader2.result, true, false)
+            document.getElementById("test").src = fileReader2.result;
         }
         fileReader2.readAsDataURL(cleanImage)
         //some kind of output
@@ -90,6 +91,7 @@ export default class ImageUpload extends Component{
                 <p>//validate button will appear here once upload complete and image parsed</p>
                 <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                 onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
+                <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
             </div>
             
         )

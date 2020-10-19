@@ -5,16 +5,16 @@ const sizeOf = require('image-size');
 function getImageMaxDimension(url){
   // const  dimensions = sizeOf(url);
   // return dimensions.width > dimensions.height ? dimensions.width : dimensions.height
-  return 500; //now hardcoded as image-size package doesnt like file format input 
+  return 504; //now hardcoded as image-size package doesnt like file format input that we are using
 }
 
-function buildTemplate(url){
+function buildTemplate(url, includeMargin, includeFudgeFactor){
   console.log("Building Image Search Template")
 
   const gridTotalHeight = getImageMaxDimension(url)
-  const margin = Math.floor(0.02*gridTotalHeight)
+  const margin = includeMargin ? Math.floor(0.02*gridTotalHeight) : 0;
   const cellHeight = Math.floor(gridTotalHeight / 9)
-  const fudgeFactor = Math.ceil(0.003*gridTotalHeight) //to account for thicker lines in grid
+  const fudgeFactor = includeFudgeFactor ? Math.ceil(0.003*gridTotalHeight) : 0 //to account for thicker lines in grid if includeFudgeFactor is true
 
   const row1 = []
   const row2 = []
@@ -115,8 +115,9 @@ async function getGrid(grid, url){
     console.log("|___|___|___|___|___|___|___|___|___|")
   }
 
-export default async function parseImage(url){
-  const gridTemplate = buildTemplate(url)
+export default async function parseImage(url, margins=false, fudgefactor=false){
+  console.log(margins, fudgefactor)
+  const gridTemplate = buildTemplate(url, margins, fudgefactor)
   const outputGrid = await getGrid(gridTemplate, url)
   const gridString = getTextGrid(outputGrid)
   drawGridFromString(gridString)
