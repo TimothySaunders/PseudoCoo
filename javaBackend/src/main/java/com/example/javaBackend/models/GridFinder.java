@@ -103,6 +103,7 @@ public class GridFinder {
         System.out.println("9" + "  " + ts());
         erodeImage(outerBox);
         System.out.println("10" + "  " + ts());
+        alt = invertImage(alt);
         System.out.println(alt.isContinuous());
 //        return alt;
         byte[] bytes = new byte[alt.cols() * alt.rows() * alt.channels()];
