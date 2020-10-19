@@ -70,7 +70,7 @@ public class GridFinder {
         alt = fillHoles(alt);
 //        erodeImage(alt);
 
-        display(alt, "aksjdhaksjhdkajshdkajshdka");
+//        display(alt, "aksjdhaksjhdkajshdkajshdka");
         System.out.println("9" + "  " + ts());
         erodeImage(outerBox);
         System.out.println("10" + "  " + ts());
@@ -97,6 +97,8 @@ public class GridFinder {
         System.out.println("7" + "  " + ts());
         alt = findGrid(outerBox, alt);
         System.out.println("8" + "  " + ts());
+        alt = fillHoles(alt);
+        alt = fillHoles(alt);
         erodeImage(alt);
         System.out.println("9" + "  " + ts());
         erodeImage(outerBox);
@@ -249,9 +251,9 @@ public class GridFinder {
 //        warpPerspective(alt, undistorted, getPerspectiveTransform(gridPoints, dstPts), new Size(504, 504));
 //        display(undistorted, "kjashdkjashdkjasd");
 
-    display(alt, "alksjhdajshdkjahdkajhdkjahdkjahdkjashd");
+//    display(alt, "alksjhdajshdkjahdkajhdkjahdkjahdkjashd");
 
-        alt = warpPerspectivePuzzle(outerBox, alt, maxPt, gridPoints);
+        alt = warpPerspectivePuzzle(outerBox, alt, maxPt);
         System.out.println("third step" + "  " + ts());
         sI = alt.createIndexer();
         for (int x = 0; x < alt.cols(); x++) {
@@ -272,23 +274,23 @@ public class GridFinder {
         return alt;
     }
 
-    public Mat warpPerspectivePuzzle(Mat image, Mat output, Point gridPoint, Point2f srcPts) {
+    public Mat warpPerspectivePuzzle(Mat image, Mat output, Point gridPoint) {
         floodFill(output, gridPoint, Scalar.BLACK);
 //        image = deskewImage(image);
 //        output = deskewImage(output);
         float skewAngle = getDeSkewAngle(image);
         RotatedRect minAreaRect = getDeSkewRotatedRect(image);
         output = deskewImage(output, skewAngle, minAreaRect);
-        display(output, "outputdisplay");
+//        display(output, "outputdisplay");
 
 
         image = deskewImage(image, skewAngle, minAreaRect);
         Rect rect = getLargestRect(image);
-//        Point2f srcPts = new Point2f(4);
-//        srcPts.position(0).x((float) rect.x()).y((float) rect.y());
-//        srcPts.position(1).x((float) rect.x() + rect.width()).y((float) rect.y());
-//        srcPts.position(2).x((float) rect.x() + rect.width()).y((float) rect.y() + rect.height());
-//        srcPts.position(3).x((float) rect.x()).y((float) rect.y() + rect.height());
+        Point2f srcPts = new Point2f(4);
+        srcPts.position(0).x((float) rect.x()).y((float) rect.y());
+        srcPts.position(1).x((float) rect.x() + rect.width()).y((float) rect.y());
+        srcPts.position(2).x((float) rect.x() + rect.width()).y((float) rect.y() + rect.height());
+        srcPts.position(3).x((float) rect.x()).y((float) rect.y() + rect.height());
         Point2f dstPts = new Point2f(4);
         dstPts.position(0).x(0).y(0);
         dstPts.position(1).x(500 - 1).y(0);

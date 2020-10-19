@@ -49,8 +49,8 @@ public class HoughLines {
         CvMemStorage storage = cvCreateMemStorage(0);
         CvSeq lines = new CvSeq();
 
-        CanvasFrame source = new CanvasFrame("Source");
-        CanvasFrame hough = new CanvasFrame("Hough");
+//        CanvasFrame source = new CanvasFrame("Source");
+//        CanvasFrame hough = new CanvasFrame("Hough");
         OpenCVFrameConverter.ToIplImage sourceConverter = new OpenCVFrameConverter.ToIplImage();
         OpenCVFrameConverter.ToIplImage houghConverter = new OpenCVFrameConverter.ToIplImage();
         if (src == null) {
@@ -108,11 +108,11 @@ public class HoughLines {
         }
 
         // shows image
-        source.showImage(sourceConverter.convert(src));
-        hough.showImage(houghConverter.convert(colorDst));
-
-        source.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        hough.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        source.showImage(sourceConverter.convert(src));
+//        hough.showImage(houghConverter.convert(colorDst));
+//
+//        source.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        hough.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return lines;
 
     }
