@@ -99,7 +99,7 @@ public class GridFinder {
         System.out.println("8" + "  " + ts());
         alt = fillHoles(alt);
         alt = fillHoles(alt);
-        erodeImage(alt);
+//        erodeImage(alt);
         System.out.println("9" + "  " + ts());
         erodeImage(outerBox);
         System.out.println("10" + "  " + ts());
