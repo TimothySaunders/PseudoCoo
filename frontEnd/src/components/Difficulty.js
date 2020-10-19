@@ -4,10 +4,8 @@ import sudoku from '../helpers/sudoku'
 const Difficulty = (props) => {  
 
     function setDifficulty(event){
-        
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
-        console.log(generatedString);
-        props.creategameStringFromDifficulty(generatedString);
+        props.createGameString(generatedString);
 
     }
 

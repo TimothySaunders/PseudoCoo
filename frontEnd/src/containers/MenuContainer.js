@@ -60,9 +60,12 @@ export default class MenuContainer extends Component{
         this.setState({viewOption:chosen})
     }
 
-    creategameStringFromDifficulty = (choice) => {
-        const newGame = this.state.game;
-        newGame.gridValues = choice;
+    createGameString = (choice) => {
+        const newGame = {
+            id: null,
+            gridValues: choice,
+            timeStamp: ""
+        }
         this.setState({game:newGame})
     }
 
@@ -79,7 +82,7 @@ export default class MenuContainer extends Component{
         if(this.state.game.gridValues === ""){
             return(
                 <Fragment>
-                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
+                    <MenuView chooseMenu={this.chooseMenu} createGameString={this.createGameString}
                       viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                 </Fragment>
             )

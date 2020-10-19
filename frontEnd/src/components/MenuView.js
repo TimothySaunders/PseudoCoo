@@ -32,7 +32,7 @@ const MenuView = (props) => {
 
                     <Fragment>
                         <p> I am Difficulty Menu view -- case</p>
-                        <Difficulty chooseMenu={props.chooseMenu} creategameStringFromDifficulty={props.creategameStringFromDifficulty} />
+                        <Difficulty chooseMenu={props.chooseMenu} createGameString={props.createGameString} />
                     </Fragment>
                 )
                 break
@@ -41,7 +41,7 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <ImageUpload />
+                        <ImageUpload createGameString={props.createGameString} />
                         <br />
                         <button onClick={makeChoice} value="DifficultyMenu"> PLAY   </button><br />
                         <button onClick={makeChoice} value="ImportImage"> get PseudoCoo from Image   </button><br />

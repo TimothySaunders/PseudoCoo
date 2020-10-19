@@ -49,7 +49,7 @@ function getTextGrid(objectOfArrays){
       if (output === ""){
         output += value
       } else {
-        output += " "  + value
+        output += value
       }
     })
   })
@@ -104,19 +104,18 @@ async function getGrid(grid, url){
           }
         
         counter +=1;
-        if(counter%18===0){
+        if(counter%9===0){
             counter=0;
             console.log(rowString);
             rowString ="|";
             console.log("|___|___|___|___|___|___|___|___|___|")
         }
     }   
-    console.log(rowString);
-    console.log("|___|___|___|___|___|___|___|___|___|")
+    // console.log(rowString);
+    // console.log("|___|___|___|___|___|___|___|___|___|")
   }
 
 export default async function parseImage(url, margins=false, fudgefactor=false){
-  console.log(margins, fudgefactor)
   const gridTemplate = buildTemplate(url, margins, fudgefactor)
   const outputGrid = await getGrid(gridTemplate, url)
   const gridString = getTextGrid(outputGrid)

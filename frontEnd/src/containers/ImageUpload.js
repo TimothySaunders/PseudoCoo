@@ -8,7 +8,7 @@ export default class ImageUpload extends Component{
         super(props);
         this.state = {
             imageFile: null,
-            parsedOutput: ""
+            parsedOutput: "",
         }
     }
 
@@ -42,14 +42,22 @@ export default class ImageUpload extends Component{
 
     analyseImage = async () => {
         const cleanImage = await uploadImage(this.state.imageFile);
+        let output = "";
 
         let fileReader2 = new FileReader();
-        fileReader2.onload = function (){
-            const output = ImageParser(fileReader2.result, true, false)
+        fileReader2.onload = async () => {
+            output = await ImageParser(fileReader2.result, false, true)
             document.getElementById("test").src = fileReader2.result;
+            this.setState ({parsedOutput: output}) 
         }
         fileReader2.readAsDataURL(cleanImage)
-        //some kind of output
+    }
+
+    handleValidate = () => {
+        if (this.state.parsedOutput !== ""){
+            this.props.createGameString(this.state.parsedOutput);
+        }
+        
     }
 
     // drag and drop methods
@@ -88,7 +96,7 @@ export default class ImageUpload extends Component{
         return(
             <div>
                 <p>//grid component will go here</p>
-                <p>//validate button will appear here once upload complete and image parsed</p>
+                <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
                 <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                 onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
                 <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
