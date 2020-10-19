@@ -36,6 +36,8 @@ export default class GameGrid extends Component {
         this.setState({ gameState: gameState });
     }
 
+    // voiceContains()
+
     toggleNotes() {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
@@ -56,11 +58,11 @@ export default class GameGrid extends Component {
         this.setState({ gameState: prevState });
     }
 
-    takeVoiceCommand = (command) => {
-        if (command.includes("solve")){
-            this.solve();
-        }
-    }
+    // takeVoiceCommand = (command) => {
+    //     if (command.includes("solve")){
+    //         this.solve();
+    //     }
+    // }
 
     clear = () => {
         let cells = this.state.gameState;
@@ -125,7 +127,7 @@ export default class GameGrid extends Component {
         
         const gridCells = this.state.gameState.map((cell, i) => {
             return (
-                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} />
+                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit}/>
             )
         });
         return (
@@ -137,6 +139,8 @@ export default class GameGrid extends Component {
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                 <button onClick={this.clear} >Clear</button>
                 <button onClick={this.handleSaveGame} >Save</button>
+                {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
+
             
     
             </div>

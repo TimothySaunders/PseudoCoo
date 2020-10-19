@@ -15,6 +15,8 @@ export default class GridCell extends Component {
         this.clickMakesNumberVanish = this.clickMakesNumberVanish.bind(this);
         this.setDisplay = this.setDisplay.bind(this);
         this.showNotes = this.showNotes.bind(this);
+        // this.giveNumtoDisplay = this.giveNumtoDisplay.bind(this);
+        // this.digtListener = this.digitlListener.bind(this);
     }
     
     componentDidMount() {
@@ -57,30 +59,70 @@ export default class GridCell extends Component {
     }
 
     clickMakesNumberVanish(event) {
+      
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
         this.display.style.backgroundColor = "rgba(255, 255, 255, 0.3";
+        this.digitListener();
     }
-    setDisplay(event) {
-        
-        let val = event.target.value;
-        if (val.length > 1) {
-            val = val.substr(1);
-            event.target.value = val;
-        }
-        this.display.textContent = val;
+    digitListener = () => {
+        // const digit = this.props.listenForDigit();
+        // window.setTimeout(() => {
+        //     if (digit !== "0" && digit !== undefined && digit !== null) {
+        //         console.log("i'm the cell and the digit is " + digit)
+        //         this.giveNumToDisplay(digit);
+        //     }
+        // }, 5000);
+        // this.props.listenForDigit().then((result) => {
+        //     console.log("i sent back " + result);
+        //     this.giveNumToDisplay(result);
+        // })
+        // this.giveNumToDisplay( await this.props.listenForDigit());
+        // if (digit !== "0") {
+        //  this.giveNumToDisplay(digit);
+        // }
 
-        if (val === "") {
-            val = "0";
+
+        this.props.listenForDigit(this.giveNumToDisplay);
+    }
+
+    giveNumToDisplay = (num) => {
+        console.log(num);
+        console.log("boogywoogywoogy");
+        this.display.textContent = num;
+
+        if (num === undefined) {
+            num = "0";
         }
+        this.setState(num);
+        // let newCell = {
+        //     value: num,
+        //     editable: this.props.cell.editable,
+        //     notes: this.props.cell.notes
+        // };
+        // this.props.onNumberInput(this.props.index, newCell, this.display);
+        // this.showNotes();
+        // setTimeout((console.log()),200);
+    }
+
+    setState = (num) => {
         let newCell = {
-            value: val,
+            value: num,
             editable: this.props.cell.editable,
             notes: this.props.cell.notes
         };
         this.props.onNumberInput(this.props.index, newCell, this.display);
         this.showNotes();
-        // setTimeout((console.log()),200);
+    }
+
+    setDisplay(event) {
+        
+        let num = event.target.value;
+        if (num.length > 1) {
+            num = num.substr(1);
+            event.target.value = num;
+        }
+       this.giveNumToDisplay(num);
 
     }
 
