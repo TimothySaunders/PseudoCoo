@@ -209,7 +209,18 @@ public class GridFinder {
         HoughLines hl = new HoughLines(outerBox);
         CvSeq lines = hl.lines();
 
-//        hl.warpGrid(lines, alt);
+        Point2f gridPoints = hl.warpGrid(lines, alt);
+
+
+        Mat undistorted = new Mat(new Size(500, 500), CV_8UC1);
+        Point2f dstPts = new Point2f(4);
+        dstPts.position(0).x(0).y(0);
+        dstPts.position(1).x(500 - 1).y(0);
+        dstPts.position(2).x(500 - 1).y(500 - 1);
+        dstPts.position(3).x(0).y(500 - 1);
+        warpPerspective(alt, undistorted, getPerspectiveTransform(gridPoints, dstPts), new Size(500, 500));
+        display(alt, "kjashdkjashdkjasd");
+
 
 
 

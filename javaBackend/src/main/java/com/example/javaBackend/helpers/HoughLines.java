@@ -71,7 +71,15 @@ public class HoughLines {
         //merge the similar ones
         lines = mergeSimilarLines(lines, colorDst);
 
-        warpGrid(lines, getInputImg(), src);
+//        Point2f corners = warpGrid(lines, getInputImg(), src);
+//        System.out.println(corners.position(0).x());
+//        System.out.println(corners.position(0).y());
+//        System.out.println(corners.position(1).x());
+//        System.out.println(corners.position(1).y());
+//        System.out.println(corners.position(2).x());
+//        System.out.println(corners.position(2).y());
+//        System.out.println(corners.position(3).x());
+//        System.out.println(corners.position(3).y());
 
         //draws lines
         for (int i = 0; i < lines.total(); i++) {
@@ -177,7 +185,7 @@ public class HoughLines {
         return lines;
     }
 
-    public Mat warpGrid(CvSeq lines, Mat image, IplImage original) {
+    public Point2f warpGrid(CvSeq lines, Mat image) {
         Point2f topEdge = new Point2f(1000, 1000);
         double topYIntercept = 100000;
         double topXIntercept = 0;
@@ -228,29 +236,100 @@ public class HoughLines {
             }
         }
 
-        int height = original.height();
-        int width = original.width();
+        int height = image.size().height();
+        int width = image.size().width();
 
         Point2f left1, left2, right1, right2, bottom1, bottom2, top1, top2;
 
-        Point2f corners1 = new Point2f(4);
-        Point2f corners2 = new Point2f(4);
-        corners1.position(0).x(1).y(3);
-
         if (leftEdge.y() != 0) {
-            left1 = new Point2f(0, leftEdge.x() / Math.sin(leftEdge.y());
-            left2 = new Point2f(width, -width / Math.tan(leftEdge.y() + left1.y());
+            left1 = new Point2f(0, (float)(leftEdge.x() / Math.sin(leftEdge.y())));
+            left2 = new Point2f(width, (float)(-width / Math.tan(leftEdge.y() + left1.y())));
         } else {
             left1 = new Point2f((float)(leftEdge.x() / Math.cos(leftEdge.y())), 0);
+            left2 = new Point2f((float)(left1.x() - height * Math.tan(leftEdge.x())), width);
         }
 
+        if (rightEdge.y() != 0) {
+            right1 = new Point2f(0, (float)(rightEdge.x() / Math.sin(rightEdge.y())));
+            right2 = new Point2f(width, (float)(-width / Math.tan(rightEdge.y()) + right1.y()));
+        } else {
+            right1 = new Point2f((float)(rightEdge.x() / Math.cos(rightEdge.y())), 0);
+            right2 = new Point2f((float)(right1.x() - height * Math.tan(rightEdge.y())), height);
+        }
+
+        bottom1 = new Point2f(0, (float)(bottomEdge.x() / Math.sin(bottomEdge.x())));
+        bottom2 = new Point2f(width, (float)(-width / Math.tan(bottomEdge.y()) * bottom1.y()));
+
+        top1 = new Point2f(0, (float)(topEdge.x() / Math.sin(topEdge.y())));
+        top2 = new Point2f(width, (float)(-width / Math.tan(topEdge.y()) * top1.y()));
 
 
+        // Next, we find the intersection of  these four lines
+        double leftA = left2.y() - left1.y();
+        double leftB = left1.x() - left2.x();
+
+        double leftC = leftA * left1.x() + leftB * left1.y();
+
+        double rightA = right2.y() - right1.y();
+        double rightB = right1.x() - right2.x();
+
+        double rightC = rightA * right1.x() + rightB * right1.y();
+
+        double topA = top2.y() - top1.y();
+        double topB = top1.x() - top2.x();
+
+        double topC = topA * top1.x() + topB * top1.y();
+
+        double bottomA = bottom2.y() - bottom1.y();
+        double bottomB = bottom1.x() - bottom2.x();
+
+        double bottomC = bottomA * bottom1.x() + bottomB * bottom1.y();
+
+        // Intersection of left and top
+        double detTopLeft = leftA * topB - leftB * topA;
+
+        Point2d ptTopLeft = new Point2d((topB * leftC - leftB * topC) / detTopLeft, (leftA * topC - topA * leftC) / detTopLeft);
+
+        // Intersection of top and right
+        double detTopRight = rightA * topB - rightB * topA;
+
+        Point2d ptTopRight = new Point2d((topB * rightC - rightB * topC) / detTopRight, (rightA * topC - topA * rightC) / detTopRight);
+
+        // Intersection of right and bottom
+        double detBottomRight = rightA * bottomB - rightB * bottomA;
+        Point2d ptBottomRight = new Point2d((bottomB * rightC - rightB * bottomC) / detBottomRight, (rightA * bottomC - bottomA * rightC) / detBottomRight);// Intersection of bottom and left
+
+        // Intersection of left and bottom
+        double detBottomLeft = leftA * bottomB - leftB * bottomA;
+        Point2d ptBottomLeft = new Point2d((bottomB * leftC - leftB * bottomC) / detBottomLeft, (leftA * bottomC - bottomA * leftC) / detBottomLeft);
 
 
+        double maxLength = (ptBottomLeft.x() - ptBottomRight.x()) * (ptBottomLeft.x() - ptBottomRight.x()) + (ptBottomLeft.y() - ptBottomRight.y()) * (ptBottomLeft.y() - ptBottomRight.y());
+        double temp = (ptTopRight.x() - ptBottomRight.x()) * (ptTopRight.x() - ptBottomRight.x()) + (ptTopRight.y() - ptBottomRight.y()) * (ptTopRight.y() - ptBottomRight.y());
+
+        if (temp > maxLength) maxLength = temp;
+
+        temp = (ptTopRight.x() - ptTopLeft.x()) * (ptTopRight.x() - ptTopLeft.x()) + (ptTopRight.y() - ptTopLeft.y()) * (ptTopRight.y() - ptTopLeft.y());
+
+        if (temp > maxLength) maxLength = temp;
+
+        temp = (ptBottomLeft.x() - ptTopLeft.x()) * (ptBottomLeft.x() - ptTopLeft.x()) + (ptBottomLeft.y() - ptTopLeft.y()) * (ptBottomLeft.y() - ptTopLeft.y());
+
+        if (temp > maxLength) maxLength = temp;
+
+        maxLength = Math.sqrt((double)maxLength);
 
 
-        return image;
+        Point2f corners = new Point2f(4);
+        corners.position(0).x((float)ptTopLeft.x()).y((float)ptTopLeft.y());
+        corners.position(1).x((float)ptTopRight.x()).y((float)ptTopRight.y());
+        corners.position(2).x((float)ptBottomRight.x()).y((float)ptBottomRight.y());
+        corners.position(3).x((float)ptBottomLeft.x()).y((float)ptBottomLeft.y());
+
+        return corners;
+
+
+//        return image;
     }
 
 
