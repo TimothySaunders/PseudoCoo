@@ -9,6 +9,7 @@ import org.bytedeco.opencv.opencv_core.*;
 import org.bytedeco.opencv.opencv_imgproc.*;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.cvCreateMemStorage;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 
@@ -100,10 +101,11 @@ public class HoughLines {
 
             // get rho (p) and theta for that line
             CvPoint2D32f current = new CvPoint2D32f(cvGetSeqElem(lines, i));
-            CvPoint p1  = new CvPoint(current).position(0);
-            CvPoint theta1  = new CvPoint(current).position(1);
 
-            if (p1.get() == 0 && theta1.get() == -100) {
+            float p1  = current.x();
+            float theta1  = current.y();
+
+            if (p1 == 0 && theta1 == -100) {
                 continue; // skip it if rho == 0 and theta == -100
             }
 
@@ -111,20 +113,20 @@ public class HoughLines {
             Point pt2Current = new Point(0, 0);
 
             // calculate the normals for the line
-            if (theta1.get() > CV_PI * 45 / 100 && theta1.get() < CV_PI * 135 / 180) {
+            if (theta1 > CV_PI * 45 / 100 && theta1 < CV_PI * 135 / 180) {
                 // line is vertical
                 pt1Current.x(0);
-                pt1Current.y((int) (p1.get() / Math.sin(theta1.get())));
+                pt1Current.y((int) (p1 / Math.sin(theta1)));
 
                 pt2Current.x(image.width());
-                pt2Current.y((int) (-pt2Current.x() / Math.tan(theta1.get()) + p1.get() / Math.sin(theta1.get())));
+                pt2Current.y((int) (-pt2Current.x() / Math.tan(theta1) + p1 / Math.sin(theta1)));
             } else {
                 // line is horizontal
                 pt1Current.y(0);
-                pt1Current.x((int) (p1.get() / Math.cos(theta1.get())));
+                pt1Current.x((int) (p1 / Math.cos(theta1)));
 
                 pt2Current.y(image.height());
-                pt2Current.x((int) (-pt2Current.y() / Math.tan(theta1.get()) + p1.get() / Math.cos(theta1.get())));
+                pt2Current.x((int) (-pt2Current.y() / Math.tan(theta1) + p1 / Math.cos(theta1)));
             }
 
             // merge lines - loop through them all and compare to the current
@@ -134,36 +136,54 @@ public class HoughLines {
                     continue;
                 }
 
-                CvPoint p  = new CvPoint(pos).position(0);
-                CvPoint theta  = new CvPoint(pos).position(1);
-                if (Math.abs(p.get() - p1.get()) < 20 && Math.abs(theta.get() - theta1.get()) < CV_PI * 10 / 180) {
+                float p  = pos.x();
+                float theta  = pos.y();
+                if (Math.abs(p - p1) < 20 && Math.abs(theta - theta1) < CV_PI * 10 / 180) {
 
                     Point pt1 = new Point(0, 0);
                     Point pt2 = new Point(0, 0);
 
-                    if (theta.get() > CV_PI * 45 / 180 && theta.get() < CV_PI * 135 / 100) {
+                    if (theta > CV_PI * 45 / 180 && theta < CV_PI * 135 / 100) {
                         pt1.x(0);
-                        pt1.y((int)(p.get() / Math.sin(theta.get())));
+                        pt1.y((int)(p / Math.sin(theta)));
                         pt2.x(image.width());
-                        pt2.y((int)(-pt2.x() / Math.tan(theta.get()) + p.get() / Math.sin(theta.get())));
+                        pt2.y((int)(-pt2.x() / Math.tan(theta) + p / Math.sin(theta)));
                     } else {
                         pt1.y(0);
-                        pt1.x((int)(p.get() / Math.cos(theta.get())));
+                        pt1.x((int)(p / Math.cos(theta)));
                         pt2.y(image.height());
-                        pt2.x((int)(-pt2.y() / Math.tan(theta.get()) + p.get() / Math.cos(theta.get())));
+                        pt2.x((int)(-pt2.y() / Math.tan(theta) + p / Math.cos(theta)));
                     }
 
                     if (((double)(pt1.x() - pt1Current.x()) * (pt1.x() - pt1Current.x()) + (pt1.y() - pt1Current.y()) * (pt1.y() - pt1Current.y()) < 64 * 64) && ((double)(pt1.x() - pt1Current.x()) * (pt1.x() - pt1Current.x()) + (pt1.y() - pt1Current.y()) * (pt1.y() - pt1Current.y()) < 64 * 64)) {
-                        float pMean = (p.get() + p1.get()) / 2f;
-                        float thetaMean = (theta.get() + theta1.get()) / 2f;
-                        // set current line to mean position of current and iterated
-                        System.out.println(cvGetSeqElem(lines, i).position(0);
-                        cvGetSeqElem(lines, i).position(0).put((byte) pMean);
-//                        System.out.println(cvGetSeqElem(lines, i).position(0).get());
-                        cvGetSeqElem(lines, i).position(1).put((byte) thetaMean);
-                        // set iterated line to stupid values so it won't get used again
-                        cvGetSeqElem(lines, j).position(0).put((byte) 0);
-                        cvGetSeqElem(lines, j).position(1).put((byte) -100);
+                        float pMean = (p + p1) / 2f;
+                        float thetaMean = (theta + theta1) / 2f;
+                        CvPoint2D32f mean = new CvPoint2D32f();
+
+                        CvMemStorage meanStore = cvCreateMemStorage();
+                        mean.x(pMean);
+                        mean.y(thetaMean);
+                        CvSeq pointMean = new CvSeq(mean);
+
+                        cvSeqRemove(lines, i);
+                        cvSeqInsert(lines, i, pointMean);
+
+                        CvPoint2D32f rmPos = new CvPoint2D32f();
+                        rmPos.x(0);
+                        rmPos.y(-100);
+                        CvSeq pointRmPos = new CvSeq(rmPos);
+
+                        cvSeqRemove(lines, j);
+                        cvSeqInsert(lines, i, pointRmPos);
+
+
+//                        // set current line to mean position of current and iterated
+//                        cvGetSeqElem(lines, i).position(0).put((byte) pMean);
+////                        System.out.println(cvGetSeqElem(lines, i).position(0).get());
+//                        cvGetSeqElem(lines, i).position(1).put((byte) thetaMean);
+//                        // set iterated line to stupid values so it won't get used again
+//                        cvGetSeqElem(lines, j).position(0).put((byte) 0);
+//                        cvGetSeqElem(lines, j).position(1).put((byte) -100);
                     }
                 }
             }
