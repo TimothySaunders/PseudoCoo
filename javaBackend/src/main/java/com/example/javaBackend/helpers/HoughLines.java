@@ -154,36 +154,17 @@ public class HoughLines {
                         pt2.y(image.height());
                         pt2.x((int)(-pt2.y() / Math.tan(theta) + p / Math.cos(theta)));
                     }
-
+                    // set current line to the mean position of current and pos
                     if (((double)(pt1.x() - pt1Current.x()) * (pt1.x() - pt1Current.x()) + (pt1.y() - pt1Current.y()) * (pt1.y() - pt1Current.y()) < 64 * 64) && ((double)(pt1.x() - pt1Current.x()) * (pt1.x() - pt1Current.x()) + (pt1.y() - pt1Current.y()) * (pt1.y() - pt1Current.y()) < 64 * 64)) {
+                        // get mean of rho and theta
                         float pMean = (p + p1) / 2f;
                         float thetaMean = (theta + theta1) / 2f;
-                        CvPoint2D32f mean = new CvPoint2D32f();
-
-                        CvMemStorage meanStore = cvCreateMemStorage();
-                        mean.x(pMean);
-                        mean.y(thetaMean);
-                        CvSeq pointMean = new CvSeq(mean);
-
-                        cvSeqRemove(lines, i);
-                        cvSeqInsert(lines, i, pointMean);
-
-                        CvPoint2D32f rmPos = new CvPoint2D32f();
-                        rmPos.x(0);
-                        rmPos.y(-100);
-                        CvSeq pointRmPos = new CvSeq(rmPos);
-
-                        cvSeqRemove(lines, j);
-                        cvSeqInsert(lines, i, pointRmPos);
-
-
-//                        // set current line to mean position of current and iterated
-//                        cvGetSeqElem(lines, i).position(0).put((byte) pMean);
-////                        System.out.println(cvGetSeqElem(lines, i).position(0).get());
-//                        cvGetSeqElem(lines, i).position(1).put((byte) thetaMean);
-//                        // set iterated line to stupid values so it won't get used again
-//                        cvGetSeqElem(lines, j).position(0).put((byte) 0);
-//                        cvGetSeqElem(lines, j).position(1).put((byte) -100);
+                        // set current to rho mean and theta mean
+                        current.position(0).put(pMean);
+                        current.position(1).put(thetaMean);
+                        // set pos to some ridiculous value so it's not checked again
+                        pos.position(0).put(0);
+                        pos.position(1).put(-100);
                     }
                 }
             }
