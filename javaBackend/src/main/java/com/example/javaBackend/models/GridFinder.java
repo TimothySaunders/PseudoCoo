@@ -293,12 +293,12 @@ public class GridFinder {
         srcPts.position(3).x((float) rect.x()).y((float) rect.y() + rect.height());
         Point2f dstPts = new Point2f(4);
         dstPts.position(0).x(0).y(0);
-        dstPts.position(1).x(500 - 1).y(0);
-        dstPts.position(2).x(500 - 1).y(500 - 1);
-        dstPts.position(3).x(0).y(500 - 1);
+        dstPts.position(1).x(504 - 1).y(0);
+        dstPts.position(2).x(504 - 1).y(504 - 1);
+        dstPts.position(3).x(0).y(504 - 1);
 
         Mat p = getPerspectiveTransform(srcPts.position(0), dstPts.position(0));
-        Mat img = new Mat(new Size(500, 500), image.type());//image.size()
+        Mat img = new Mat(new Size(504, 504), image.type());//image.size()
         warpPerspective(output, img, p, img.size());
         return img;
     }

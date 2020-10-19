@@ -3,17 +3,18 @@ const sizeOf = require('image-size');
 
 
 function getImageMaxDimension(url){
-  var dimensions = sizeOf(url);
-  return dimensions.width > dimensions.height ? dimensions.width : dimensions.height
+  // const  dimensions = sizeOf(url);
+  // return dimensions.width > dimensions.height ? dimensions.width : dimensions.height
+  return 504; //now hardcoded as image-size package doesnt like file format input that we are using
 }
 
-function buildTemplate(url){
+function buildTemplate(url, includeMargin, includeFudgeFactor){
   console.log("Building Image Search Template")
 
   const gridTotalHeight = getImageMaxDimension(url)
-  const margin = Math.floor(0.02*gridTotalHeight)
+  const margin = includeMargin ? Math.floor(0.02*gridTotalHeight) : 0;
   const cellHeight = Math.floor(gridTotalHeight / 9)
-  const fudgeFactor = Math.ceil(0.003*gridTotalHeight) //to account for thicker lines in grid
+  const fudgeFactor = includeFudgeFactor ? Math.ceil(0.003*gridTotalHeight) : 0 //to account for thicker lines in grid if includeFudgeFactor is true
 
   const row1 = []
   const row2 = []
@@ -27,7 +28,7 @@ function buildTemplate(url){
   const grid = [row1, row2, row3, row4, row5, row6, row7, row8, row9]
 
   grid.forEach((row, index) => {
-    for (x=0; x<9; x++){
+    for (let x=0; x<9; x++){
         row.push({
             left: (x * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((x+1)/3)+1),
             top: (index * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((index+1)/3)+1),
@@ -45,10 +46,10 @@ function getTextGrid(objectOfArrays){
   let output = ""
   Object.values(objectOfArrays).forEach(rowArray => {
     rowArray.forEach(value => {
-      if (output == ""){
+      if (output === ""){
         output += value
       } else {
-        output += " "  + value
+        output += value
       }
     })
   })
@@ -60,7 +61,7 @@ async function getGrid(grid, url){
 
   const outputGrid = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[]}
 
-  for (index=0; index<9; index++){
+  for (let index=0; index<9; index++){
     const worker = createWorker();
 
       console.log(`Parsing Image, Row ${index+1}`);
@@ -93,7 +94,7 @@ async function getGrid(grid, url){
     var rowString ="|";
     let counter =0;
     for(let char of string){
-        if (char != " ")
+        if (char !== " ")
             {
             if (char === "0")
               {rowString = rowString.concat(`   |`);
@@ -103,21 +104,22 @@ async function getGrid(grid, url){
           }
         
         counter +=1;
-        if(counter%18==0){
+        if(counter%9===0){
             counter=0;
             console.log(rowString);
-            var rowString ="|";
+            rowString ="|";
             console.log("|___|___|___|___|___|___|___|___|___|")
         }
     }   
-    console.log(rowString);
-    console.log("|___|___|___|___|___|___|___|___|___|")
+    // console.log(rowString);
+    // console.log("|___|___|___|___|___|___|___|___|___|")
   }
 
-async function parseImage(url){
-  const gridTemplate = buildTemplate(url)
+export default async function parseImage(url, margins=false, fudgefactor=false){
+  const gridTemplate = buildTemplate(url, margins, fudgefactor)
   const outputGrid = await getGrid(gridTemplate, url)
   const gridString = getTextGrid(outputGrid)
   drawGridFromString(gridString)
   return gridString
 }
+
