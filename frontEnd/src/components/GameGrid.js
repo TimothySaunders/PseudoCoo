@@ -1,14 +1,16 @@
-import React, { Component } from "react";
+import React, { Component,} from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
+// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
+
 
 
 import Parser from "../helpers/StringParser";
 const sp = new Parser();
 const psc = new PsChecker();
-
+// SpeechRecognition.SpeechRecognition();  //! 
 
 export default class GameGrid extends Component {
 
@@ -20,6 +22,7 @@ export default class GameGrid extends Component {
         }
         this.handleNumberInput = this.handleNumberInput.bind(this);
         this.toggleNotes = this.toggleNotes.bind(this);
+        
     }
 
 
@@ -52,6 +55,13 @@ export default class GameGrid extends Component {
         });
         this.setState({ gameState: prevState });
     }
+
+    takeVoiceCommand = (command) => {
+        if (command.includes("solve")){
+            this.solve();
+        }
+    }
+
     clear = () => {
         let cells = this.state.gameState;
         cells = cells.map(cell => {
@@ -112,6 +122,7 @@ export default class GameGrid extends Component {
     }
 
     render() {
+        
         const gridCells = this.state.gameState.map((cell, i) => {
             return (
                 <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} />
@@ -126,6 +137,16 @@ export default class GameGrid extends Component {
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                 <button onClick={this.clear} >Clear</button>
                 <button onClick={this.handleSaveGame} >Save</button>
+                {/*  -------  */}
+                {/* <br/>
+                <button onClick={SpeechRecognition.startListening} >Start</button>
+                <button onClick={SpeechRecognition.stopListening} >Stop</button>
+                <button onClick={useSpeechRecognition.resetTranscript} >Clear</button>
+        
+                <p>{useSpeechRecognition.transcript}</p>       */}
+                
+
+                
             </div>
         )
     }
