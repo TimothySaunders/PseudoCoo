@@ -25,7 +25,7 @@ const Difficulty = (props) => {
         <button onClick={setDifficulty} value="hard"> Moooodium Rare</button><br/>
         <button onClick={setDifficulty} value="very-hard"> Udderly difficult</button><br/>
         <button onClick={setDifficulty} value="insane"> Mad Cooo!!! </button><br/>
-        <button onClick={setDifficulty} value="inhuman"> Mooooooooo!!</button><br/>
+        <button onClick={setDifficulty} value="inhuman"> Holy Coo!!</button><br/>
 
         <button onClick={makeChoice} value="mainMenu"> Back to menu</button>
 

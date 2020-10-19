@@ -1,10 +1,13 @@
 import React, { Component, Fragment } from 'react'
-import { get, post, patch } from '../helpers/requests'
+import { get, post, patch, remove } from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
+import JokeTimer from '../helpers/JokeTimer'
+import sudoku from '../helpers/sudoku'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
+recognition.continous = true;
 // recognition.start();
 
 export default class MenuContainer extends Component {
@@ -20,27 +23,46 @@ export default class MenuContainer extends Component {
             savedGames: []
         }
 
+        this.voiceCommands = this.voiceCommands.bind(this)
     };
 
-    async componentDidMount() {
-        const saveGames = await get("api/saves");
-        this.setState({ savedGames: saveGames })
-        console.log('fff!')
+    componentDidMount() {
+        this.getSaveGames();
+        const jokeGenerator = new JokeTimer(15, 30)
+        // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
+    }
 
-        console.log('fff2!')
+    getSaveGames = async () => {
+        const saveGames = await get("api/saves");
+        this.setState({ savedGames: saveGames });
     }
     // --- --- VOICE  --- --- 
 
+
+
+    contains(checkedarray, arrayOfWords) {
+        var result = false;
+        for (let word of arrayOfWords){
+            if (checkedarray.includes(word)) {
+                result = true
+            }
+        }
+
+        return result;
+    }
+
     voiceCommands() {
+        // recognition.abort();
         recognition.start();
+        // recognition.continous =true;
         console.log("inVoiceCommands")
         recognition.onstart = () => {
             console.log("voice recog initialised");
         }
         recognition.onresult = (e) => {
-            console.log("here")
+            console.log("onresult")
             let current = e.resultIndex;
 
             let transcript = e.results[current][0].transcript;
@@ -50,97 +72,143 @@ export default class MenuContainer extends Component {
                 if (transcript === 'load' || transcript === ' load') {
                     this.setState({ viewOption: "SavedGames" })
                 }
-                if (transcript === 'back' || transcript === ' back') {
-                    this.setState({ viewOption: "mainMenu" })
 
+                if (this.contains(transcript, ['back','reset'])  ) {
+                    console.log("reset called")
+                    this.reset();
+                    this.setState({ viewOption: "mainMenu" })   
                 }
                 if (transcript === 'play' || transcript === ' play') {
                     this.setState({ viewOption: "DifficultyMenu" })
-                    
                 }
 
-            setTimeout(() => {
-                recognition.start();
-            }, 50);
+                if (this.state.viewOption==="DifficultyMenu") {
+                    if (this.contains(transcript, ['laughing','coo', 'cow'])  ) {
+                        const generatedString = sudoku.sudoku.generate("easy", true);
+                        this.creategameStringFromDifficulty(generatedString)
+                    }
+                    // if (transcript.includes('skimmed','milk')  ) {
+                    if (this.contains(transcript, ['skimmed','milk'])  ) {
+                        const generatedString = sudoku.sudoku.generate("medium", true);
+                        this.creategameStringFromDifficulty(generatedString)
+                    }
+                    if (this.contains(transcript, ['mooodium','rare','moodium','medium','mooooodium'])  ) {
+                        const generatedString = sudoku.sudoku.generate("hard", true);
+                        this.creategameStringFromDifficulty(generatedString)
+                    }
+                    if (this.contains(transcript, ['difficult','uterly','udder','udderly','elderly'])  ) {
+                        const generatedString = sudoku.sudoku.generate("very-hard", true);
+                        this.creategameStringFromDifficulty(generatedString)
+                    }
+                    if (this.contains(transcript, ['mad','madcow'])  ) {
+                        const generatedString = sudoku.sudoku.generate("insane", true);
+                        this.creategameStringFromDifficulty(generatedString)
+                    }
+                    if (this.contains(transcript, ['holy',' holy'])  ) {
+                        const generatedString = sudoku.sudoku.generate("inhuman", true);
+                        this.creategameStringFromDifficulty(generatedString)
+                    }
+                    
 
-            console.log(transcript);
+
+                }
+            
+                
+
+                
+
+                
+
+                setTimeout(() => {
+                    recognition.start();
+                }, 50);
+
+                console.log(transcript);
+            }
+            this.getSaveGames();
         }
     }
-}
-// --- --- --- ---
+    // --- --- --- ---
 
-saveGame = async (gridValues) => {
-    const saveGame = {
-        gridValues: gridValues,
-        timeStamp: new Date().toLocaleString()
-    }
-    if (this.state.game.id === null) {
-        const savedGame = await post("api/saves", saveGame)
-        this.setState({ game: savedGame })
-    } else {
-        saveGame.id = this.state.game.id;
-        const savedGame = await patch("api/saves/" + saveGame.id, saveGame)
-        this.setState({ game: savedGame })
-    }
-}
-
-loadGame = (event) => {
-    const targetId = event.target.id;
-    const gameIndex = targetId.substring(targetId.length - 1);
-    const game = this.state.savedGames[gameIndex];
-    this.setState({ game: game });
-}
-
-chooseMenu = (choice) => {
-    const chosen = choice;
-    this.setState({ viewOption: chosen })
-}
-
-creategameStringFromDifficulty = (choice) => {
-    const newGame = this.state.game;
-    newGame.gridValues = choice;
-    this.setState({ game: newGame })
-}
-
-reset = () => {
-    this.setState({
-        game: {
-            id: null,
-            gridValues: "",
-            timeStamp: ""
+    saveGame = async (gridValues) => {
+        const saveGame = {
+            gridValues: gridValues,
+            timeStamp: new Date().toLocaleString()
         }
-    });
-}
+        if (this.state.game.id === null) {
+            const savedGame = await post("api/saves", saveGame)
+            this.setState({ game: savedGame })
+        } else {
+            saveGame.id = this.state.game.id;
+            const savedGame = await patch("api/saves/" + saveGame.id, saveGame)
+            this.setState({ game: savedGame })
+        }
+    }
+
+    loadGame = (id) => {
+        const game = this.state.savedGames[id];
+        this.setState({ game: game });
+    }
 
 
-render() {
+    removeGame = async (id) => {
+        await remove("/api/saves/" + id);
+        this.getSaveGames();
+    }
 
-    if (this.state.game.gridValues === "") {
-        return (
-            <Fragment>
-                <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
-                    viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} > </MenuView>
-                    <br/>
+    chooseMenu = (choice) => {
+        const chosen = choice;
+        this.setState({ viewOption: chosen })
+    }
+
+    loadGame = (event) => {
+        const targetId = event.target.id;
+        const gameIndex = targetId.substring(targetId.length - 1);
+        const game = this.state.savedGames[gameIndex];
+        this.setState({ game: game });
+    }
+
+
+
+    creategameStringFromDifficulty = (choice) => {
+        const newGame = this.state.game;
+        newGame.gridValues = choice;
+        this.setState({ game: newGame })
+    }
+
+    reset = () => {
+        this.setState({
+            game: {
+                id: null,
+                gridValues: "",
+                timeStamp: ""
+            }
+        });
+    }
+
+    render() {
+
+        if (this.state.game.gridValues === "") {
+            return (
+                <Fragment>
+                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
+                        viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
+                    <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-            </Fragment>
-        )
-    } else {
-        return (
-            <Fragment>
-                <GameGrid game={this.state.game} saveGame={this.saveGame}></GameGrid>
-                <button onClick={this.reset}> Return to menu</button>
-                <br/>
-                <button onClick={this.voiceCommands}>resume VRC</button>
-            </Fragment>
-        )
+                </Fragment>
+            )
+        } else {
+            return (
+                <Fragment>
+                    <GameGrid game={this.state.game} saveGame={this.saveGame}></GameGrid>
+                    <button onClick={this.reset}> Return to menu</button>
+                    <br />
+                    <button onClick={this.voiceCommands}>resume VRC</button>
+                </Fragment>
+            )
+        }
     }
-
-
-
-
-
-    
 }
 
 
-}
+

@@ -137,16 +137,8 @@ export default class GameGrid extends Component {
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                 <button onClick={this.clear} >Clear</button>
                 <button onClick={this.handleSaveGame} >Save</button>
-                {/*  -------  */}
-                {/* <br/>
-                <button onClick={SpeechRecognition.startListening} >Start</button>
-                <button onClick={SpeechRecognition.stopListening} >Stop</button>
-                <button onClick={useSpeechRecognition.resetTranscript} >Clear</button>
-        
-                <p>{useSpeechRecognition.transcript}</p>       */}
-                
-
-                
+            
+    
             </div>
         )
     }

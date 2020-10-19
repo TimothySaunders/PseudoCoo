@@ -1,35 +1,20 @@
 import React, {Component} from 'react';
 import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
+import ImageParser from '../helpers/ImageParser'
 
 export default class ImageUpload extends Component{
     constructor(props){
         super(props);
         this.state = {
             imageFile: null,
+            parsedOutput: ""
         }
     }
 
     handleImageClick = () => {
         const virtualInput = this.createUpload();
         virtualInput.click();
-    }
-    
-
-    handleUpload = async (event) => {
-        this.handleClear();
-        await this.setState({imageFile : event.target.files[0]});
-        this.createPreview();
-    }
-
-    createPreview = () => {
-        let fileReader = new FileReader();
-        fileReader.onload = function () {
-            document.getElementById("preview").src = fileReader.result;
-        }
-        // fileReader.readAsDataURL(this.state.imageFile);
-        // console.log(this.state.imageFile);
-        uploadImage(this.state.imageFile).then(data => fileReader.readAsDataURL(data));
     }
 
     createUpload = () => {
@@ -40,6 +25,34 @@ export default class ImageUpload extends Component{
         return virtualInput;
     }
 
+    handleUpload = async (event) => {
+        this.handleClear();
+        await this.setState({imageFile : event.target.files[0]});
+        this.createPreview();
+        this.analyseImage();
+    }
+
+    createPreview = async () => {
+        let fileReader = new FileReader();
+        fileReader.onload = function (){
+            document.getElementById("preview").src = fileReader.result;
+        }
+        fileReader.readAsDataURL(this.state.imageFile);
+    }
+
+    analyseImage = async () => {
+        const cleanImage = await uploadImage(this.state.imageFile);
+
+        let fileReader2 = new FileReader();
+        fileReader2.onload = function (){
+            const output = ImageParser(fileReader2.result, true, false)
+            document.getElementById("test").src = fileReader2.result;
+        }
+        fileReader2.readAsDataURL(cleanImage)
+        //some kind of output
+    }
+
+    // drag and drop methods
     handleClear = () => {
         this.setState({imageFile : null});
         document.getElementById("preview").src = "uploadDefault.png";
@@ -63,7 +76,8 @@ export default class ImageUpload extends Component{
         event.preventDefault();
         if (event.dataTransfer.files[0].type.includes("image")) {
             await this.setState({imageFile : event.dataTransfer.files[0]});
-        this.createPreview();
+            this.createPreview();
+            this.analyseImage();
         } else {
             this.handleClear();
         }
@@ -77,6 +91,7 @@ export default class ImageUpload extends Component{
                 <p>//validate button will appear here once upload complete and image parsed</p>
                 <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                 onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
+                <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
             </div>
             
         )
