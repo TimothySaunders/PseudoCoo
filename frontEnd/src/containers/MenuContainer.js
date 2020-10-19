@@ -112,12 +112,6 @@ export default class MenuContainer extends Component {
 
 
                 }
-            
-                
-
-                
-
-                
 
                 setTimeout(() => {
                     recognition.start();
@@ -175,6 +169,14 @@ export default class MenuContainer extends Component {
         newGame.gridValues = choice;
         this.setState({ game: newGame })
     }
+    createGameString = (choice) => {
+        const newGame = {
+            id: null,
+            gridValues: choice,
+            timeStamp: ""
+        }
+        this.setState({game:newGame})
+    }
 
     reset = () => {
         this.setState({
@@ -191,10 +193,11 @@ export default class MenuContainer extends Component {
         if (this.state.game.gridValues === "") {
             return (
                 <Fragment>
-                    <MenuView chooseMenu={this.chooseMenu} creategameStringFromDifficulty={this.creategameStringFromDifficulty}
-                        viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
+                    <MenuView chooseMenu={this.chooseMenu} createGameString={this.createGameString}
+                      viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
+                    
                 </Fragment>
             )
         } else {
