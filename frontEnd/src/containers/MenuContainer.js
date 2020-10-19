@@ -109,8 +109,6 @@ export default class MenuContainer extends Component {
                         this.creategameStringFromDifficulty(generatedString)
                     }
                     
-
-
                 }
 
                 setTimeout(() => {
