@@ -16,7 +16,7 @@ public class GridFinderTest {
 
     @Before
     public void before() {
-        grid = new GridFinder("images/sudoku4.jpg");
+        grid = new GridFinder("images/sudoku.jpg");
     }
 
     @Test

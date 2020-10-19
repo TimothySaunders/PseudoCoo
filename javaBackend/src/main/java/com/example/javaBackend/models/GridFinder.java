@@ -66,11 +66,16 @@ public class GridFinder {
         System.out.println("7" + "  " + ts());
         alt = findGrid(outerBox, alt);
         System.out.println("8" + "  " + ts());
-        erodeImage(alt);
+        alt = fillHoles(alt);
+        alt = fillHoles(alt);
+//        erodeImage(alt);
+
+        display(alt, "aksjdhaksjhdkajshdkajshdka");
         System.out.println("9" + "  " + ts());
         erodeImage(outerBox);
         System.out.println("10" + "  " + ts());
         System.out.println(alt.isContinuous());
+        imwrite("output.jpg", alt);
         return alt;
     }
 
@@ -109,16 +114,16 @@ public class GridFinder {
         int wid = imported.cols();
         int hei = imported.rows();
         int bigger = Math.max(wid, hei);
-        if (bigger > 1000) {
+        if (bigger > 900) {
             int newX;
             int newY;
             if (bigger == wid) {
-                newX = 1000;
-                double scale = 1000 / (double) wid;
+                newX = 900;
+                double scale = 900 / (double) wid;
                 newY = (int) (hei * scale);
             } else {
-                newY = 1000;
-                double scale = 1000 / (double) hei;
+                newY = 900;
+                double scale = 900 / (double) hei;
                 newX = (int) (wid * scale);
             }
             resize(imported, sudoku, new Size(newX, newY), 0, 0, INTER_AREA);
@@ -126,6 +131,29 @@ public class GridFinder {
             sudoku = imported.clone();
         }
         return sudoku;
+    }
+
+    public Mat fillHoles(Mat image) {
+        int count = 0;
+        int max = 100;
+        UByteRawIndexer sI = image.createIndexer();
+        for (int y = 0; y < image.rows(); y+=1) {
+            for (int x = 0; x < image.cols(); x+=1) {
+                if (sI.get(y, x) > 1) {
+                    count += 1;
+//                    int area = -2;
+                    Point pt = new Point(x, y);
+                    int area = floodFill(image, pt, Scalar.GRAY);
+                    if (area > max) {
+                        floodFill(image, pt, Scalar.WHITE);
+                    } else {
+                        floodFill(image, pt, Scalar.BLACK);
+                    }
+                }
+            }
+        }
+        System.out.println(count + " times i looped this");
+        return image;
     }
 
     public Mat denoise(Mat sudoku) {
@@ -212,19 +240,18 @@ public class GridFinder {
         Point2f gridPoints = hl.warpGrid(lines, alt);
 
 
-        Mat undistorted = new Mat(new Size(500, 500), CV_8UC1);
+
         Point2f dstPts = new Point2f(4);
         dstPts.position(0).x(0).y(0);
-        dstPts.position(1).x(500 - 1).y(0);
-        dstPts.position(2).x(500 - 1).y(500 - 1);
-        dstPts.position(3).x(0).y(500 - 1);
-        warpPerspective(alt, undistorted, getPerspectiveTransform(gridPoints, dstPts), new Size(500, 500));
-        display(alt, "kjashdkjashdkjasd");
+        dstPts.position(1).x(504 - 1).y(0);
+        dstPts.position(2).x(504 - 1).y(504 - 1);
+        dstPts.position(3).x(0).y(504 - 1);
+//        warpPerspective(alt, undistorted, getPerspectiveTransform(gridPoints, dstPts), new Size(504, 504));
+//        display(undistorted, "kjashdkjashdkjasd");
 
+    display(alt, "alksjhdajshdkjahdkajhdkjahdkjahdkjashd");
 
-
-
-        alt = warpPerspectivePuzzle(outerBox, alt, maxPt);
+        alt = warpPerspectivePuzzle(outerBox, alt, maxPt, gridPoints);
         System.out.println("third step" + "  " + ts());
         sI = alt.createIndexer();
         for (int x = 0; x < alt.cols(); x++) {
@@ -245,20 +272,23 @@ public class GridFinder {
         return alt;
     }
 
-    public Mat warpPerspectivePuzzle(Mat image, Mat output, Point gridPoint) {
+    public Mat warpPerspectivePuzzle(Mat image, Mat output, Point gridPoint, Point2f srcPts) {
         floodFill(output, gridPoint, Scalar.BLACK);
 //        image = deskewImage(image);
 //        output = deskewImage(output);
         float skewAngle = getDeSkewAngle(image);
         RotatedRect minAreaRect = getDeSkewRotatedRect(image);
         output = deskewImage(output, skewAngle, minAreaRect);
+        display(output, "outputdisplay");
+
+
         image = deskewImage(image, skewAngle, minAreaRect);
         Rect rect = getLargestRect(image);
-        Point2f srcPts = new Point2f(4);
-        srcPts.position(0).x((float) rect.x()).y((float) rect.y());
-        srcPts.position(1).x((float) rect.x() + rect.width()).y((float) rect.y());
-        srcPts.position(2).x((float) rect.x() + rect.width()).y((float) rect.y() + rect.height());
-        srcPts.position(3).x((float) rect.x()).y((float) rect.y() + rect.height());
+//        Point2f srcPts = new Point2f(4);
+//        srcPts.position(0).x((float) rect.x()).y((float) rect.y());
+//        srcPts.position(1).x((float) rect.x() + rect.width()).y((float) rect.y());
+//        srcPts.position(2).x((float) rect.x() + rect.width()).y((float) rect.y() + rect.height());
+//        srcPts.position(3).x((float) rect.x()).y((float) rect.y() + rect.height());
         Point2f dstPts = new Point2f(4);
         dstPts.position(0).x(0).y(0);
         dstPts.position(1).x(500 - 1).y(0);
@@ -270,6 +300,7 @@ public class GridFinder {
         warpPerspective(output, img, p, img.size());
         return img;
     }
+
 
     public float getDeSkewAngle(Mat img) {
         MatVector countours = new MatVector();

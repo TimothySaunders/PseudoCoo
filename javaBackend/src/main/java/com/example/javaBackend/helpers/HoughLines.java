@@ -69,7 +69,17 @@ public class HoughLines {
         lines = cvHoughLines2(dst, storage, CV_HOUGH_STANDARD, 1, Math.PI / 180, 90, 0, 0, 0, CV_PI);
 
         //merge the similar ones
-        lines = mergeSimilarLines(lines, colorDst);
+//        lines = mergeSimilarLines(lines, colorDst);
+
+
+
+
+
+
+
+
+
+
 
 //        Point2f corners = warpGrid(lines, getInputImg(), src);
 //        System.out.println(corners.position(0).x());
@@ -213,7 +223,10 @@ public class HoughLines {
             double xIntercept = p / Math.cos(theta);
             double yIntercept = p / (Math.cos(theta) * Math.sin(theta));
 
-            // if line is horizontal
+            // if line is vertical
+//            pt2current.x = -pt2curren.y * tan(theta1) + p1/cos(theta1);
+
+
             if (theta > CV_PI * 80 / 180 && theta < CV_PI * 100 / 180) {
                 if (p < topEdge.x()) {
                     topEdge.x(p);
@@ -223,6 +236,7 @@ public class HoughLines {
                     bottomEdge.x(p);
                     bottomEdge.y(theta);
                 }
+                //if line is horizontal
             } else if (theta < CV_PI * 10 / 180 || theta > CV_PI * 170 / 180) {
                 if (xIntercept > rightXIntercept) {
                     rightEdge.x(p);
@@ -246,7 +260,7 @@ public class HoughLines {
             left2 = new Point2f(width, (float)(-width / Math.tan(leftEdge.y() + left1.y())));
         } else {
             left1 = new Point2f((float)(leftEdge.x() / Math.cos(leftEdge.y())), 0);
-            left2 = new Point2f((float)(left1.x() - height * Math.tan(leftEdge.x())), width);
+            left2 = new Point2f((float)(left1.x() - height * Math.tan(leftEdge.x())), height);
         }
 
         if (rightEdge.y() != 0) {
@@ -304,20 +318,20 @@ public class HoughLines {
         Point2d ptBottomLeft = new Point2d((bottomB * leftC - leftB * bottomC) / detBottomLeft, (leftA * bottomC - bottomA * leftC) / detBottomLeft);
 
 
-        double maxLength = (ptBottomLeft.x() - ptBottomRight.x()) * (ptBottomLeft.x() - ptBottomRight.x()) + (ptBottomLeft.y() - ptBottomRight.y()) * (ptBottomLeft.y() - ptBottomRight.y());
-        double temp = (ptTopRight.x() - ptBottomRight.x()) * (ptTopRight.x() - ptBottomRight.x()) + (ptTopRight.y() - ptBottomRight.y()) * (ptTopRight.y() - ptBottomRight.y());
+//        double maxLength = (ptBottomLeft.x() - ptBottomRight.x()) * (ptBottomLeft.x() - ptBottomRight.x()) + (ptBottomLeft.y() - ptBottomRight.y()) * (ptBottomLeft.y() - ptBottomRight.y());
+//        double temp = (ptTopRight.x() - ptBottomRight.x()) * (ptTopRight.x() - ptBottomRight.x()) + (ptTopRight.y() - ptBottomRight.y()) * (ptTopRight.y() - ptBottomRight.y());
+//
+//        if (temp > maxLength) maxLength = temp;
+//
+//        temp = (ptTopRight.x() - ptTopLeft.x()) * (ptTopRight.x() - ptTopLeft.x()) + (ptTopRight.y() - ptTopLeft.y()) * (ptTopRight.y() - ptTopLeft.y());
+//
+//        if (temp > maxLength) maxLength = temp;
+//
+//        temp = (ptBottomLeft.x() - ptTopLeft.x()) * (ptBottomLeft.x() - ptTopLeft.x()) + (ptBottomLeft.y() - ptTopLeft.y()) * (ptBottomLeft.y() - ptTopLeft.y());
+//
+//        if (temp > maxLength) maxLength = temp;
 
-        if (temp > maxLength) maxLength = temp;
-
-        temp = (ptTopRight.x() - ptTopLeft.x()) * (ptTopRight.x() - ptTopLeft.x()) + (ptTopRight.y() - ptTopLeft.y()) * (ptTopRight.y() - ptTopLeft.y());
-
-        if (temp > maxLength) maxLength = temp;
-
-        temp = (ptBottomLeft.x() - ptTopLeft.x()) * (ptBottomLeft.x() - ptTopLeft.x()) + (ptBottomLeft.y() - ptTopLeft.y()) * (ptBottomLeft.y() - ptTopLeft.y());
-
-        if (temp > maxLength) maxLength = temp;
-
-        maxLength = Math.sqrt((double)maxLength);
+//        maxLength = Math.sqrt((double)maxLength);
 
 
         Point2f corners = new Point2f(4);
@@ -331,7 +345,5 @@ public class HoughLines {
 
 //        return image;
     }
-
-
 }
 
