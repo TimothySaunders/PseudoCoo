@@ -106,7 +106,7 @@ public class GridFinder {
         System.out.println(alt.isContinuous());
 //        return alt;
         byte[] bytes = new byte[alt.cols() * alt.rows() * alt.channels()];
-        imencode(".jpg", alt, bytes);
+        imencode(".png", alt, bytes);
         return bytes;
     }
 
