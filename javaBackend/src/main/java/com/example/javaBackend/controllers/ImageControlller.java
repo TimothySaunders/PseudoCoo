@@ -39,7 +39,7 @@ public class ImageControlller {
             output = grid.convert();
 
             final HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentType(MediaType.IMAGE_PNG);
 
             System.out.println("finished the conversion");
             System.out.println("sending response...");
