@@ -55,6 +55,7 @@ export default class ImageUpload extends Component{
 
     handleValidate = () => {
         if (this.state.parsedOutput !== ""){
+            // check if solvable // still to be written
             this.props.createGameString(this.state.parsedOutput);
         }
         
