@@ -3,8 +3,9 @@ const sizeOf = require('image-size');
 
 
 function getImageMaxDimension(url){
-  var dimensions = sizeOf(url);
-  return dimensions.width > dimensions.height ? dimensions.width : dimensions.height
+  // const  dimensions = sizeOf(url);
+  // return dimensions.width > dimensions.height ? dimensions.width : dimensions.height
+  return 500; //now hardcoded as image-size package doesnt like file format input 
 }
 
 function buildTemplate(url){
@@ -27,7 +28,7 @@ function buildTemplate(url){
   const grid = [row1, row2, row3, row4, row5, row6, row7, row8, row9]
 
   grid.forEach((row, index) => {
-    for (x=0; x<9; x++){
+    for (let x=0; x<9; x++){
         row.push({
             left: (x * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((x+1)/3)+1),
             top: (index * cellHeight) + (margin / 2) + fudgeFactor*(Math.floor((index+1)/3)+1),
@@ -45,7 +46,7 @@ function getTextGrid(objectOfArrays){
   let output = ""
   Object.values(objectOfArrays).forEach(rowArray => {
     rowArray.forEach(value => {
-      if (output == ""){
+      if (output === ""){
         output += value
       } else {
         output += " "  + value
@@ -60,7 +61,7 @@ async function getGrid(grid, url){
 
   const outputGrid = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[]}
 
-  for (index=0; index<9; index++){
+  for (let index=0; index<9; index++){
     const worker = createWorker();
 
       console.log(`Parsing Image, Row ${index+1}`);
@@ -93,7 +94,7 @@ async function getGrid(grid, url){
     var rowString ="|";
     let counter =0;
     for(let char of string){
-        if (char != " ")
+        if (char !== " ")
             {
             if (char === "0")
               {rowString = rowString.concat(`   |`);
@@ -103,10 +104,10 @@ async function getGrid(grid, url){
           }
         
         counter +=1;
-        if(counter%18==0){
+        if(counter%18===0){
             counter=0;
             console.log(rowString);
-            var rowString ="|";
+            rowString ="|";
             console.log("|___|___|___|___|___|___|___|___|___|")
         }
     }   
@@ -114,10 +115,11 @@ async function getGrid(grid, url){
     console.log("|___|___|___|___|___|___|___|___|___|")
   }
 
-async function parseImage(url){
+export default async function parseImage(url){
   const gridTemplate = buildTemplate(url)
   const outputGrid = await getGrid(gridTemplate, url)
   const gridString = getTextGrid(outputGrid)
   drawGridFromString(gridString)
   return gridString
 }
+

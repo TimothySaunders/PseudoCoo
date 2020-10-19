@@ -15,11 +15,12 @@ export default function JokeTimer(min, max){
         const selectedJoke = randomItemFromList(cowJokes);
         const selectedIndex = cowJokes.findIndex((joke) => joke === selectedJoke);
         cowJokes.splice(selectedIndex,1);
-        if (cowJokes.length === 0){
+        if (cowJokes.length === 1){
             getCowJokes();
         }
         resetTimer();
         console.log(selectedJoke)
+        // document.getElementById("test").innerHTML=selectedJoke.setup
     }
     
     function randomInterval(min, max) {
