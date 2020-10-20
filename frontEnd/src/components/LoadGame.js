@@ -10,15 +10,15 @@ export default function LoadGame(props) {
         return targetId;
     }
 
-    const handleLoadGame = (event) => {
-        const gameId = getIdFromEvent(event)
-        console.log(gameId);
-        props.loadGame(gameId);
+    const handleLoadGame = (game) => {
+        // const gameId = getIdFromEvent(event)
+        // console.log(gameId);
+        props.loadGame(game.id);
     }
 
-    const handleDeleteGame = (event) => {
-        const gameId = getIdFromEvent(event)
-        props.removeGame(gameId);
+    const handleDeleteGame = (game) => {
+        // const gameId = getIdFromEvent(event)
+        props.removeGame(game.id);
     }
 
     const saveNodes = props.savedGames.map((game, index) => {

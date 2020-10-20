@@ -36,33 +36,23 @@ export default class GameGrid extends Component {
         this.setState({ gameState: gameState });
     }
 
-    // voiceContains()
 
     toggleNotes() {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
     solve = () => {
-        // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
-        let toConvert = sp.getRawStringFromObjects(this.state.gameState)
-        toConvert.replace("0", ".");
+        let toConvert = sp.getRawStringFromObjects(this.state.gameState);
         const solution = sudoku.sudoku.solve(toConvert);
-
-        // const solution = sudoku.sudoku.solve(sp.getRawStringFromObjects(this.state.gameState));
-
-        let prevState = this.state.gameState;
-        let gameState = sp.getObjects(solution);
-        prevState = prevState.map((cell, index) => {
-            cell.value = gameState[index].value;
-            return cell;
-        });
-        this.setState({ gameState: prevState });
+        if (solution) {
+            let prevState = this.state.gameState;
+            let gameState = sp.getObjects(solution);
+            prevState = prevState.map((cell, index) => {
+                cell.value = gameState[index].value;
+                return cell;
+            });
+            this.setState({ gameState: prevState });
+        }
     }
-
-    // takeVoiceCommand = (command) => {
-    //     if (command.includes("solve")){
-    //         this.solve();
-    //     }
-    // }
 
     clear = () => {
         let cells = this.state.gameState;

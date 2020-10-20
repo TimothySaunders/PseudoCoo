@@ -3,11 +3,11 @@ import "./LoadGameItem.css";
 
 export default function LoadGameItem({ game, clickEvent, deleteEvent }) {
     const handleLoadGame = (event) => {
-        clickEvent(event);
+        clickEvent(game);
     }
     const handleDeleteGame = (event) => {
         event.stopPropagation();
-        deleteEvent(event);
+        deleteEvent(game);
     }
     return (
         <section id={`save-${game.id}`} className="load-game-item" onClick={handleLoadGame}>
