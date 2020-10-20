@@ -3,16 +3,17 @@ import React, { Fragment } from 'react'
 import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
 import LoadGame from './LoadGame'
-import CowTimer from '../helpers/CowTimer'
+// import CowTimer from '../helpers/CowTimer'
 
 /* eslint-disable */
 
 const MenuView = (props) => {
 
-    const moo = new CowTimer(10, 15, "moo")
-    moo.startTimer()
+    // const moo = new CowTimer(10, 10, "joke")
+    // moo.startTimer()
 
         function makeChoice(event) {
+            // moo.endTimer();
             props.chooseMenu(event.target.value)
         }
         

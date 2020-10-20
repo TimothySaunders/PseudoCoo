@@ -5,7 +5,6 @@ import GameGrid from '../components/GameGrid'
 import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
 
-
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 recognition.continous = true;
@@ -279,12 +278,12 @@ export default class MenuContainer extends Component {
                     <button onClick={this.reset}> Return to menu</button>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-                    <div id="cow-container">
+                    {/* <div id="cow-container">
                             <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
                             <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
                             <p className="cow-speech" id="setup"></p>
                             <p className="cow-speech" id="punchline"></p>
-                    </div>
+                    </div> */}
                 </Fragment>
             )
         }
