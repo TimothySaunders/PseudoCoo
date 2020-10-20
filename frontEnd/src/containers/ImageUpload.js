@@ -44,14 +44,16 @@ export default class ImageUpload extends Component{
     analyseImage = async () => {
         const joke = new CowTimer(12, 12, "joke")
         joke.startTimer()
-
+        const secondImageBox = document.getElementById("processed-preview");
+        secondImageBox.style.display = "initial";
         const cleanImage = await uploadImage(this.state.imageFile);
         let output = "";
 
         let fileReader2 = new FileReader();
         fileReader2.onload = async () => {
+            secondImageBox.src = "processing.gif";
             output = await ImageParser(fileReader2.result, false, false)
-            document.getElementById("test").src = fileReader2.result;
+            secondImageBox.src = fileReader2.result;
             this.setState ({parsedOutput: output})
             joke.endTimer();
         }
@@ -105,7 +107,7 @@ export default class ImageUpload extends Component{
                 <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
                 <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                 onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
-                <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
+                <img id="processed-preview" className="image" src="uploading.gif" alt="uploadImage" draggable="false" />
             </div>
             
         )
