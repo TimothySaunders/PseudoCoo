@@ -197,7 +197,6 @@ export default class MenuContainer extends Component {
 
                 console.log(transcript);
             }
-            // this.getSaveGames();   ///! WUT?
         }
     }
     // --- --- --- ---
@@ -215,6 +214,7 @@ export default class MenuContainer extends Component {
             const savedGame = await patch("api/saves/" + saveGame.id, saveGame)
             this.setState({ game: savedGame })
         }
+        this.getSaveGames();
     }
 
     loadGame = (id) => {
