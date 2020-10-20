@@ -79,7 +79,6 @@ Parser.prototype.getObjectsFromSavedString = function (parsedInputString) {
         cellObj.notes = pieces[2].split("");
         cellObjects.push(cellObj);
     });
-    console.log(cellObjects);
     return cellObjects;
 }
 
@@ -127,12 +126,11 @@ Parser.prototype.getRawStringFromCells = function (inputCellsString) {
     split.forEach(cell => {
         outputString += cell[0];
     });
-    console.log(outputString);
+    return outputString;
 
 }
 
 Parser.prototype.getObjects = function (rawInput) {
-    console.log(this.formatCellsToString(this.formatRawStringToCells(rawInput)))
     return this.getObjectsFromSavedString(this.formatCellsToString(this.formatRawStringToCells(rawInput)));
 }
 

@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./GridCell.css";
 
 export default function GridCell(props) {
@@ -43,7 +43,7 @@ export default function GridCell(props) {
       
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
-        display.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+        display.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
         props.listenForDigit(giveNumToDisplay);
     }
 
@@ -55,18 +55,7 @@ export default function GridCell(props) {
             num = num.slice(-1);
         }
         
-        // setGameGridState(num);
         props.onNumberInput(props.index, props.cell, display, num);
-        // showNotes();
-    }
-
-    const setGameGridState = (input) => {
-        // let newCell = {
-        //     value: value,
-        //     editable: props.cell.editable,
-        //     notes: props.cell.notes
-        // }
-        
     }
 
     const setDisplay = (event) => {

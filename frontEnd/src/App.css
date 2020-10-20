@@ -33,6 +33,86 @@
   }
 }
 
+html, body {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  top: 0px;
+}
+
+
+#cow-container {
+  position: absolute;
+  pointer-events: none;
+  bottom: -600px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  transition-timing-function: ease;
+  transition: bottom 2s;
+  max-width: 800px;
+}
+
+.cow-animation {
+  width: 100%;
+  height: auto;
+  position: relative;
+  grid-column: 1 / span 12;
+  grid-row: 1 / span 12; 
+}
+
+#cow {
+  transition-timing-function: ease;
+  z-index: 10;
+}
+
+#speech-bubble {
+  visibility: hidden;
+  z-index: 10;
+}
+
+.cow-speech {
+  width: 100%;
+  /* max-width: ; */
+  position: relative;
+  color: darkorange;
+  font-size: 1.5em;
+  font-weight: 800;
+  line-height: 1.8em;
+  margin: 0;
+  transition-timing-function: ease;
+  opacity: 0;
+  z-index:11;
+}
+
+#setup {
+  grid-column: 5 / span 6;
+  grid-row: 1 / span 3; 
+  padding-top: 40px; 
+  visibility: hidden;
+}
+
+#punchline {
+  grid-column: 6 / span 6;
+  grid-row: 3 / span 3;
+  padding-top: 45px; 
+  text-align: right;
+  visibility: hidden;
+}
+
+
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0s linear 2s, opacity 2000ms;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0s linear 2s, opacity 2500ms;
+}
+
 #main_container {
   width: 80%;
   padding: 30px;

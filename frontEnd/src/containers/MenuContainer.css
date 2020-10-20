@@ -2,19 +2,6 @@ body {
     background-image: url("../images/cow_pattern.jpg");
 }
 
-.cow-animation {
-    width: 100%;
-    height: auto;
-}
-
-#cow {
-    transition-timing-function: ease;
-}
-
-#cow-container {
-    position: absolute;
-}
-
 button {
     padding: 10px;
     border-radius: 5px;
@@ -27,4 +14,3 @@ button {
 button:hover {
     background-color: dodgerblue;
 }
-

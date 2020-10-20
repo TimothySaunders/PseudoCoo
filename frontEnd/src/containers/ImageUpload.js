@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
+import CowTimer from '../helpers/CowTimer'
 
 export default class ImageUpload extends Component{
     constructor(props){
@@ -41,6 +42,9 @@ export default class ImageUpload extends Component{
     }
 
     analyseImage = async () => {
+        const joke = new CowTimer(12, 12, "joke")
+        joke.startTimer()
+
         const cleanImage = await uploadImage(this.state.imageFile);
         let output = "";
 
@@ -48,7 +52,8 @@ export default class ImageUpload extends Component{
         fileReader2.onload = async () => {
             output = await ImageParser(fileReader2.result, false, false)
             document.getElementById("test").src = fileReader2.result;
-            this.setState ({parsedOutput: output}) 
+            this.setState ({parsedOutput: output})
+            joke.endTimer();
         }
         fileReader2.readAsDataURL(cleanImage)
     }
