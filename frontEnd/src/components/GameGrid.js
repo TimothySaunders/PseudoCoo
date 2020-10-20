@@ -169,22 +169,12 @@ export default class GameGrid extends Component {
                 <div id="game-grid">
                     {gridCells}
                 </div>
-<<<<<<< HEAD
-                <button onClick={this.solve} > Solve</button><br/>
-                <button onClick={this.toggleShowConflict} > Find Conflicts</button><br/>
-                <button onClick={this.hint} > Hint</button><br/>
-
-                <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
-                <button onClick={this.clear} >Clear</button>
-                <button onClick={this.handleSaveGame} >Save</button>
-=======
                 <div id="game-buttons">
                     <button onClick={this.solve} > Solve</button>
                     <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                     <button onClick={this.clear} >Clear</button>
                     <button onClick={this.handleSaveGame} >Save</button>
                 </div>
->>>>>>> develop
                 {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
 
 
