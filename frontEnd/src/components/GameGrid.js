@@ -125,6 +125,24 @@ export default class GameGrid extends Component {
 
 
     hint = () => {
+        /// solve the sudoku
+        let toConvert = sp.getRawStringFromObjects(this.state.gameState);
+        toConvert.replace("0", ".");
+        const solution = sudoku.sudoku.solve(toConvert);
+        let hints = []
+        if (solution) {
+           for(let cell of gameState){                  //
+               if (cell.editable) {                     //
+                   hints.push([cell.index,solution[cell.index]])     // should create a list of the solutions (excluding uneditable cells)
+               }
+           } 
+        }
+        console.log("hints: " + hints[0]);
+
+        /// comlpile a list of all the indexes for the editable cells
+        /// pick a random index
+        /// pass the solution into that cells notes. 
+        
 
     }
 
@@ -172,6 +190,7 @@ export default class GameGrid extends Component {
                     <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                     <button onClick={this.clear} >Clear</button>
                     <button onClick={this.toggleShowConflict} >Verify</button>
+                    <button onClick={this.hint} >Hint</button>
                     <button onClick={this.handleSaveGame} >Save</button>
                 </div>
                 {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
