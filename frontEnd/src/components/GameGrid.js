@@ -1,4 +1,4 @@
-import React, { Component, } from "react";
+import React, { Component, Fragment, } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
@@ -180,25 +180,28 @@ export default class GameGrid extends Component {
     hint = () => {
 
     }
-
-
-
+    
     toggleShowConflict = () => {
         this.setState({ showConflictToggle: !this.state.showConflictToggle })
         // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
 
     }
+
     showConflict(i, grid, cell) {
 
         // let grid  = sp.getRawStringFromObjects(this.state.gameState);
         if (this.toggleShowConflict) {
             return psc.validateEntry(i, grid, cell.value)
         }
-
-
     }
+
     grid = () => {
         return sp.getRawStringFromObjects(this.state.gameState);
+    }
+
+    returnHome = () => {
+        // this.hint.endTimer();
+        this.props.returnHome();
     }
 
     render() {
@@ -216,22 +219,23 @@ export default class GameGrid extends Component {
 
 
         return (
-            <div id="game-container">
-                <div id="game-grid">
-                    {gridCells}
+            <Fragment>
+                <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                <div id="game-container">
+                    <div id="game-grid">
+                        {gridCells}
+                    </div>
+                    <div id="game-buttons">
+                        <button onClick={this.solve} > Solve</button>
+                        <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
+                        <button onClick={this.clear} >Clear</button>
+                        <button onClick={this.toggleShowConflict} >Verify</button>
+                        <button onClick={this.handleSaveGame} >Save</button>
+                    </div>
+                    {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
+
                 </div>
-                <div id="game-buttons">
-                    <button onClick={this.solve} > Solve</button>
-                    <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
-                    <button onClick={this.clear} >Clear</button>
-                    <button onClick={this.toggleShowConflict} >Verify</button>
-                    <button onClick={this.handleSaveGame} >Save</button>
-                </div>
-                {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
-
-
-
-            </div>
+            </Fragment>
         )
     }
 }
