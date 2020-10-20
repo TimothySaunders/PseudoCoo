@@ -186,7 +186,7 @@ export default class GameGrid extends Component {
         // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
 
     }
-    
+
     showConflict(i, grid, cell) {
 
         // let grid  = sp.getRawStringFromObjects(this.state.gameState);
