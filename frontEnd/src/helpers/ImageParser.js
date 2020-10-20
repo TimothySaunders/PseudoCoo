@@ -75,7 +75,7 @@ async function getGrid(grid, url){
       const values = [];
       for (let i = 0; i < grid[index].length; i++) {
         const { data: { text } } = await worker.recognize(url, { rectangle: grid[index][i] });
-        let number = 0;
+        let number = ".";
         if (text.length > 0){
           number = parseInt(text.replace("\n", ""))
         } 

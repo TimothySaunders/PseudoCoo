@@ -30,9 +30,6 @@ public class ImageControlller {
 
     @PostMapping("/images")
     public ResponseEntity processImage(@RequestParam("sudoku") MultipartFile file)  {
-//        System.out.println(imageData);
-
-//            InputStream fileData = file.getInputStream();
         GridFinder grid = new GridFinder(file);
         byte[] output = null;
         try {
@@ -46,13 +43,6 @@ public class ImageControlller {
             return new ResponseEntity(output, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("____________________________________");
-            System.out.println("____________________________________");
-            System.out.println("____________________________________");
-            System.out.println("______________F_U_C_K_______________");
-            System.out.println("____________________________________");
-            System.out.println("____________________________________");
-            System.out.println("____________________________________");
             return new ResponseEntity(null, HttpStatus.I_AM_A_TEAPOT);
         }
 
