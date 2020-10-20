@@ -1,18 +1,23 @@
 import React, { Fragment } from 'react'
 import sudoku from '../helpers/sudoku'
+import CowTimer from '../helpers/CowTimer'
 
 import "./Difficulty.css";
 
 const Difficulty = (props) => {
 
-    function setDifficulty(event) {
+    const moo = new CowTimer(10, 15, "moo")
+    moo.startTimer();
+
+    function setDifficulty(event){
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
         props.createGameString(generatedString);
-
+        moo.endTimer();
     }
 
     function makeChoice(event) {
         props.chooseMenu(event.target.value)
+        moo.endTimer();
     }
 
 

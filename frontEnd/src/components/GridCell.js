@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./GridCell.css";
 import PsChecker from '../helpers/PsChecker'
 
@@ -61,7 +61,7 @@ export default function GridCell(props) {
       
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
-        display.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+        display.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
         props.listenForDigit(giveNumToDisplay);
     }
 
@@ -86,6 +86,7 @@ export default function GridCell(props) {
         //     notes: props.cell.notes
         // }
         
+        props.onNumberInput(props.index, props.cell, display, num);
     }
 
     const setDisplay = (event) => {
