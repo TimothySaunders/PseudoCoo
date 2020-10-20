@@ -20,6 +20,10 @@ export default function GridCell(props) {
         return value;
     }
 
+    const isHint = function() {
+        return ( props.hint !=null && props.hint[0]===props.index)
+    }
+
     const showNotes = function() {
         // if (["0", ".", ""].includes(display.textContent)) {
             const sorted = props.cell.notes.sort();
@@ -40,6 +44,9 @@ export default function GridCell(props) {
         if (visualiseConflict()){
             console.log("if visualise conflict is:  " + visualiseConflict())
             className += "conflicting ";
+        }
+        if (isHint()){
+            className += "hint "; 
         }
 
         if (props.index % 9 === 2 || props.index % 9 === 5) {

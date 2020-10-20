@@ -18,6 +18,8 @@
     background-color: rgb(110, 255, 105);
 }
 
+
+
 .left {
     border-left-width: 2px;
 }
@@ -58,6 +60,8 @@ input:disabled {
     font-weight: 900;
 }
 
+
+
 .display {
     position: absolute;
     display: flex;
@@ -82,4 +86,9 @@ input:disabled {
     font-size: 0.7em;
     padding: 0 5px;
     color: black;
+}
+
+.hint {
+    color: rgb(241, 100, 6);
+    
 }
