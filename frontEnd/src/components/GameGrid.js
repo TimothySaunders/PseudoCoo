@@ -7,8 +7,8 @@ import PsChecker from '../helpers/PsChecker';
 import CowTimer from '../helpers/CowTimer'
 import Parser from "../helpers/StringParser";
 
-const hint = new CowTimer(20, 20, "hint")
-hint.startTimer()
+// const hint = new CowTimer(20, 20, "hint")
+// hint.startTimer()
 
 const sp = new Parser();
 const psc = new PsChecker();
