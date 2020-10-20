@@ -6,7 +6,7 @@ import "./Difficulty.css";
 
 const Difficulty = (props) => {
 
-    const moo = new CowTimer(10, 15, "moo")
+    const moo = new CowTimer(15, 15, "moo")
     moo.startTimer();
 
     function setDifficulty(event){

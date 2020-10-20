@@ -61,6 +61,7 @@ export default class JokeTimer{
     resetTimer = () => {
         clearTimeout(this.time);
         let interval = this.randomInterval(this.min, this.max);
+        console.log(interval)
         this.time = setTimeout(this.output, interval);
     }
 
@@ -139,7 +140,7 @@ export default class JokeTimer{
             document.getElementById("setup").style.visibility="visible"
             document.getElementById("setup").classList.add("fade-in")
             document.getElementById("setup").innerHTML="..... Need a hint?"
-            setTimeout(removeSetup, 2000)
+            setTimeout(removeSetup, 3000)
         }
 
         function removeSetup(){
@@ -154,7 +155,7 @@ export default class JokeTimer{
             document.getElementById("punchline").style.visibility="visible"
             document.getElementById("punchline").classList.add("fade-in")
             document.getElementById("punchline").innerHTML="Just ask!"
-            setTimeout(removePunchline, 2000)
+            setTimeout(removePunchline, 3000)
         }
 
         function removePunchline(){
