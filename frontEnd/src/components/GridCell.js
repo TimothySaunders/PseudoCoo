@@ -10,7 +10,7 @@ export default function GridCell(props) {
         showNotes();
     });
 
-    const visualiseConflict = function(){
+    const visualiseConflict = function(){  // ! this could be improved to regodnised all conflicting items, currently identifies the most recent addition as the conflicting value.
         let value = false;
         if(props.cell.editable && props.showConflictToggle && (props.cell.value!=="." || props.cell.value!=="")){
             
@@ -18,6 +18,10 @@ export default function GridCell(props) {
             console.log("in cell + " + props.index + ", result :" + value)
         }
         return value;
+    }
+
+    const isHint = function() {
+        return ( props.hint !=null && props.hint[0]===props.index)
     }
 
     const showNotes = function() {
@@ -40,6 +44,9 @@ export default function GridCell(props) {
         if (visualiseConflict()){
             console.log("if visualise conflict is:  " + visualiseConflict())
             className += "conflicting ";
+        }
+        if (isHint()){
+            className += "hint "; 
         }
 
         if (props.index % 9 === 2 || props.index % 9 === 5) {
