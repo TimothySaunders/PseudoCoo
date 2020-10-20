@@ -115,7 +115,7 @@ export default class ImageUpload extends Component{
                     <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
                     <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                     onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
-                    <img id="processed-preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
+                    <img id="processed-preview" className="image" src="uploading.gif" alt="uploadImage" draggable="false" />
                 </div>
             </Fragment>
         )
