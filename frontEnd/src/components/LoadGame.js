@@ -8,20 +8,14 @@ export default function LoadGame(props) {
     const moo = new CowTimer(10, 15, "moo")
     moo.startTimer();
 
-    const getIdFromEvent = (event) => {
-        const stringIndexofID = event.target.id.indexOf("-")+1;
-        const targetId = event.target.id.slice(stringIndexofID);
-        return targetId;
-    }
-
-    const handleLoadGame = (event) => {
-        const gameId = getIdFromEvent(event)
+    const handleLoadGame = (game) => {
+        const gameId = game.id;
         moo.endTimer();
         props.loadGame(gameId);
     }
 
-    const handleDeleteGame = (event) => {
-        const gameId = getIdFromEvent(event)
+    const handleDeleteGame = (game) => {
+        const gameId = game.id;
         props.removeGame(gameId);
     }
 
