@@ -4,10 +4,12 @@ import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
 // import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
-
-
-
+import CowTimer from '../helpers/CowTimer'
 import Parser from "../helpers/StringParser";
+
+// const hint = new CowTimer(10, 10, "hint")
+// hint.startTimer()
+
 const sp = new Parser();
 const psc = new PsChecker();
 // SpeechRecognition.SpeechRecognition();  //! 

@@ -263,12 +263,6 @@ export default class MenuContainer extends Component {
                         viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-                    <div id="cow-container">
-                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
-                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p className="cow-speech" id="setup"></p>
-                            <p className="cow-speech" id="punchline"></p>
-                    </div>
                 </Fragment>
             )
         } else {
@@ -278,12 +272,6 @@ export default class MenuContainer extends Component {
                     <button onClick={this.reset}> Return to menu</button>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-                    {/* <div id="cow-container">
-                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
-                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p className="cow-speech" id="setup"></p>
-                            <p className="cow-speech" id="punchline"></p>
-                    </div> */}
                 </Fragment>
             )
         }

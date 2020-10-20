@@ -27,7 +27,6 @@ export default class ImageUpload extends Component{
     }
 
     handleUpload = async (event) => {
-        new CowTimer(10, 15, "joke")
         this.handleClear();
         await this.setState({imageFile : event.target.files[0]});
         this.createPreview();
@@ -43,6 +42,9 @@ export default class ImageUpload extends Component{
     }
 
     analyseImage = async () => {
+        const joke = new CowTimer(12, 12, "joke")
+        joke.startTimer()
+
         const cleanImage = await uploadImage(this.state.imageFile);
         let output = "";
 
@@ -50,7 +52,8 @@ export default class ImageUpload extends Component{
         fileReader2.onload = async () => {
             output = await ImageParser(fileReader2.result, false, false)
             document.getElementById("test").src = fileReader2.result;
-            this.setState ({parsedOutput: output}) 
+            this.setState ({parsedOutput: output})
+            joke.endTimer();
         }
         fileReader2.readAsDataURL(cleanImage)
     }

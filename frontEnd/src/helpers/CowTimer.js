@@ -6,8 +6,8 @@ export default class JokeTimer{
         this.min = min;
         this.max = max;
         this.out = out;
-        let cowJokes = [];
-        let time = null;
+        this.cowJokes = [];
+        this.time = null;
     }
 
     startTimer(){
@@ -17,12 +17,12 @@ export default class JokeTimer{
                 break;
             case "hint":
                 document.addEventListener("mousemove", this.resetTimer);
-                document.addEventListener("keypress", this.resetTimer);;
+                document.addEventListener("keypress", this.resetTimer);
                 break;
             default:
                 break;
         }
-        window.onload = this.resetTimer;
+            this.resetTimer();
     }
 
     endTimer(){
@@ -49,7 +49,9 @@ export default class JokeTimer{
     }
     
     randomInterval = (min, max) => {
-        return 1000 * Math.floor(min + (Math.random()*(max-min)));
+        const interval = 1000 * Math.floor(min + (Math.random()*(max-min)));
+        console.log(interval)
+        return interval
     }
 
     randomItemFromList = (list) => {
@@ -115,7 +117,7 @@ export default class JokeTimer{
 
         function removeCow(){
             document.getElementById("speech-bubble").style.visibility="hidden"
-            document.getElementById("cow-container").style.bottom="-1000px";
+            document.getElementById("cow-container").style.bottom="-600px";
         }
     }
 
@@ -166,7 +168,7 @@ export default class JokeTimer{
 
         function removeCow(){
             document.getElementById("speech-bubble").style.visibility="hidden"
-            document.getElementById("cow-container").style.bottom="-1000px";
+            document.getElementById("cow-container").style.bottom="-600px";
         }
     }
 
