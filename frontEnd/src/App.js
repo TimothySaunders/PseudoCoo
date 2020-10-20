@@ -7,12 +7,12 @@ function App() {
 
   return (
 
-    <Fragment>
-      The APP:
+    <main id="main_container">
+      {/* Psuedocoo */}
       <MenuContainer/>
 
   
-    </Fragment>
+    </main>
 
   );
 }
