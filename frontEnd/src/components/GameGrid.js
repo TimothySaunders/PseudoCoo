@@ -42,6 +42,7 @@ export default class GameGrid extends Component {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
     solve = () => {
+        this.clear(); //! Needs to be run so that it eliminates any invalid entries, trying to solve 
         // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
         let toConvert = sp.getRawStringFromObjects(this.state.gameState)
         toConvert.replace("0",".");
@@ -76,6 +77,23 @@ export default class GameGrid extends Component {
         this.setState({ gameState: cells });
     }
 
+    gridIsStillSolvable = () => {
+        var solvable = true;
+        let grid = sp.getRawStringFromObjects(this.state.gameState);
+        if(sudoku.sudoku.solve(grid)===false){
+            solvable = false;
+        }
+        return solvable;
+        
+    }
+
+    gridIsFilled = () => {
+        // let grid = sp.getRawStringFromObjects(this.state.gameState);
+        return !sp.getRawStringFromObjects(this.state.gameState).includes(".")
+        // return !(grid).includes(".")
+        
+    }
+
     handleNumberInput(index, newCell, display) {
         let updated = this.state.gameState;
 
@@ -97,15 +115,10 @@ export default class GameGrid extends Component {
             }
             display.textContent =""
             
-            
-            // --- ORIGINAL CODE: 
-            // newCell.notes.push(newCell.value);
-            // newCell.value="."
-            // display.textContent ="";
         }
-        
-        
-        
+        // VALIDATE game finished on click//!! 
+        (this.gridIsStillSolvable() && this.gridIsFilled()) ? console.log("Moooooo - you have won") : console.log("The game is not finished");     // ! this is for THE victory COW display/
+       
 
         //! prevent invalid input being entered into cell // rephrase to validae all inputs
         // if(!psc.validateEntry(index,this.state.gameState,newCell.value)) {
@@ -113,9 +126,6 @@ export default class GameGrid extends Component {
         //      display.textContent ="";
         // }
 
-        
-
-       
     }
 
     handleSaveGame = () => {
