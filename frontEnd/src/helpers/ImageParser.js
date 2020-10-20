@@ -1,5 +1,5 @@
 const { createWorker } = require('tesseract.js');
-const sizeOf = require('image-size');
+// const sizeOf = require('image-size');
 
 
 function getImageMaxDimension(url){

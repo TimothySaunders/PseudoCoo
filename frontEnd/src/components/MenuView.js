@@ -22,7 +22,6 @@ const MenuView = (props) => {
                         <button onClick={makeChoice} value="DifficultyMenu"> PLAY   </button><br />
                         <button onClick={makeChoice} value="ImportImage"> get PseudoCoo from Image   </button><br />
                         <button onClick={makeChoice} value="SavedGames"> Continue a game   </button>
-
                     </Fragment>
                 )
                 break

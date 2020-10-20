@@ -46,7 +46,7 @@ export default class ImageUpload extends Component{
 
         let fileReader2 = new FileReader();
         fileReader2.onload = async () => {
-            output = await ImageParser(fileReader2.result, false, true)
+            output = await ImageParser(fileReader2.result, false, false)
             document.getElementById("test").src = fileReader2.result;
             this.setState ({parsedOutput: output}) 
         }
@@ -96,7 +96,7 @@ export default class ImageUpload extends Component{
 
         return(
             <div>
-                <p>//grid component will go here</p>
+                <p>grid component will go here</p>
                 <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
                 <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                 onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
