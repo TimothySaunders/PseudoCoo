@@ -3,6 +3,7 @@ import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
 import CowTimer from '../helpers/CowTimer'
+import ValidateGrid from "../components/ValidateGrid";
 
 export default class ImageUpload extends Component{
     constructor(props){
@@ -104,6 +105,21 @@ export default class ImageUpload extends Component{
         this.props.returnHome();
     }
 
+    renderValidateGrid() {
+        if (this.state.parsedOutput.length === 81) {
+            return (
+                <Fragment>
+                    <ValidateGrid input={this.state.parsedOutput} />
+                    <button id="validate-upload" onClick={this.handleValidate}>Play the game</button>
+                </Fragment>
+            )
+        } else if (this.state.parsedOutput.length > 0) {
+            return (
+                <p>Couldn't find a sudoku grid! Try taking a better picture!</p>
+            )
+        }
+    }
+
     render(){
 
         return(
@@ -111,8 +127,8 @@ export default class ImageUpload extends Component{
                 <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
                 <div>
                     <h1>Upload a Puzzle</h1>
-                    <p>grid component will go here</p>
-                    <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
+                    {this.renderValidateGrid()}
+                    
                     <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
                     onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
                     <img id="processed-preview" className="image" src="uploading.gif" alt="uploadImage" draggable="false" />
