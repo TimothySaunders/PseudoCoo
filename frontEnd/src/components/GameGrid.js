@@ -118,7 +118,7 @@ export default class GameGrid extends Component {
         this.setState({ gameState: updated });
     }
 
-    handleSaveGame(index){
+    handleSaveGame =() => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
     }
@@ -127,6 +127,8 @@ export default class GameGrid extends Component {
     hint = () => {
 
     }
+
+
     
     toggleShowConflict = () => {
         this.setState({ showConflictToggle : !this.state.showConflictToggle})
@@ -150,11 +152,7 @@ export default class GameGrid extends Component {
            
             const gridCells = this.state.gameState.map((cell, i) => {
                 
-            //
-            
-            
-            
-
+         
             if (!cell.editable) {
             return (
             
@@ -173,6 +171,7 @@ export default class GameGrid extends Component {
                     <button onClick={this.solve} > Solve</button>
                     <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                     <button onClick={this.clear} >Clear</button>
+                    <button onClick={this.toggleShowConflict} >Verify</button>
                     <button onClick={this.handleSaveGame} >Save</button>
                 </div>
                 {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}

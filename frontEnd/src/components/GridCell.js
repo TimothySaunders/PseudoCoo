@@ -79,15 +79,15 @@ export default function GridCell(props) {
         // showNotes();
     }
 
-    const setGameGridState = (input) => {
+    // const setGameGridState = (input) => {
         // let newCell = {
         //     value: value,
         //     editable: props.cell.editable,
         //     notes: props.cell.notes
         // }
         
-        props.onNumberInput(props.index, props.cell, display, num);
-    }
+    //     props.onNumberInput(props.index, props.cell, display, num);
+    // }
 
     const setDisplay = (event) => {
         let num = event.target.value;
