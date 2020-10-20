@@ -2,10 +2,17 @@ import React, { Fragment } from 'react'
 import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
 import LoadGame from './LoadGame'
+import CowTimer from '../helpers/CowTimer'
+
+/* eslint-disable */
+
+const moo = new CowTimer(15, 30, "moo")
+moo.startTimer()
 
 const MenuView = (props) => {
 
         function makeChoice(event) {
+            moo.endTimer();
             props.chooseMenu(event.target.value)
         }
         
@@ -52,7 +59,6 @@ const MenuView = (props) => {
                         <button onClick={makeChoice} value="DifficultyMenu"> PLAY   </button><br />
                         <button onClick={makeChoice} value="ImportImage"> get PseudoCoo from Image   </button><br />
                         <button onClick={makeChoice} value="SavedGames"> Continue a game   </button>
-
                     </Fragment>
                 )
         }

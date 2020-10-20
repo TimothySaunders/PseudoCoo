@@ -2,10 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { get, post, patch, remove } from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
-import JokeTimer from '../helpers/JokeTimer'
 import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
-
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -30,10 +28,10 @@ export default class MenuContainer extends Component {
 
     componentDidMount() {
         this.getSaveGames();
-        const jokeGenerator = new JokeTimer(15, 30)
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
+        
     }
 
     getSaveGames = async () => {
@@ -266,11 +264,6 @@ export default class MenuContainer extends Component {
                         viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-                    <div id="cow-container">
-                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
-                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p id="cow-speech"></p>
-                    </div>
                 </Fragment>
             )
         } else {
@@ -280,11 +273,6 @@ export default class MenuContainer extends Component {
                     <button onClick={this.reset}> Return to menu</button>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-                    <div id="cow-container">
-                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
-                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p id="cow-speech"></p>
-                    </div>
                 </Fragment>
             )
         }

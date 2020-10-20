@@ -1,12 +1,24 @@
 import React, { useEffect } from "react";
 import "./GridCell.css";
+import PsChecker from '../helpers/PsChecker'
+
 
 export default function GridCell(props) {
     let display, notes;
-
+    let psc = new PsChecker;
     useEffect( () => {
         showNotes();
     });
+
+    const visualiseConflict = function(){
+        let value = false;
+        if(props.cell.editable && props.showConflictToggle && (props.cell.value!=="." || props.cell.value!=="")){
+            
+            value = !psc.validateEntryStringGrid(props.index,props.grid,props.cell.value)
+            console.log("in cell + " + props.index + ", result :" + value)
+        }
+        return value;
+    }
 
     const showNotes = function() {
         // if (["0", ".", ""].includes(display.textContent)) {
@@ -24,6 +36,12 @@ export default function GridCell(props) {
         } else {
             className += "locked ";
         }
+
+        if (visualiseConflict()){
+            console.log("if visualise conflict is:  " + visualiseConflict())
+            className += "conflicting ";
+        }
+
         if (props.index % 9 === 2 || props.index % 9 === 5) {
             className += "right ";
         }
@@ -55,13 +73,30 @@ export default function GridCell(props) {
             num = num.slice(-1);
         }
         
-        props.onNumberInput(props.index, props.cell, display, num);
+        // setGameGridState(num);
+        if (display) {
+        props.onNumberInput(props.index, props.cell, display, num);}
+        // showNotes();
     }
+
+    // const setGameGridState = (input) => {
+        // let newCell = {
+        //     value: value,
+        //     editable: props.cell.editable,
+        //     notes: props.cell.notes
+        // }
+        
+    //     props.onNumberInput(props.index, props.cell, display, num);
+    // }
 
     const setDisplay = (event) => {
         let num = event.target.value;
         if (num.length > 1) {
             num = num.slice(-1);
+            event.target.value = num;
+        }
+        if (num.length===0){
+            num = ".";
             event.target.value = num;
         }
         giveNumToDisplay(num);

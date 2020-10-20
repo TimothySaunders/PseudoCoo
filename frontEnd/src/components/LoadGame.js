@@ -1,15 +1,22 @@
 import React from 'react';
+import CowTimer from '../helpers/CowTimer';
 import "./LoadGame.css";
 import LoadGameItem from "./LoadGameItem.js";
 
 export default function LoadGame(props) {
 
+    const moo = new CowTimer(10, 15, "moo")
+    moo.startTimer();
+
     const handleLoadGame = (game) => {
-        props.loadGame(game.id);
+        const gameId = game.id;
+        moo.endTimer();
+        props.loadGame(gameId);
     }
 
     const handleDeleteGame = (game) => {
-        props.removeGame(game.id);
+        const gameId = game.id;
+        props.removeGame(gameId);
     }
 
     const saveNodes = props.savedGames.map((game, index) => {
