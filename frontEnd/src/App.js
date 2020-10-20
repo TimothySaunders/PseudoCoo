@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import MenuContainer from './containers/MenuContainer'
 import './App.css';
 
@@ -20,7 +20,7 @@ function App() {
         gameContainer.style.marginLeft = `${(containerWidth - 600) / 2}px`;
         gameContainer.style.gridTemplateRows = "600px 1fr";
       }
-    } catch(e) {console.log("on resize: " + e)}
+    } catch(e) {}
   }
 
   window.onresize = () => {
