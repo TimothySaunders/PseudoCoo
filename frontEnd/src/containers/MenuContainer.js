@@ -243,12 +243,12 @@ export default class MenuContainer extends Component {
         this.setState({ viewOption: chosen })
     }
 
-    loadGame = (event) => {
-        const targetId = event.target.id;
-        const gameIndex = targetId.substring(targetId.length - 1);
-        const game = this.state.savedGames[gameIndex];
-        this.setState({ game: game });
-    }
+    // loadGame = (event) => {
+    //     const targetId = event.target.id;
+    //     const gameIndex = targetId.substring(targetId.length - 1);
+    //     const game = this.state.savedGames[gameIndex];
+    //     this.setState({ game: game });
+    // }
 
 
 
