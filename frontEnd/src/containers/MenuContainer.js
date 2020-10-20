@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { get, post, patch, remove } from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
-import JokeTimer from '../helpers/JokeTimer'
 import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
 
@@ -30,7 +29,6 @@ export default class MenuContainer extends Component {
 
     componentDidMount() {
         this.getSaveGames();
-        new JokeTimer(15, 15)
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
@@ -269,8 +267,8 @@ export default class MenuContainer extends Component {
                     <div id="cow-container">
                             <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
                             <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p className="cow-speech" id="setup">Ten cows are lined up in a field - which one is nearest Iraq?</p>
-                            <p className="cow-speech" id="punchline">The steaks have never been so high!</p>
+                            <p className="cow-speech" id="setup"></p>
+                            <p className="cow-speech" id="punchline"></p>
                     </div>
                 </Fragment>
             )

@@ -12,6 +12,7 @@ html, body {
     grid-template-rows: repeat(12, 1fr);
     transition-timing-function: ease;
     transition: bottom 2s;
+    max-width: 800px;
 }
 
 .cow-animation {
@@ -32,9 +33,10 @@ html, body {
 
 .cow-speech {
     width: 100%;
+    /* max-width: ; */
     position: relative;
     color: darkorange;
-    font-size: 3vw;
+    font-size: 1.5em;
     font-weight: 800;
     line-height: 1.8em;
     margin: 0;

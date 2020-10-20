@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
+import CowTimer from '../helpers/CowTimer'
 
 export default class ImageUpload extends Component{
     constructor(props){
@@ -26,6 +27,7 @@ export default class ImageUpload extends Component{
     }
 
     handleUpload = async (event) => {
+        new CowTimer(10, 15, "joke")
         this.handleClear();
         await this.setState({imageFile : event.target.files[0]});
         this.createPreview();
