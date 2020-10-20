@@ -220,13 +220,15 @@ export default class GameGrid extends Component {
 
         return (
             <Fragment>
-                <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                <div className="menu-grid">
+                    <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                </div>
                 <div id="game-container">
                     <div id="game-grid">
                         {gridCells}
                     </div>
                     <div id="game-buttons">
-                        <button onClick={this.solve} > Solve</button>
+                        <button onClick={this.solve} >Solve</button>
                         <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                         <button onClick={this.clear} >Clear</button>
                         <button onClick={this.toggleShowConflict} >Verify</button>

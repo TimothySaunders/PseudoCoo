@@ -23,7 +23,9 @@ const Difficulty = (props) => {
 
     return (
         <Fragment>
-            <button onClick={makeChoice} value="mainMenu"> Return to Menu </button>
+            <div className="menu-grid">
+                <button className="return-home" onClick={makeChoice} value="mainMenu"> Return to Menu</button>
+            </div>
             <h1>Choose Diffi-cow-lty</h1>
             <section id="buttons">
                 <button onClick={setDifficulty} value="easy">Laughing Coooo</button>

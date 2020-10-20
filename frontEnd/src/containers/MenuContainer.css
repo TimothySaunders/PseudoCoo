@@ -14,3 +14,25 @@ button {
 button:hover {
     background-color: dodgerblue;
 }
+
+.return-home {
+    grid-column: 2 / span 3;
+    background-color:  lightskyblue;
+    font-weight: 600;
+}
+
+h1 {
+    text-align: center;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.menu-button {
+    grid-column: 2 / span 3;
+    font-size: larger;
+    font-weight: 600;
+    height: 3em;
+}
