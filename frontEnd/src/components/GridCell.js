@@ -43,7 +43,7 @@ export default function GridCell(props) {
       
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
-        display.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+        display.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
         props.listenForDigit(giveNumToDisplay);
     }
 

@@ -276,7 +276,7 @@ export default class MenuContainer extends Component {
         } else {
             return (
                 <Fragment>
-                    <GameGrid game={this.state.game} saveGame={this.saveGame} voiceInput={this.voiceCommandsContain} listenForDigit={this.voiceCommandsContainsDigit}  ></GameGrid>
+                    <GameGrid game={this.state.game} saveGame={this.saveGame} voiceInput={this.voiceCommandsContain} listenForDigit={this.voiceCommandsContainsDigit} resizeGrid={this.props.resizeGrid} ></GameGrid>
                     <button onClick={this.reset}> Return to menu</button>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>

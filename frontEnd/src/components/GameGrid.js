@@ -27,6 +27,7 @@ export default class GameGrid extends Component {
 
 
     componentDidMount() {
+        this.props.resizeGrid();
         let gameState;
         if (this.props.game.gridValues.length === 81) {
             gameState = sp.getObjects(this.props.game.gridValues);
@@ -104,10 +105,12 @@ export default class GameGrid extends Component {
                 <div id="game-grid">
                     {gridCells}
                 </div>
-                <button onClick={this.solve} > Solve</button>
-                <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
-                <button onClick={this.clear} >Clear</button>
-                <button onClick={this.handleSaveGame} >Save</button>
+                <div id="game-buttons">
+                    <button onClick={this.solve} > Solve</button>
+                    <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
+                    <button onClick={this.clear} >Clear</button>
+                    <button onClick={this.handleSaveGame} >Save</button>
+                </div>
                 {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
 
 
