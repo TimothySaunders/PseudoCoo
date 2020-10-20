@@ -72,10 +72,10 @@ input:disabled {
 }
 
 .notes-cell {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.8em;
+    text-align: center;
+    line-height: 46px;
+    margin: -14px 0px;
+    font-size: 0.7em;
+    padding: 0 5px;
     color: black;
 }

@@ -9,13 +9,13 @@ export default function GridCell(props) {
     });
 
     const showNotes = function() {
-        if (["0", ".", ""].includes(display.textContent)) {
+        // if (["0", ".", ""].includes(display.textContent)) {
             const sorted = props.cell.notes.sort();
 
-            notes.textContent = sorted.toString().split(",").join("");
-        } else {
-            notes.textContent = "";
-        }
+            notes.textContent = sorted.toString().split(",").join(" ");
+        // } else {
+            // notes.textContent = "";
+        // }
     }
     const getClassName = function() {
         let className = "grid-cell ";
@@ -51,24 +51,28 @@ export default function GridCell(props) {
         if (num === undefined || num === "...") {
             num = "0";
         }
-        display.textContent = num;
-        setGameGridState(num);
+        if (num.length > 1) {
+            num = num.slice(-1);
+        }
+        
+        // setGameGridState(num);
+        props.onNumberInput(props.index, props.cell, display, num);
+        // showNotes();
     }
 
-    const setGameGridState = (num) => {
-        let newCell = {
-            value: num,
-            editable: props.cell.editable,
-            notes: props.cell.notes
-        }
-        props.onNumberInput(props.index, newCell, display);
-        showNotes();
+    const setGameGridState = (input) => {
+        // let newCell = {
+        //     value: value,
+        //     editable: props.cell.editable,
+        //     notes: props.cell.notes
+        // }
+        
     }
 
     const setDisplay = (event) => {
         let num = event.target.value;
         if (num.length > 1) {
-            num = num.substr(1);
+            num = num.slice(-1);
             event.target.value = num;
         }
         giveNumToDisplay(num);

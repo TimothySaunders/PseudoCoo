@@ -1,4 +1,4 @@
-import React, { Component,} from "react";
+import React, { Component, } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
@@ -22,7 +22,7 @@ export default class GameGrid extends Component {
         }
         this.handleNumberInput = this.handleNumberInput.bind(this);
         this.toggleNotes = this.toggleNotes.bind(this);
-        
+
     }
 
 
@@ -44,7 +44,7 @@ export default class GameGrid extends Component {
     solve = () => {
         // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
         let toConvert = sp.getRawStringFromObjects(this.state.gameState)
-        toConvert.replace("0",".");
+        toConvert.replace("0", ".");
         const solution = sudoku.sudoku.solve(toConvert);
 
         // const solution = sudoku.sudoku.solve(sp.getRawStringFromObjects(this.state.gameState));
@@ -76,46 +76,25 @@ export default class GameGrid extends Component {
         this.setState({ gameState: cells });
     }
 
-    handleNumberInput(index, newCell, display) {
+    handleNumberInput(index, cell, display, input) {
         let updated = this.state.gameState;
 
-        if(!this.state.writeNotes){
-            
-            updated[index] = newCell;
-            this.setState({ gameState: updated });
-        } else {
-
-            if (newCell.value.match(/[1-9]/) ) {
-                if( !newCell.notes.includes(newCell.value)){
-                newCell.notes.push(newCell.value);
-                newCell.value="."
-                }
-                if ( newCell.notes.includes(newCell.value)){
-                    const r = newCell.notes.pop(newCell.value);
-                    newCell.value=".";
+        if (this.state.writeNotes) {
+            // write some notes
+            if (input.match(/[1-9]/)) {
+                if (cell.notes.includes(input)) {
+                    cell.notes = cell.notes.filter(note => note !== input);
+                } else {
+                    cell.notes.push(input);
                 }
             }
-            display.textContent =""
-            
-            
-            // --- ORIGINAL CODE: 
-            // newCell.notes.push(newCell.value);
-            // newCell.value="."
-            // display.textContent ="";
+        } else {
+            // write into the box
+            cell.value = input;
         }
-        
-        
-        
-
-        //! prevent invalid input being entered into cell // rephrase to validae all inputs
-        // if(!psc.validateEntry(index,this.state.gameState,newCell.value)) {
-        //     newCell.value =".";
-        //      display.textContent ="";
-        // }
-
-        
-
-       
+        updated[index] = cell;
+        display.textContent = ["0", "."].includes(cell.value) ? "" : cell.value;
+        this.setState({ gameState: updated });
     }
 
     handleSaveGame = () => {
@@ -124,10 +103,10 @@ export default class GameGrid extends Component {
     }
 
     render() {
-        
+
         const gridCells = this.state.gameState.map((cell, i) => {
             return (
-                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit}/>
+                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} />
             )
         });
         return (
@@ -141,8 +120,8 @@ export default class GameGrid extends Component {
                 <button onClick={this.handleSaveGame} >Save</button>
                 {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
 
-            
-    
+
+
             </div>
         )
     }
