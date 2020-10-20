@@ -7,10 +7,10 @@ import CowTimer from '../helpers/CowTimer'
 
 /* eslint-disable */
 
-const MenuView = (props) => {
+const moo = new CowTimer(15, 30, "moo")
+moo.startTimer()
 
-    const moo = new CowTimer(15, 30, "moo")
-    moo.startTimer()
+const MenuView = (props) => {
 
         function makeChoice(event) {
             moo.endTimer();

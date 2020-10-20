@@ -1,6 +1,10 @@
 import React from 'react';
+import CowTimer from '../helpers/CowTimer';
 
 export default function LoadGame(props){
+
+    const moo = new CowTimer(10, 15, "moo")
+    moo.startTimer();
 
     const getIdFromEvent = (event) => {
         const stringIndexofID = event.target.id.indexOf("-")+1;
@@ -10,6 +14,7 @@ export default function LoadGame(props){
 
     const handleLoadGame = (event) => {
         const gameId = getIdFromEvent(event)
+        moo.endTimer();
         props.loadGame(gameId);
     }
 

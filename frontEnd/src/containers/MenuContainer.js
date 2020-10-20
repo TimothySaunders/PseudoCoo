@@ -31,6 +31,7 @@ export default class MenuContainer extends Component {
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
+        
     }
 
     getSaveGames = async () => {
