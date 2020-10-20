@@ -1,4 +1,4 @@
-import React, { Component,} from "react";
+import React, { Component, } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
@@ -18,22 +18,27 @@ export default class GameGrid extends Component {
         super(props);
         this.state = {
             gameState: [],
-            writeNotes: false
+            writeNotes: false,
+            showConflictToggle: false,
+            grid:""
         }
         this.handleNumberInput = this.handleNumberInput.bind(this);
         this.toggleNotes = this.toggleNotes.bind(this);
-        
+        this.showConflict = this.showConflict.bind(this);
+
     }
 
 
     componentDidMount() {
         let gameState;
+        
         if (this.props.game.gridValues.length === 81) {
             gameState = sp.getObjects(this.props.game.gridValues);
         } else {
             gameState = sp.getObjectsFromSavedString(this.props.game.gridValues);
         }
-        this.setState({ gameState: gameState });
+        let getGrid = sp.getRawStringFromObjects(gameState);
+        this.setState({ gameState: gameState, grid : getGrid });   
     }
 
     // voiceContains()
@@ -45,7 +50,7 @@ export default class GameGrid extends Component {
         this.clear(); //! Needs to be run so that it eliminates any invalid entries, trying to solve 
         // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
         let toConvert = sp.getRawStringFromObjects(this.state.gameState)
-        toConvert.replace("0",".");
+        toConvert.replace("0", ".");
         const solution = sudoku.sudoku.solve(toConvert);
 
         // const solution = sudoku.sudoku.solve(sp.getRawStringFromObjects(this.state.gameState));
@@ -94,42 +99,26 @@ export default class GameGrid extends Component {
         
     }
 
-   
-
-
-
-    handleNumberInput(index, newCell, display) {
+    // handleNumberInput(index, newCell, display) {
+    handleNumberInput(index, cell, display, input) {
         let updated = this.state.gameState;
 
-        if(!this.state.writeNotes){
-            
-            updated[index] = newCell;
-            this.setState({ gameState: updated });
-        } else {
-
-            if (newCell.value.match(/[1-9]/) ) {
-                if( !newCell.notes.includes(newCell.value)){
-                newCell.notes.push(newCell.value);
-                newCell.value="."
-                }
-                if ( newCell.notes.includes(newCell.value)){
-                    const r = newCell.notes.pop(newCell.value);
-                    newCell.value=".";
+        if (this.state.writeNotes) {
+            // write some notes
+            if (input.match(/[1-9]/)) {
+                if (cell.notes.includes(input)) {
+                    cell.notes = cell.notes.filter(note => note !== input);
+                } else {
+                    cell.notes.push(input);
                 }
             }
-            display.textContent =""
-            
+        } else {
+            // write into the box
+            cell.value = input;
         }
-        // VALIDATE game finished on click//!! 
-        (this.gridIsStillSolvable() && this.gridIsFilled()) ? console.log("Moooooo - you have won") : console.log("The game is not finished");     // ! this is for THE victory COW display/
-       
-
-        //! prevent invalid input being entered into cell // rephrase to validae all inputs
-        // if(!psc.validateEntry(index,this.state.gameState,newCell.value)) {
-        //     newCell.value =".";
-        //      display.textContent ="";
-        // }
-
+        updated[index] = cell;
+        display.textContent = ["0", "."].includes(cell.value) ? "" : cell.value;
+        this.setState({ gameState: updated });
     }
 
     handleSaveGame(index){
@@ -141,19 +130,40 @@ export default class GameGrid extends Component {
     hint = () => {
 
     }
-    showConflict =() => {
-       return true;
+    
+    toggleShowConflict = () => {
+        this.setState({ showConflictToggle : !this.state.showConflictToggle})
+        // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
+        
+    }
+    showConflict(i, grid, cell){
+
+        // let grid  = sp.getRawStringFromObjects(this.state.gameState);
+        if(this.toggleShowConflict){
+        return psc.validateEntry(i, grid, cell.value)
+        }
+        
+
+    }
+    grid = () =>{
+        return sp.getRawStringFromObjects(this.state.gameState);
     }
 
-
     render() {
-        
-        const gridCells = this.state.gameState.map((cell, i) => {
-            if(!cell.editable) {
-            return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit}/>)
-            } else {
-            return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} showConflict={this.showConflict}/>)
-            }
+           
+            const gridCells = this.state.gameState.map((cell, i) => {
+                
+            //
+            
+            
+            
+
+            if (!cell.editable) {
+            return (
+            
+                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} />
+            )
+        } else { return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} grid={this.state.grid} showConflict={this.showConflict} showConflictToggle={this.state.showConflictToggle} />)  }
         });
 
 
@@ -163,7 +173,7 @@ export default class GameGrid extends Component {
                     {gridCells}
                 </div>
                 <button onClick={this.solve} > Solve</button><br/>
-                <button onClick={this.conflicts} > Find Conflicts</button><br/>
+                <button onClick={this.toggleShowConflict} > Find Conflicts</button><br/>
                 <button onClick={this.hint} > Hint</button><br/>
 
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
@@ -171,8 +181,8 @@ export default class GameGrid extends Component {
                 <button onClick={this.handleSaveGame} >Save</button>
                 {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
 
-            
-    
+
+
             </div>
         )
     }

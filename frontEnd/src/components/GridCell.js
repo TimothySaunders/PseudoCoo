@@ -1,177 +1,128 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "./GridCell.css";
+import PsChecker from '../helpers/PsChecker'
 
-export default class GridCell extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: "",
-            notes: [],
-            editable: true 
+export default function GridCell(props) {
+    let display, notes;
+    let psc = new PsChecker;
+    useEffect( () => {
+        showNotes();
+    });
+
+    const visualiseConflict = function(){
+        let value = false;
+        if(props.cell.editable && props.showConflictToggle && (props.cell.value!=="." || props.cell.value!=="")){
             
+            value = !psc.validateEntryStringGrid(props.index,props.grid,props.cell.value)
+            console.log("in cell + " + props.index + ", result :" + value)
         }
-        this.editNotes = true;
-        
-        this.clickMakesNumberVanish = this.clickMakesNumberVanish.bind(this);
-        this.setDisplay = this.setDisplay.bind(this);
-        this.showNotes = this.showNotes.bind(this);
-        // this.giveNumtoDisplay = this.giveNumtoDisplay.bind(this);
-        // this.digtListener = this.digitlListener.bind(this);
-    }
-    
-    componentDidMount() {
-        this.showNotes();
+        return value;
+
+        // let result = psc.validateEntry(props.index,props.grid,props.cell.value)
+        // console.log("in cell: result" + result)
+        // // return result
+
     }
 
-    showNotes() {
-        
-        if (this.display.textContent === "0" || this.display.textContent === "") {
-            for (let value of this.props.cell.notes) {
-                document.querySelector("#notes_" + this.props.index + "_" + value).textContent = value;
-            }
-        } else {
-            for (let i = 1; i < 10; i++) {
-                document.querySelector("#notes_" + this.props.index + "_" + i).textContent = "";
-            }
-        }
-    }
+    const showNotes = function() {
+        // if (["0", ".", ""].includes(display.textContent)) {
+            const sorted = props.cell.notes.sort();
 
-    getClassName() {
+            notes.textContent = sorted.toString().split(",").join(" ");
+        // } else {
+            // notes.textContent = "";
+        // }
+    }
+    const getClassName = function() {
         let className = "grid-cell ";
-
-       
-        if (this.props.cell.editable) {
+        if (props.cell.editable) {
             className += "editable ";
         } else {
             className += "locked ";
         }
-        if (this.props.index % 9 === 2 || this.props.index % 9 === 5) {
+
+        if (visualiseConflict()){
+            console.log("if visualise conflict is:  " + visualiseConflict())
+            className += "conflicting ";
+        }
+
+        if (props.index % 9 === 2 || props.index % 9 === 5) {
             className += "right ";
         }
-        if (this.props.index % 9 === 3 || this.props.index % 9 === 6) {
+        if (props.index % 9 === 3 || props.index % 9 === 6) {
             className += "left ";
         }
-        if ((this.props.index >= 18 && this.props.index <= 26) || (this.props.index >= 45 && this.props.index <= 53)) {
+        if ((props.index >= 18 && props.index <= 26) || (props.index >= 45 && props.index <= 53)) {
             className += "bottom ";
         }
-        if ((this.props.index >= 27 && this.props.index <= 35) || (this.props.index >= 54 && this.props.index <= 62)) {
+        if ((props.index >= 27 && props.index <= 35) || (props.index >= 54 && props.index <= 62)) {
             className += "top ";
         }
         return className;
     }
 
-    clickMakesNumberVanish(event) {
+    const clickMakesNumberVanish = function(event) {
       
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
-        this.display.style.backgroundColor = "rgba(255, 255, 255, 0.3";
-        this.digitListener();
+        display.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+        props.listenForDigit(giveNumToDisplay);
     }
 
-
-    highlightConflicts(){    //! 
-
-        console.log("inside some cells");
-    }
-
-    digitListener = () => {
-        // const digit = this.props.listenForDigit();
-        // window.setTimeout(() => {
-        //     if (digit !== "0" && digit !== undefined && digit !== null) {
-        //         console.log("i'm the cell and the digit is " + digit)
-        //         this.giveNumToDisplay(digit);
-        //     }
-        // }, 5000);
-        // this.props.listenForDigit().then((result) => {
-        //     console.log("i sent back " + result);
-        //     this.giveNumToDisplay(result);
-        // })
-        // this.giveNumToDisplay( await this.props.listenForDigit());
-        // if (digit !== "0") {
-        //  this.giveNumToDisplay(digit);
-        // }
-
-
-        this.props.listenForDigit(this.giveNumToDisplay);
-    }
-
-    giveNumToDisplay = (num) => {
-        console.log(num);
-        console.log("boogywoogywoogy");
-        this.display.textContent = num;
-
-        if (num === undefined) {
+    const giveNumToDisplay = (num) => {
+        if (num === undefined || num === "...") {
             num = "0";
         }
-        this.setState(num);
-        // let newCell = {
-        //     value: num,
-        //     editable: this.props.cell.editable,
-        //     notes: this.props.cell.notes
-        // };
-        // this.props.onNumberInput(this.props.index, newCell, this.display);
-        // this.showNotes();
-        // setTimeout((console.log()),200);
-    }
-
-    setState = (num) => {
-        let newCell = {
-            value: num,
-            editable: this.props.cell.editable,
-            notes: this.props.cell.notes
-        };
-        this.props.onNumberInput(this.props.index, newCell, this.display);
-        this.showNotes();
-    }
-
-    setDisplay(event) {
+        if (num.length > 1) {
+            num = num.slice(-1);
+        }
         
+        // setGameGridState(num);
+        if (display) {
+        props.onNumberInput(props.index, props.cell, display, num);}
+        // showNotes();
+    }
+
+    const setGameGridState = (input) => {
+        // let newCell = {
+        //     value: value,
+        //     editable: props.cell.editable,
+        //     notes: props.cell.notes
+        // }
+        
+    }
+
+    const setDisplay = (event) => {
         let num = event.target.value;
         if (num.length > 1) {
-            num = num.substr(1);
+            num = num.slice(-1);
             event.target.value = num;
         }
-       this.giveNumToDisplay(num);
-
+        if (num.length===0){
+            num = ".";
+            event.target.value = num;
+        }
+        giveNumToDisplay(num);
     }
 
-    noScroll(event) {
-        event.preventDefault();
-    }
-
-    render() {
-        let className = this.getClassName();
-        return (
-            <div className={className}>
-                <div ref={(div) => this.display = div} className="display">
-                {this.props.cell.value.match(/[1-9]/) ? this.props.cell.value : null}
-                </div>
-                <input
-                    min="1"
-                    max="9"
-                    className="cell-input"
-                    type="number"
-                    defaultValue={this.props.cell.value}
-                    disabled={!this.props.cell.editable}
-                    onClick={this.clickMakesNumberVanish}
-                    onKeyUp={this.setDisplay}
-                    onScroll={this.noScroll}
-                />
-
-                <div className="notes">
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_1"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_2"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_3"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_4"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_5"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_6"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_7"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_8"}></div>
-                    <div className="notes-cell" id={"notes_" + this.props.index + "_9"}></div>
-                </div>
-
+    return(
+        <div className={getClassName()}>
+            <div ref={(div) => display = div} className="display">
+                {props.cell.value.match(/[1-9]/) ? props.cell.value : null}
             </div>
-        )
-    }
+            <input 
+                min="1"
+                max='9'
+                className="cell-input"
+                type="number"
+                defaultValue={props.cell.value}
+                disabled={!props.cell.editable}
+                onClick={clickMakesNumberVanish}
+                onKeyUp={setDisplay}
+            />
+            <div className="notes-cell" ref={(div) => notes = div}></div>
+        </div>
+    )
+
 }
