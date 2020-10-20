@@ -8,7 +8,8 @@ export default class GridCell extends Component {
         this.state = {
             value: "",
             notes: [],
-            editable: true
+            editable: true 
+            
         }
         this.editNotes = true;
         
@@ -38,6 +39,8 @@ export default class GridCell extends Component {
 
     getClassName() {
         let className = "grid-cell ";
+
+       
         if (this.props.cell.editable) {
             className += "editable ";
         } else {
@@ -65,6 +68,13 @@ export default class GridCell extends Component {
         this.display.style.backgroundColor = "rgba(255, 255, 255, 0.3";
         this.digitListener();
     }
+
+
+    highlightConflicts(){    //! 
+
+        console.log("inside some cells");
+    }
+
     digitListener = () => {
         // const digit = this.props.listenForDigit();
         // window.setTimeout(() => {

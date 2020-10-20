@@ -3,14 +3,14 @@ import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
-// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
+
 
 
 
 import Parser from "../helpers/StringParser";
 const sp = new Parser();
 const psc = new PsChecker();
-// SpeechRecognition.SpeechRecognition();  //! 
+
 
 export default class GameGrid extends Component {
 
@@ -94,6 +94,10 @@ export default class GameGrid extends Component {
         
     }
 
+   
+
+
+
     handleNumberInput(index, newCell, display) {
         let updated = this.state.gameState;
 
@@ -128,24 +132,40 @@ export default class GameGrid extends Component {
 
     }
 
-    handleSaveGame = () => {
+    handleSaveGame(index){
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
     }
 
+
+    hint = () => {
+
+    }
+    showConflict =() => {
+       return true;
+    }
+
+
     render() {
         
         const gridCells = this.state.gameState.map((cell, i) => {
-            return (
-                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit}/>
-            )
+            if(!cell.editable) {
+            return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit}/>)
+            } else {
+            return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} showConflict={this.showConflict}/>)
+            }
         });
+
+
         return (
             <div id="game-container">
                 <div id="game-grid">
                     {gridCells}
                 </div>
-                <button onClick={this.solve} > Solve</button>
+                <button onClick={this.solve} > Solve</button><br/>
+                <button onClick={this.conflicts} > Find Conflicts</button><br/>
+                <button onClick={this.hint} > Hint</button><br/>
+
                 <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                 <button onClick={this.clear} >Clear</button>
                 <button onClick={this.handleSaveGame} >Save</button>
