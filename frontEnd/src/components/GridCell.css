@@ -71,14 +71,11 @@ input:disabled {
     user-select: none;
 }
 
-.notes {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin: 0px;
-}
 .notes-cell {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    line-height: 46px;
+    margin: -14px 0px;
+    font-size: 0.7em;
+    padding: 0 5px;
+    color: black;
 }
