@@ -4,6 +4,8 @@ import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 import JokeTimer from '../helpers/JokeTimer'
 import sudoku from '../helpers/sudoku'
+import './MenuContainer.css'
+
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -38,10 +40,8 @@ export default class MenuContainer extends Component {
         const saveGames = await get("api/saves");
         this.setState({ savedGames: saveGames });
     }
+
     // --- --- VOICE  --- --- 
-
-
-
     contains(checkedarray, arrayOfWords) {
         var result = false;
         for (let word of arrayOfWords) {
@@ -126,21 +126,11 @@ export default class MenuContainer extends Component {
                 console.log(output + " maybe this is working")
                 functionPassedBack(output);
                 // return output;
-                
             }
-
         } catch(error) {
             console.log(error + "   oops i broke");
         }
-
-
-
-        
-      
     }
-
-
-
 
     voiceCommands() {
 
@@ -207,7 +197,6 @@ export default class MenuContainer extends Component {
 
                 console.log(transcript);
             }
-            // this.getSaveGames();   ///! WUT?
         }
     }
     // --- --- --- ---
@@ -225,13 +214,14 @@ export default class MenuContainer extends Component {
             const savedGame = await patch("api/saves/" + saveGame.id, saveGame)
             this.setState({ game: savedGame })
         }
+        this.getSaveGames();
     }
 
     loadGame = (id) => {
-        const game = this.state.savedGames[id];
+        console.log(id)
+        const game = this.state.savedGames.find(game => game.id === parseInt(id));
         this.setState({ game: game });
     }
-
 
     removeGame = async (id) => {
         await remove("/api/saves/" + id);
@@ -242,15 +232,6 @@ export default class MenuContainer extends Component {
         const chosen = choice;
         this.setState({ viewOption: chosen })
     }
-
-    loadGame = (event) => {
-        const targetId = event.target.id;
-        const gameIndex = targetId.substring(targetId.length - 1);
-        const game = this.state.savedGames[gameIndex];
-        this.setState({ game: game });
-    }
-
-
 
     creategameStringFromDifficulty = (choice) => {
         const newGame = this.state.game;
@@ -285,7 +266,11 @@ export default class MenuContainer extends Component {
                         viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-
+                    <div id="cow-container">
+                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
+                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
+                            <p id="cow-speech"></p>
+                    </div>
                 </Fragment>
             )
         } else {
@@ -295,6 +280,11 @@ export default class MenuContainer extends Component {
                     <button onClick={this.reset}> Return to menu</button>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
+                    <div id="cow-container">
+                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
+                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
+                            <p id="cow-speech"></p>
+                    </div>
                 </Fragment>
             )
         }
