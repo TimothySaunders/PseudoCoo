@@ -30,7 +30,7 @@ export default class MenuContainer extends Component {
 
     componentDidMount() {
         this.getSaveGames();
-        new JokeTimer(15, 30)
+        new JokeTimer(15, 15)
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
@@ -269,8 +269,8 @@ export default class MenuContainer extends Component {
                     <div id="cow-container">
                             <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
                             <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p class="cow-speech" id="setup">testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123</p>
-                            <p class="cow-speech" id="punchline">testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123</p>
+                            <p className="cow-speech" id="setup">Ten cows are lined up in a field - which one is nearest Iraq?</p>
+                            <p className="cow-speech" id="punchline">The steaks have never been so high!</p>
                     </div>
                 </Fragment>
             )
@@ -281,12 +281,7 @@ export default class MenuContainer extends Component {
                     <button onClick={this.reset}> Return to menu</button>
                     <br />
                     <button onClick={this.voiceCommands}>resume VRC</button>
-                    <div id="cow-container">
-                            <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
-                            <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p class="cow-speech" id="setup">testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123</p>
-                            <p class="cow-speech" id="punchline">testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123</p>
-                    </div>
+
                 </Fragment>
             )
         }
