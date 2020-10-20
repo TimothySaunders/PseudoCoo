@@ -30,7 +30,7 @@ export default class MenuContainer extends Component {
 
     componentDidMount() {
         this.getSaveGames();
-        const jokeGenerator = new JokeTimer(15, 30)
+        new JokeTimer(15, 30)
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
@@ -269,7 +269,7 @@ export default class MenuContainer extends Component {
                     <div id="cow-container">
                             <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
                             <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p id="cow-speech"></p>
+                            <p id="cow-speech">testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123</p>
                     </div>
                 </Fragment>
             )
@@ -283,7 +283,7 @@ export default class MenuContainer extends Component {
                     <div id="cow-container">
                             <img id="cow" className="cow-animation" src="cow.png" alt="cow" draggable="false"></img>
                             <img id="speech-bubble" className="cow-animation" src="speech_bubble.png" alt="speech" draggable="false"></img>
-                            <p id="cow-speech"></p>
+                            <p id="cow-speech">testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123</p>
                     </div>
                 </Fragment>
             )
