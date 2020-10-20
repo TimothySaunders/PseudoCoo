@@ -18,9 +18,10 @@ export default function JokeTimer(min, max){
         if (cowJokes.length === 1){
             getCowJokes();
         }
+        document.getElementById("setup").innerHTML=selectedJoke.setup;
+        document.getElementById("punchline").innerHTML=selectedJoke.setup;
+
         resetTimer();
-        console.log(selectedJoke)
-        // document.getElementById("test").innerHTML=selectedJoke.setup
     }
     
     function randomInterval(min, max) {
