@@ -18,11 +18,6 @@ export default function GridCell(props) {
             console.log("in cell + " + props.index + ", result :" + value)
         }
         return value;
-
-        // let result = psc.validateEntry(props.index,props.grid,props.cell.value)
-        // console.log("in cell: result" + result)
-        // // return result
-
     }
 
     const showNotes = function() {
