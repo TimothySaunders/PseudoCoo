@@ -1,74 +1,76 @@
 import {get} from './requests'
 
-export default function JokeTimer(min, max, out){
+export default class JokeTimer{
 
-    let time;
-    let cowJokes = [];
-
-    switch (out) {
-        case "joke":
-            getCowJokes();
-            break;
-        case "hint":
-            document.addEventListener("mousemove", resetTimer);
-            document.addEventListener("keypress", resetTimer);;
-            break;
-        default:
-            break;
+    constructor(min, max, out="moo"){
+        this.min = min;
+        this.max = max;
+        this.out = out;
+        let cowJokes = [];
+        let time = null;
     }
 
-    
-    window.onload = resetTimer;
-
-    async function getCowJokes() {
-        cowJokes = await get("api/jokes");
-    }
-
-    function output() {
-        
-        switch (out) {
+    startTimer(){
+        switch (this.out) {
             case "joke":
-                tellJoke();
+                this.getCowJokes();
                 break;
             case "hint":
-                tellHint();
+                document.addEventListener("mousemove", this.resetTimer);
+                document.addEventListener("keypress", this.resetTimer);;
                 break;
             default:
-                moo();
                 break;
         }
+        window.onload = this.resetTimer;
+    }
 
-        resetTimer();
+    endTimer(){
+        clearTimeout(this.time);
+    }
+
+    getCowJokes = async () => {
+        this.cowJokes = await get("api/jokes");
+    }
+
+    output = () => {
+        switch (this.out) {
+            case "joke":
+                this.tellJoke();
+                break;
+            case "hint":
+                this.tellHint();
+                break;
+            default:
+                this.moo();
+                break;
+        }
+        this.resetTimer();
     }
     
-    function randomInterval(min, max) {
+    randomInterval = (min, max) => {
         return 1000 * Math.floor(min + (Math.random()*(max-min)));
     }
 
-    function randomItemFromList(list) {
+    randomItemFromList = (list) => {
         const index = Math.floor((Math.random()*(list.length)));
         return list[index];
     }
 
-    function resetTimer() {
-        clearTimeout(time);
-        let interval = randomInterval(min, max);
-        time = setTimeout(output, interval);
+    resetTimer = () => {
+        clearTimeout(this.time);
+        let interval = this.randomInterval(this.min, this.max);
+        this.time = setTimeout(this.output, interval);
     }
 
     // functions for use in output()
 
-    function removeCow(){
-        document.getElementById("speech-bubble").style.visibility="hidden"
-        document.getElementById("cow-container").style.bottom="-1000px";
-    }
-
-    function tellJoke(){
-        const selectedJoke = randomItemFromList(cowJokes);
-        const selectedIndex = cowJokes.findIndex((joke) => joke === selectedJoke);
-        cowJokes.splice(selectedIndex,1);
-        if (cowJokes.length === 1){
-            getCowJokes();
+    tellJoke = () => {
+        const selectedJoke = this.randomItemFromList(this.cowJokes);
+        const selectedIndex = this.cowJokes.findIndex((joke) => joke === selectedJoke);
+        this.cowJokes.splice(selectedIndex, 1);
+        if (this.cowJokes.length === 0){
+            this.getCowJokes();
         }
         
         document.getElementById("setup").classList.add("fade-out");
@@ -110,9 +112,14 @@ export default function JokeTimer(min, max, out){
             document.getElementById("punchline").classList.add("fade-out")
             setTimeout(removeCow, 500)
         }
+
+        function removeCow(){
+            document.getElementById("speech-bubble").style.visibility="hidden"
+            document.getElementById("cow-container").style.bottom="-1000px";
+        }
     }
 
-    function tellHint(){
+    tellHint = () => {
         document.getElementById("setup").classList.add("fade-out");
         document.getElementById("punchline").classList.add("fade-out");
         document.getElementById("setup").style.fontSize="2em"
@@ -156,9 +163,14 @@ export default function JokeTimer(min, max, out){
             document.getElementById("punchline").style.fontSize="1.5em"
             setTimeout(removeCow, 500)
         }
+
+        function removeCow(){
+            document.getElementById("speech-bubble").style.visibility="hidden"
+            document.getElementById("cow-container").style.bottom="-1000px";
+        }
     }
 
-    function moo(){
+    moo = () => {
         document.getElementById("setup").classList.add("fade-out");
         document.getElementById("punchline").classList.add("fade-out");
         document.getElementById("setup").style.fontSize="3em"
@@ -183,11 +195,14 @@ export default function JokeTimer(min, max, out){
             document.getElementById("setup").classList.remove("fade-in")
             document.getElementById("setup").classList.add("fade-out")
             document.getElementById("setup").style.fontSize="1.5em"
-            setTimeout(removeCow, 500)
+            setTimeout(removeCow, 2000)
+        }
+
+        function removeCow(){
+            document.getElementById("speech-bubble").style.visibility="hidden"
+            document.getElementById("cow-container").style.bottom="-1000px";
         }
 
     }
-
-
 
 }

@@ -9,7 +9,8 @@ import CowTimer from '../helpers/CowTimer'
 
 const MenuView = (props) => {
 
-    new CowTimer(10, 15, "moo")
+    const moo = new CowTimer(10, 15, "moo")
+    moo.startTimer()
 
         function makeChoice(event) {
             props.chooseMenu(event.target.value)
