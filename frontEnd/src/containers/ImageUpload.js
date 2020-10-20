@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
@@ -97,17 +97,25 @@ export default class ImageUpload extends Component{
         }
     }
 
+    returnHome = () => {
+        clearTimeout("joke")
+        this.props.returnHome();
+    }
+
     render(){
 
         return(
-            <div>
-                <p>grid component will go here</p>
-                <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
-                <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
-                onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
-                <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
-            </div>
-            
+            <Fragment>
+                <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                <div>
+                    <h1>Upload a Puzzle</h1>
+                    <p>grid component will go here</p>
+                    <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
+                    <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
+                    onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
+                    <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
+                </div>
+            </Fragment>
         )
     }
 

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import CowTimer from '../helpers/CowTimer';
 import "./LoadGame.css";
 import LoadGameItem from "./LoadGameItem.js";
 
 export default function LoadGame(props) {
 
-    const moo = new CowTimer(10, 15, "moo")
+    const moo = new CowTimer(12, 15, "moo")
     moo.startTimer();
 
     const handleLoadGame = (game) => {
@@ -25,10 +25,19 @@ export default function LoadGame(props) {
         )
     })
 
+    const returnHome = () => {
+        moo.endTimer();
+        props.returnHome();
+    }
+
     return (
-        <main id="load-games">
-            {saveNodes}
-        </main>
+        <Fragment>
+            <button className="return-home" onClick={returnHome}> Return to Menu</button>
+            <h1>Load Game</h1>
+            <div id="load-games">
+                {saveNodes}
+            </div>
+        </Fragment>
     )
 
 }
