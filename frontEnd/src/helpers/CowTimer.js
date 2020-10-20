@@ -50,7 +50,6 @@ export default class JokeTimer{
     
     randomInterval = (min, max) => {
         const interval = 1000 * Math.floor(min + (Math.random()*(max-min)));
-        console.log(interval)
         return interval
     }
 

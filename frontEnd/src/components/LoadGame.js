@@ -1,7 +1,9 @@
 import React from 'react';
 import CowTimer from '../helpers/CowTimer';
+import "./LoadGame.css";
+import LoadGameItem from "./LoadGameItem.js";
 
-export default function LoadGame(props){
+export default function LoadGame(props) {
 
     const moo = new CowTimer(10, 15, "moo")
     moo.startTimer();
@@ -25,19 +27,14 @@ export default function LoadGame(props){
 
     const saveNodes = props.savedGames.map((game, index) => {
         return (
-            <div key={index}>
-                <button id={"save-"+game.id} onClick={handleLoadGame}>{game.timeStamp}</button>
-                <button id={"del-"+game.id} onClick={handleDeleteGame}>Delete</button>
-                <br/>
-            </div>
-                
+            <LoadGameItem key={index} game={game} clickEvent={handleLoadGame} deleteEvent={handleDeleteGame} />
         )
     })
 
-    return(
-        <div>
+    return (
+        <main id="load-games">
             {saveNodes}
-        </div>
+        </main>
     )
 
 }
