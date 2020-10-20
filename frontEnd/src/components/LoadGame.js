@@ -32,7 +32,9 @@ export default function LoadGame(props) {
 
     return (
         <Fragment>
-            <button className="return-home" onClick={returnHome}> Return to Menu</button>
+            <div className="menu-grid">
+                <button className="return-home" onClick={returnHome}> Return to Menu</button>
+            </div>
             <h1>Load Game</h1>
             <div id="load-games">
                 {saveNodes}

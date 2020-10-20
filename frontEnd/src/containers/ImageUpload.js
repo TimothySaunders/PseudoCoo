@@ -124,7 +124,9 @@ export default class ImageUpload extends Component{
 
         return(
             <Fragment>
-                <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                <div className="menu-grid">
+                    <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                </div>
                 <div>
                     <h1>Upload a Puzzle</h1>
                     {this.renderValidateGrid()}
