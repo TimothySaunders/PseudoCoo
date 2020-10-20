@@ -1,4 +1,4 @@
-import React, { Component, } from "react";
+import React, { Component, Fragment, } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
@@ -6,6 +6,8 @@ import PsChecker from '../helpers/PsChecker';
 // import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
 import CowTimer from '../helpers/CowTimer'
 import Parser from "../helpers/StringParser";
+
+import confetti from "canvas-confetti";
 
 // const hint = new CowTimer(20, 20, "hint")
 // hint.startTimer()
@@ -36,14 +38,14 @@ export default class GameGrid extends Component {
     componentDidMount() {
         this.props.resizeGrid();
         let gameState;
-        
+
         if (this.props.game.gridValues.length === 81) {
             gameState = sp.getObjects(this.props.game.gridValues);
         } else {
             gameState = sp.getObjectsFromSavedString(this.props.game.gridValues);
         }
         let getGrid = sp.getRawStringFromObjects(gameState);
-        this.setState({ gameState: gameState, grid : getGrid });   
+        this.setState({ gameState: gameState, grid: getGrid });
     }
 
 
@@ -66,6 +68,7 @@ export default class GameGrid extends Component {
                 return cell;
             });
             this.setState({ gameState: prevState });
+            this.confettiCannon();
         }
     }
 
@@ -84,11 +87,11 @@ export default class GameGrid extends Component {
     gridIsStillSolvable = () => {
         var solvable = true;
         let grid = sp.getRawStringFromObjects(this.state.gameState);
-        if(sudoku.sudoku.solve(grid)===false){
+        if (sudoku.sudoku.solve(grid) === false) {
             solvable = false;
         }
         return solvable;
-        
+
     }
 
     gridIsFilled = () => {
@@ -96,6 +99,53 @@ export default class GameGrid extends Component {
         return !sp.getRawStringFromObjects(this.state.gameState).includes(".")
         // return !(grid).includes(".")
         
+    }
+
+    gridIsSolved = () => {
+        const currentGameState = sp.getRawStringFromObjects(this.state.gameState);
+        console.log(currentGameState);
+        const solution = sudoku.sudoku.solve(currentGameState);
+        console.log(solution);
+        if (currentGameState === solution) {
+            return true;
+        }
+        return false;
+    }
+
+    confettiCannon() {
+        var count = 250;
+        var defaults = {
+            origin: { y: 0.8 }
+        };
+
+        function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, {
+                particleCount: Math.floor(count * particleRatio)
+            }));
+        }
+
+        fire(0.25, {
+            spread: 56,
+            startVelocity: 55,
+        });
+        fire(0.2, {
+            spread: 120,
+        });
+        fire(0.55, {
+            spread: 180,
+            decay: 0.90,
+            scalar: 0.8
+        });
+        fire(0.1, {
+            spread: 120,
+            startVelocity: 25,
+            decay: 0.92,
+            scalar: 1.2
+        });
+        fire(0.2, {
+            spread: 120,
+            startVelocity: 55,
+        });
     }
 
     // handleNumberInput(index, newCell, display) {
@@ -116,11 +166,14 @@ export default class GameGrid extends Component {
             cell.value = input;
         }
         updated[index] = cell;
+        if (this.gridIsSolved()) {
+            this.confettiCannon();
+        }
         display.textContent = ["0", "."].includes(cell.value) ? "" : cell.value;
         this.setState({ gameState: updated });
     }
 
-    handleSaveGame =() => {
+    handleSaveGame = () => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
     }
@@ -165,32 +218,35 @@ export default class GameGrid extends Component {
         
 
     }
-
-
     
     toggleShowConflict = () => {
-        this.setState({ showConflictToggle : !this.state.showConflictToggle})
+        this.setState({ showConflictToggle: !this.state.showConflictToggle })
         // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
-        
+
     }
-    showConflict(i, grid, cell){
+
+    showConflict(i, grid, cell) {
 
         // let grid  = sp.getRawStringFromObjects(this.state.gameState);
-        if(this.toggleShowConflict){
-        return psc.validateEntry(i, grid, cell.value)
+        if (this.toggleShowConflict) {
+            return psc.validateEntry(i, grid, cell.value)
         }
-        
-
     }
-    grid = () =>{
+
+    grid = () => {
         return sp.getRawStringFromObjects(this.state.gameState);
     }
 
+    returnHome = () => {
+        // this.hint.endTimer();
+        this.props.returnHome();
+    }
+
     render() {
-           
-            const gridCells = this.state.gameState.map((cell, i) => {
-                
-         
+
+        const gridCells = this.state.gameState.map((cell, i) => {
+
+
             if (!cell.editable) {
             return (
             
@@ -201,23 +257,24 @@ export default class GameGrid extends Component {
 
 
         return (
-            <div id="game-container">
-                <div id="game-grid">
-                    {gridCells}
+            <Fragment>
+                <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                <div id="game-container">
+                    <div id="game-grid">
+                        {gridCells}
+                    </div>
+                    <div id="game-buttons">
+                        <button onClick={this.solve} > Solve</button>
+                        <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
+                        <button onClick={this.clear} >Clear</button>
+                        <button onClick={this.toggleShowConflict} >Verify</button>
+                        <button onClick={this.hint} >Hint</button>
+                        <button onClick={this.handleSaveGame} >Save</button>
+                    </div>
+                    {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
+
                 </div>
-                <div id="game-buttons">
-                    <button onClick={this.solve} > Solve</button>
-                    <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
-                    <button onClick={this.clear} >Clear</button>
-                    <button onClick={this.toggleShowConflict} >Verify</button>
-                    <button onClick={this.hint} >Hint</button>
-                    <button onClick={this.handleSaveGame} >Save</button>
-                </div>
-                {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
-
-
-
-            </div>
+            </Fragment>
         )
     }
 }

@@ -253,6 +253,7 @@ export default class MenuContainer extends Component {
                 timeStamp: ""
             }
         });
+        this.chooseMenu("mainMenu")
     }
 
     render() {
@@ -262,17 +263,15 @@ export default class MenuContainer extends Component {
                 <Fragment>
                     <MenuView chooseMenu={this.chooseMenu} createGameString={this.createGameString}
                         viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
-                    <br />
-                    <button onClick={this.voiceCommands}>resume VRC</button>
+                    {/* <br />
+                    <button onClick={this.voiceCommands}>resume VRC</button> */}
                 </Fragment>
             )
         } else {
             return (
                 <Fragment>
-                    <GameGrid game={this.state.game} saveGame={this.saveGame} voiceInput={this.voiceCommandsContain} listenForDigit={this.voiceCommandsContainsDigit} resizeGrid={this.props.resizeGrid} ></GameGrid>
-                    <button onClick={this.reset}> Return to menu</button>
-                    <br />
-                    <button onClick={this.voiceCommands}>resume VRC</button>
+                    <GameGrid game={this.state.game} saveGame={this.saveGame} voiceInput={this.voiceCommandsContain} listenForDigit={this.voiceCommandsContainsDigit}
+                     resizeGrid={this.props.resizeGrid} returnHome={this.reset}></GameGrid>
                 </Fragment>
             )
         }

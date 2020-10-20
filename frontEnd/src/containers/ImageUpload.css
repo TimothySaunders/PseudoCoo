@@ -9,3 +9,7 @@
 .on-droppable {
     border: 6px maroon solid;
 }
+
+#processed-preview {
+    display: none;
+}

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
@@ -44,14 +44,16 @@ export default class ImageUpload extends Component{
     analyseImage = async () => {
         const joke = new CowTimer(12, 12, "joke")
         joke.startTimer()
-
+        const secondImageBox = document.getElementById("processed-preview");
+        secondImageBox.style.display = "initial";
         const cleanImage = await uploadImage(this.state.imageFile);
         let output = "";
 
         let fileReader2 = new FileReader();
         fileReader2.onload = async () => {
+            secondImageBox.src = "processing.gif";
             output = await ImageParser(fileReader2.result, false, false)
-            document.getElementById("test").src = fileReader2.result;
+            secondImageBox.src = fileReader2.result;
             this.setState ({parsedOutput: output})
             joke.endTimer();
         }
@@ -97,17 +99,25 @@ export default class ImageUpload extends Component{
         }
     }
 
+    returnHome = () => {
+        clearTimeout("joke")
+        this.props.returnHome();
+    }
+
     render(){
 
         return(
-            <div>
-                <p>grid component will go here</p>
-                <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
-                <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
-                onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
-                <img id="test" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false" />
-            </div>
-            
+            <Fragment>
+                <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
+                <div>
+                    <h1>Upload a Puzzle</h1>
+                    <p>grid component will go here</p>
+                    <button id="validate-upload" onClick={this.handleValidate}>Validate</button>
+                    <img id="preview" className="image" src="uploadDefault.png" alt="uploadImage" draggable="false"
+                    onClick={this.handleImageClick} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragLeave} onDragOver={this.handleDragOver} onDrop={this.handleOnDrop}/>
+                    <img id="processed-preview" className="image" src="uploading.gif" alt="uploadImage" draggable="false" />
+                </div>
+            </Fragment>
         )
     }
 

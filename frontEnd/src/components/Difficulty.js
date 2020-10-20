@@ -23,7 +23,8 @@ const Difficulty = (props) => {
 
     return (
         <Fragment>
-            <h1>Diffi-cow-lty selection</h1>
+            <button onClick={makeChoice} value="mainMenu"> Return to Menu </button>
+            <h1>Choose Diffi-cow-lty</h1>
             <section id="buttons">
                 <button onClick={setDifficulty} value="easy">Laughing Coooo</button>
                 <button onClick={setDifficulty} value="medium">Skimmed Milk</button>
@@ -32,8 +33,6 @@ const Difficulty = (props) => {
                 <button onClick={setDifficulty} value="insane">Mad Cooo!!!</button>
                 <button onClick={setDifficulty} value="inhuman">Holy Coo!!</button>
             </section>
-            <button onClick={makeChoice} value="mainMenu"> Back to menu</button>
-
         </Fragment>
     )
 
