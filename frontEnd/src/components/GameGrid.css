@@ -1,3 +1,8 @@
+#game-container {
+    display: grid;
+    grid-template-rows: 600px 1fr;
+    gap: 20px;
+}
 #game-grid {
     display: grid;
     height: 600px;
@@ -5,4 +10,5 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     border: 2px solid black;
+    transform-origin: top left;
 }

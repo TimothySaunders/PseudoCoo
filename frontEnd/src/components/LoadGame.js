@@ -1,38 +1,27 @@
 import React from 'react';
+import "./LoadGame.css";
+import LoadGameItem from "./LoadGameItem.js";
 
-export default function LoadGame(props){
+export default function LoadGame(props) {
 
-    const getIdFromEvent = (event) => {
-        const stringIndexofID = event.target.id.indexOf("-")+1;
-        const targetId = event.target.id.slice(stringIndexofID);
-        return targetId;
+    const handleLoadGame = (game) => {
+        props.loadGame(game.id);
     }
 
-    const handleLoadGame = (event) => {
-        const gameId = getIdFromEvent(event)
-        props.loadGame(gameId);
-    }
-
-    const handleDeleteGame = (event) => {
-        const gameId = getIdFromEvent(event)
-        props.removeGame(gameId);
+    const handleDeleteGame = (game) => {
+        props.removeGame(game.id);
     }
 
     const saveNodes = props.savedGames.map((game, index) => {
         return (
-            <div key={index}>
-                <button id={"save-"+game.id} onClick={handleLoadGame}>{game.timeStamp}</button>
-                <button id={"del-"+game.id} onClick={handleDeleteGame}>Delete</button>
-                <br/>
-            </div>
-                
+            <LoadGameItem key={index} game={game} clickEvent={handleLoadGame} deleteEvent={handleDeleteGame} />
         )
     })
 
-    return(
-        <div>
+    return (
+        <main id="load-games">
             {saveNodes}
-        </div>
+        </main>
     )
 
 }

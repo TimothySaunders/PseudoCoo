@@ -4,6 +4,10 @@ html, body {
     overflow: hidden;
 }
 
+body {
+    background-image: url("../images/cow_pattern.jpg");
+}
+
 .cow-animation {
     width: 100%;
     height: auto;
@@ -46,3 +50,17 @@ html, body {
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(12, 1fr);
 }
+
+button {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: hotpink;
+    border: none;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: dodgerblue;
+}
+
