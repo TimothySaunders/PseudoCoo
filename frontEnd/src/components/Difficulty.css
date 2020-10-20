@@ -1,0 +1,6 @@
+#buttons {
+    display: grid;
+    width: 80%;
+    margin: auto;
+    grid-template-columns: 1fr 1fr;
+}

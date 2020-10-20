@@ -1,6 +1,6 @@
 .grid-cell {
     user-select: none;
-    background-color: hotpink;
+    background-color: rgba;
     border: 1px solid black;
     position: relative;
 }
@@ -15,19 +15,19 @@
 }
 
 .left {
-    border-left: 2px solid black;
+    border-left-width: 2px;
 }
 
 .right {
-    border-right: 2px solid black;
+    border-right-width: 2px;
 }
 
 .top {
-    border-top: 2px solid black;
+    border-top-width: 2px;
 }
 
 .bottom {
-    border-bottom: 2px solid black;
+    border-bottom-width: 2px;
 }
 
 .cell-input {

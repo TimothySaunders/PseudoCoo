@@ -1,5 +1,5 @@
 body {
-    background-image: url("../images/cow_pattern_.png");
+    background-image: url("../images/cow_pattern.jpg");
 }
 
 .cow-animation {
@@ -27,3 +27,4 @@ button {
 button:hover {
     background-color: dodgerblue;
 }
+

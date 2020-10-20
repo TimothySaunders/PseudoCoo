@@ -12,7 +12,9 @@ export default function LoadGameItem({ game, clickEvent, deleteEvent }) {
     return (
         <section id={`save-${game.id}`} className="load-game-item" onClick={handleLoadGame}>
             <span>{game.timeStamp}</span>
-            <button id={"del-" + game.id} className="delete" onClick={handleDeleteGame}><span className="fas fa-exclamation-triangle"></span> Delete</button>
+            <button id={"del-" + game.id} className="delete" onClick={handleDeleteGame}>
+                <span className="fas fa-exclamation-triangle"></span> Delete
+            </button>
         </section>
     )
 }
