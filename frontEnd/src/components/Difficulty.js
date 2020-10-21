@@ -5,9 +5,11 @@ import "./Difficulty.css";
 
 const Difficulty = (props) => {
 
+    let timeout;
+
     if (props.cowTimer) {
         props.cowTimer.startTimer(18, 18, "Feelin' tough?")
-        setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 15000)
+        timeout = window.setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 15000)
     }
 
     function setDifficulty(event){
@@ -17,6 +19,7 @@ const Difficulty = (props) => {
     }
 
     function makeChoice(event) {
+        window.clearTimeout(timeout)
         props.cowTimer.endTimer();
         props.chooseMenu(event.target.value)
     }
