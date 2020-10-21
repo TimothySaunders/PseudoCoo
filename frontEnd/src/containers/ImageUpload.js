@@ -119,11 +119,16 @@ export default class ImageUpload extends Component {
         this.setState({ parsedOutput: parsedGrid.join("") });
     }
     gameIsSolvable = () => {
-        if (this.state.parsedOutput.length > 0) {
-            const solution = sudoku.sudoku.solve(this.state.parsedOutput);
-            return solution ? true : false;
+        try {
+            if (this.state.parsedOutput.length > 0) {
+                const solution = sudoku.sudoku.solve(this.state.parsedOutput);
+                return solution ? true : false;
+            }
+            return false;
+        } catch (e) {
+            console.log(e);
+            return false;
         }
-        return false;
     }
 
     renderValidateGrid() {
