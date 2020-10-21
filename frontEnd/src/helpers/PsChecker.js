@@ -19,6 +19,10 @@ export default class PsChecker {
     } else {
 
 
+    
+
+
+
     // estblish all characters in the same row,column, box as the index pased into the function (index of cell clicked)
     // SAME ROW
     const currentRowNumber = Math.floor(index/9);

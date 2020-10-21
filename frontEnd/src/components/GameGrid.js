@@ -3,7 +3,6 @@ import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
-// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
 import Parser from "../helpers/StringParser";
 import confetti from "canvas-confetti";
 
@@ -20,12 +19,15 @@ export default class GameGrid extends Component {
             writeNotes: false,
             showConflictToggle: false,
             grid:"",
-            hint:null
+            hint:null,
+            currentOrder:"",
+            preventDoubleExecution:1
         }
         this.handleNumberInput = this.handleNumberInput.bind(this);
         this.toggleNotes = this.toggleNotes.bind(this);
         this.showConflict = this.showConflict.bind(this);
         this.hint = this.hint.bind(this);
+        
 
     }
 
@@ -40,6 +42,7 @@ export default class GameGrid extends Component {
             gameState = sp.getObjectsFromSavedString(this.props.game.gridValues);
         }
         let getGrid = sp.getRawStringFromObjects(gameState);
+        
         this.setState({ gameState: gameState, grid: getGrid });
 
         if (this.props.cowTimer){
@@ -47,6 +50,66 @@ export default class GameGrid extends Component {
             this.props.cowTimer.startTimer(30, 30, "PSEUDOCOO!")
             setTimeout(()=>{this.props.cowTimer.startTimer(14, 20, "hint")}, 28000)
         }
+
+       
+        this.setState({currentOrder: this.props.voiceOrder}, this.executeOrder66)
+
+        
+
+    }
+  
+    // componentDidUpdate(){
+    //     let order = this.state.currentOrder;
+    //     if (order==="solve"){
+    //         console.log("solve called within gamegrid")
+            
+    //     }
+    // }
+    executeVoiceOrders = (order) => {
+        console.log("Execute order");
+        let prev = this.state.preventDoubleExecution
+        prev +=1;
+
+
+        // if (prev%2===0) {
+        if (order==="solve"){
+            this.solve();
+            this.setState({preventDoubleExecution:prev})  
+        }
+        if (order==="notes"){
+            this.toggleNotes();
+            this.setState({preventDoubleExecution:prev}) 
+        }
+        if (order==="clear"){
+            this.clear();  
+            this.setState({preventDoubleExecution:prev})
+        }
+        if (order==="verify"){
+            this.toggleShowConflict();  
+            this.setState({preventDoubleExecution:prev})
+        }
+        if (order==="hint"){
+            this.hint();  
+            this.setState({preventDoubleExecution:prev})
+        }
+        if (order==="save"){
+            this.handleSaveGame(); 
+            this.setState({preventDoubleExecution:prev}) 
+        }
+        if (order==="confetti"){
+            this.confettiCannon();  
+            this.setState({preventDoubleExecution:prev})
+        }
+        // }
+        // if (order==="joke"){
+        //     this.getCowWithAjoke?();  
+        // }
+        
+        this.props.resetOrder();
+        // prev = this.state.preventDoubleExecution
+        
+        // this.setState({preventDoubleExecution:prev})
+
     }
 
 
@@ -192,6 +255,7 @@ export default class GameGrid extends Component {
     hint = () => {
         /// solve the sudoku
         let toConvert = sp.getRawStringFromObjects(this.state.gameState);
+        if(toConvert.indexOf(".") !== -1){ 
         toConvert.replace("0", ".");
         const solution = sudoku.sudoku.solve(toConvert);
         let hints = []
@@ -203,7 +267,13 @@ export default class GameGrid extends Component {
                    hints.push([i,solution[i]])     // should create a list of the solutions (excluding uneditable cells) 
                }
            } 
+
+
+
+
+           
         }
+        if (hints.length >0) {
         this.setState({hint: hints[0]});
         // this.setState(gameState[hints[0][0]].editable:false,gameState[hints[0][0]].value=hints[0][1])
         let index = hints[0][0];
@@ -213,7 +283,17 @@ export default class GameGrid extends Component {
         cell.editable = false;
         cell.value = value;
         updated[index]=cell;
+
+        let a = this.state.preventDoubleExecution;
+        if(a%2===0) {
+            // console.log("a: " + a)
         this.setState({gameState: updated});
+        }
+        }
+        }
+        if (this.gridIsSolved()) {
+            this.confettiCannon();
+        }
         // this.setState({gameState[index].editable: false})
             
             
@@ -259,7 +339,26 @@ export default class GameGrid extends Component {
         this.props.returnHome();
     }
 
+
+    componentDidUpdate() {
+
+        let order = this.props.voiceOrder;
+        if (order!==""){
+            this.executeVoiceOrders(order)
+        }
+
+    }
+
     render() {
+        // console.log("solve:  " + this.props.voiceOrder + '< ---')
+        // let order = this.props.voiceOrder;
+     
+        // if (order!==""){
+
+        //     this.executeVoiceOrders(order)
+            
+        
+        // }
 
         const gridCells = this.state.gameState.map((cell, i) => {
 
@@ -290,7 +389,7 @@ export default class GameGrid extends Component {
                         <button onClick={this.hint} >Hint (£5)</button>
                         <button onClick={this.handleSaveGame} >Save</button>
                     </div>
-                    {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}
+                    
 
                 </div>
             </Fragment>
