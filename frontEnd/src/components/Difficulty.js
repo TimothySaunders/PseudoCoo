@@ -6,8 +6,8 @@ import "./Difficulty.css";
 const Difficulty = (props) => {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(1, 2, "Feelin' tough?")
-        setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 1500)
+        props.cowTimer.startTimer(18, 18, "Feelin' tough?")
+        setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 15000)
     }
 
     function setDifficulty(event){

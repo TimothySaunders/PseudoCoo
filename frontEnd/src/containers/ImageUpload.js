@@ -18,8 +18,8 @@ export default class ImageUpload extends Component {
 
     componentDidMount(){
         if (this.props.cowTimer) {
-            this.props.cowTimer.startTimer(1, 2, "I hate pen and paper too...")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 1500)
+            this.props.cowTimer.startTimer(18, 18, "I hate pen and paper too...")
+            setTimeout(()=>{this.props.cowTimer.endTimer()}, 12000)
         }
     }
 

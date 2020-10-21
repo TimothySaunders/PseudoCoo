@@ -15,6 +15,7 @@ export default class CowTimer{
         this.min = min;
         this.max = max;
         this.out = out;
+        this.getCowJokes();
         switch (this.out) {
             case "joke":
                 this.getCowJokes();
@@ -26,13 +27,26 @@ export default class CowTimer{
             default:
                 break;
         }
-            this.resetTimer();
+        this.output();
     }
 
     endTimer(){
         clearTimeout(this.time);
         document.removeEventListener("mousemove", this.resetTimer);
         document.removeEventListener("keypress", this.resetTimer);
+
+        document.getElementById("setup").classList.remove("fade-in")
+        document.getElementById("setup").classList.remove("fade-out");
+        document.getElementById("setup").style.visibility="hidden"
+        document.getElementById("setup").innerHTML=""
+        document.getElementById("setup").style.fontSize="1.5em"
+        document.getElementById("punchline").classList.remove("fade-in")
+        document.getElementById("punchline").classList.remove("fade-out");
+        document.getElementById("punchline").style.visibility="hidden"
+        document.getElementById("punchline").innerHTML=""
+        document.getElementById("punchline").style.fontSize="1.5em"
+        document.getElementById("speech-bubble").style.visibility="hidden"
+        document.getElementById("cow-container").style.bottom="-600px";
     }
 
     getCowJokes = async () => {
@@ -73,6 +87,7 @@ export default class CowTimer{
     // functions for use in output()
 
     tellJoke = () => {
+        setTimeout(()=>{}, 2000)
         const selectedJoke = this.randomItemFromList(this.cowJokes);
         const selectedIndex = this.cowJokes.findIndex((joke) => joke === selectedJoke);
         this.cowJokes.splice(selectedIndex, 1);
