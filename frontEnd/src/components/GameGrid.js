@@ -70,6 +70,8 @@ export default class GameGrid extends Component {
             });
             this.setState({ gameState: prevState });
             this.confettiCannon();
+            this.props.cowTimer.startTimer(1, 2, "I solved it! That confetti is for me, not you!!")
+            setTimeout(()=>{this.props.cowTimer.endTimer()}, 3000)
         }
     }
 
@@ -169,6 +171,8 @@ export default class GameGrid extends Component {
         updated[index] = cell;
         if (this.gridIsSolved()) {
             this.confettiCannon();
+            this.props.cowTimer.startTimer(1, 2, "Cow-gratulations!!")
+            setTimeout(()=>{this.props.cowTimer.endTimer()}, 1500)
         }
         display.textContent = ["0", "."].includes(cell.value) ? "" : cell.value;
         this.setState({ gameState: updated });
