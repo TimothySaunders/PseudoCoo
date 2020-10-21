@@ -7,8 +7,7 @@ import './MenuContainer.css'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
-recognition.continous = true;
-// recognition.start();
+recognition.addEventListener('end', recognition.start);//! THIS WORKS - it will will run indefinately but will crash out when changing views. 
 
 export default class MenuContainer extends Component {
     constructor(props) {
@@ -17,7 +16,8 @@ export default class MenuContainer extends Component {
             game: {
                 id: null,
                 gridValues: "",
-                timeStamp: ""
+                timeStamp: "",
+                voiceOrder:""
             },
             viewOption: "mainMenu",
             savedGames: []
@@ -31,7 +31,7 @@ export default class MenuContainer extends Component {
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
-        
+
     }
 
     getSaveGames = async () => {
@@ -39,7 +39,9 @@ export default class MenuContainer extends Component {
         this.setState({ savedGames: saveGames });
     }
 
-    // --- --- VOICE  --- --- 
+    // !--- --- VOICE  START --- --- 
+    // ------------------------------
+
     contains(checkedarray, arrayOfWords) {
         var result = false;
         for (let word of arrayOfWords) {
@@ -51,34 +53,73 @@ export default class MenuContainer extends Component {
         return result;
     }
 
+    // !Currently not used?
     voiceCommandsContain(arrayOfWords) {
-        recognition.start();
-        var result = false;
-        recognition.onresult = (e) => {
-            let current = e.resultIndex;
-            let transcript = e.results[current][0].transcript;
-            let adjusted = (current === 1 && transcript === e.results[0[0].transcript])
-            if (!adjusted) {
-                // var result = false;
-                var match = ""
-                for (let word of arrayOfWords) {
-                    if (transcript.includes(word)) {
-                        result = true
-                        match = word;
-                        console.log("trn: " + transcript + "  - >" + word + " was detected hence result = " + result)
-                    }
-                }
-            }
-        }
 
-        return result;
+        // recognition.start();
+        // // recognition.addEventListener('end', recognition.start); //! ADDED TESTING
+        // var result = false;
+        // recognition.onresult = (e) => {
+        //     let current = e.resultIndex;
+        //     let transcript = e.results[current][0].transcript;
+        //     let adjusted = (current === 1 && transcript === e.results[0[0].transcript])
+        //     if (!adjusted) {
+        //         // var result = false;
+        //         var match = ""
+        //         for (let word of arrayOfWords) {
+        //             if (transcript.includes(word)) {
+        //                 result = true
+        //                 match = word;
+        //                 console.log("trn: " + transcript + "  - >" + word + " was detected hence result = " + result)
+        //             }
+        //         }
+        //     }
+        // }
+        // recognition.abort();  //! ADDED TESTING
+
+
+        // return result;
     }
 
+    voiceCommandsGameGrid() {
+        // try {
+
+        //     recognition.onresult = (e) => {
+        //         let current = e.resultIndex;
+        //         let transcript = e.results[current][0].transcript;
+        //         let output = "";
+        //         let adjusted = (current === 1 && transcript === e.results[0[0].transcript])
+        //         if (!adjusted) {
+        //             if (transcript === 'verify' || transcript === ' verify') {
+        //                 output = "Grid 1";
+        //             }
+        //             if (transcript === 'back' || transcript === ' back') {
+        //                 output = "Grid2";
+        //             }
+        //             if (transcript === 'verify' || transcript === ' verify') {
+        //                 output = "Grid 3";
+        //             }
+
+        //         }
+        //         return output;
+        //     }
+
+        // } catch (error) {
+        //     console.log(error + "   oops i broke");
+
+        // }
+        
+    }
+
+
+
+    // Currently Passed down to gameGrid and then to each cell - clicking on a cell activates this and tk
     voiceCommandsContainsDigit(functionPassedBack) {
         try {
-
-            recognition.stop();
-            recognition.start();
+            // recognition.abort();  //! ADDED TESTING
+            // recognition.stop();  //! ADDED TESTING
+            // recognition.start();
+            // recognition.addEventListener('end', recognition.start); //! ADDED TESTING
             var match = "";   // ! this is not being overridden in time before value is returned.
             recognition.onresult = (e) => {
                 let current = e.resultIndex;
@@ -120,20 +161,26 @@ export default class MenuContainer extends Component {
                 //     recognition.start();
                 // }, 50);
                 recognition.stop();
+
                 console.log("tr " + transcript)
                 console.log(output + " maybe this is working")
                 functionPassedBack(output);
                 // return output;
             }
-        } catch(error) {
+        } catch (error) {
             console.log(error + "   oops i broke");
         }
     }
 
-    voiceCommands() {
+    resetOrder = () => {
+        this.setState({ voiceOrder: ""})
+    }
 
+    voiceCommands() {   // THIS IS what controls the MENU navigation
+        // recognition.stop();
         // recognition.abort();
-        // recognition.start();  // !
+        recognition.start();  // !
+        // recognition.addEventListener('end', recognition.start); //! ADDED TESTING
         // recognition.continous =true;
         console.log("inVoiceCommands")
         recognition.onstart = () => {
@@ -151,11 +198,46 @@ export default class MenuContainer extends Component {
                     this.setState({ viewOption: "SavedGames" })
                 }
 
-                if (this.contains(transcript, ['back', 'reset'])) {
+                if (this.contains(transcript, ['back'])) {
                     console.log("reset called")
                     this.reset();
                     this.setState({ viewOption: "mainMenu" })
                 }
+                if (this.contains(transcript, ['solve', 'solve', 'resolve', 'endgame'])) {
+                    console.log("solve called")
+                    this.setState({ voiceOrder: "solve" }) 
+                }
+
+                if (this.contains(transcript, ['hint', 'help', 'help me'])) {
+                    console.log("hint")
+                    this.setState({ voiceOrder: "hint" }) 
+                }
+                if (this.contains(transcript, ['reset', 'clear', 'empty', 'clear board', 'empty board', 'reset board'])) {
+                    console.log("clear")
+                    this.setState({ voiceOrder: "clear" }) 
+                }
+                if (this.contains(transcript, ['notes', 'note'])) {
+                    console.log("notes")
+                    this.setState({ voiceOrder: "notes" }) 
+                }
+                if (this.contains(transcript, ['save', 'save game', 'later'])) {
+                    console.log("save")
+                    this.setState({ voiceOrder: "save" }) 
+                }
+                if (this.contains(transcript, ['bang', 'shoot', 'confetti', 'boom'])) {
+                    console.log("confetti")
+                    this.setState({ voiceOrder: "confetti" }) 
+                }
+                if (this.contains(transcript, ['verify', 'show', 'correct'])) {
+                    console.log("verify")
+                    this.setState({ voiceOrder: "verify" }) 
+                }
+
+
+
+
+
+
                 if (transcript === 'play' || transcript === ' play') {
                     this.setState({ viewOption: "DifficultyMenu" })
                 }
@@ -189,16 +271,20 @@ export default class MenuContainer extends Component {
 
                 }
 
-                setTimeout(() => {
-                    recognition.start();
-                }, 50);
+                // setTimeout(() => {
+                //     recognition.start();
+                // }, 50);
 
                 console.log(transcript);
             }
+            // setTimeout(() => {
+            //     recognition.start();
+            // }, 50);
         }
-    }
-    // --- --- --- ---
 
+    }
+    // !  --- VOICE--- END  --- --- ---
+    // ------------------------------
     saveGame = async (gridValues) => {
         const saveGame = {
             gridValues: gridValues,
@@ -227,8 +313,11 @@ export default class MenuContainer extends Component {
     }
 
     chooseMenu = (choice) => {
+        recognition.stop(); //!! TESTING 
+        recognition.abort(); //!! TESTING 
         const chosen = choice;
         this.setState({ viewOption: chosen })
+        // this.voiceCommands();
     }
 
     creategameStringFromDifficulty = (choice) => {
@@ -254,6 +343,8 @@ export default class MenuContainer extends Component {
             }
         });
         this.chooseMenu("mainMenu")
+
+
     }
 
     render() {
@@ -270,8 +361,8 @@ export default class MenuContainer extends Component {
         } else {
             return (
                 <Fragment>
-                    <GameGrid game={this.state.game} saveGame={this.saveGame} voiceInput={this.voiceCommandsContain} listenForDigit={this.voiceCommandsContainsDigit}
-                     resizeGrid={this.props.resizeGrid} returnHome={this.reset}></GameGrid>
+                    <GameGrid game={this.state.game} saveGame={this.saveGame} listenForDigit={this.voiceCommandsContainsDigit}
+                        resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} ></GameGrid>
                 </Fragment>
             )
         }
