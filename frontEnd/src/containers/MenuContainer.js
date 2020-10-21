@@ -4,6 +4,7 @@ import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
 import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
+import CowTimer from '../helpers/CowTimer'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -20,7 +21,8 @@ export default class MenuContainer extends Component {
                 voiceOrder:""
             },
             viewOption: "mainMenu",
-            savedGames: []
+            savedGames: [],
+            cowTimer: null
         }
 
         this.voiceCommands = this.voiceCommands.bind(this)
@@ -31,7 +33,7 @@ export default class MenuContainer extends Component {
         // this.setState({ savedGames: saveGames })
         // recognition.start();
         this.voiceCommands();
-
+        this.setState({cowTimer: new CowTimer()});
     }
 
     getSaveGames = async () => {
@@ -352,7 +354,7 @@ export default class MenuContainer extends Component {
         if (this.state.game.gridValues === "") {
             return (
                 <Fragment>
-                    <MenuView chooseMenu={this.chooseMenu} createGameString={this.createGameString}
+                    <MenuView chooseMenu={this.chooseMenu} createGameString={this.createGameString} cowTimer={this.state.cowTimer}
                         viewOption={this.state.viewOption} savedGames={this.state.savedGames} loadGame={this.loadGame} removeGame={this.removeGame}> </MenuView>
                     {/* <br />
                     <button onClick={this.voiceCommands}>resume VRC</button> */}
@@ -361,8 +363,10 @@ export default class MenuContainer extends Component {
         } else {
             return (
                 <Fragment>
+
                     <GameGrid game={this.state.game} saveGame={this.saveGame} listenForDigit={this.voiceCommandsContainsDigit}
-                        resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} ></GameGrid>
+                        resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} cowTimer={this.state.cowTimer}></GameGrid>
+=
                 </Fragment>
             )
         }

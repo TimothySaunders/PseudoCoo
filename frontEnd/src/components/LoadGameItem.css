@@ -11,7 +11,7 @@
 }
 
 .load-game-item:hover {
-    background-color: teal;
+    background-color: lightgrey;
 }
 
 .load-game-item>span {
