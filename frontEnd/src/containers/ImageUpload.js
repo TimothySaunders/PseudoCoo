@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react';
 import './ImageUpload.css';
 import {uploadImage} from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
-import CowTimer from '../helpers/CowTimer'
 
 export default class ImageUpload extends Component{
     constructor(props){
@@ -42,8 +41,7 @@ export default class ImageUpload extends Component{
     }
 
     analyseImage = async () => {
-        const joke = new CowTimer(12, 12, "joke")
-        joke.startTimer()
+        this.props.cowTimer.startTimer(12,12, "joke");
         const secondImageBox = document.getElementById("processed-preview");
         secondImageBox.style.display = "initial";
         const cleanImage = await uploadImage(this.state.imageFile);
@@ -55,7 +53,7 @@ export default class ImageUpload extends Component{
             output = await ImageParser(fileReader2.result, false, false)
             secondImageBox.src = fileReader2.result;
             this.setState ({parsedOutput: output})
-            joke.endTimer();
+            this.props.cowTimer.endTimer();
         }
         fileReader2.readAsDataURL(cleanImage)
     }
@@ -65,7 +63,6 @@ export default class ImageUpload extends Component{
             // check if solvable // still to be written
             this.props.createGameString(this.state.parsedOutput);
         }
-        
     }
 
     // drag and drop methods

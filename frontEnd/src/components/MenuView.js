@@ -2,17 +2,17 @@ import React, { Fragment } from 'react'
 import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
 import LoadGame from './LoadGame'
-import CowTimer from '../helpers/CowTimer'
 
 /* eslint-disable */
 
-const moo = new CowTimer(15, 30, "moo")
-moo.startTimer()
-
 const MenuView = (props) => {
 
+        if (props.cowTimer){
+            props.cowTimer.startTimer(12, 30, "moo")
+        }
+
         function makeChoice(event) {
-            moo.endTimer();
+            props.cowTimer.endTimer()
             props.chooseMenu(event.target.value)
         }
         
@@ -35,14 +35,14 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <Difficulty chooseMenu={props.chooseMenu} createGameString={props.createGameString} returnHome={props.chooseMenu} />
+                        <Difficulty chooseMenu={props.chooseMenu} createGameString={props.createGameString} returnHome={props.chooseMenu} cowTimer={props.cowTimer} />
                     </Fragment>
                 )
 
             case "ImportImage":
                 return (
                     <Fragment>
-                        <ImageUpload createGameString={props.createGameString} returnHome={props.chooseMenu} />
+                        <ImageUpload createGameString={props.createGameString} returnHome={props.chooseMenu} cowTimer={props.cowTimer} />
                     </Fragment>
                 )
 
@@ -50,7 +50,7 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame} removeGame={props.removeGame} returnHome={props.chooseMenu} />
+                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame} removeGame={props.removeGame} returnHome={props.chooseMenu} cowTimer={props.cowTimer}/>
                     </Fragment>
                 )
         }

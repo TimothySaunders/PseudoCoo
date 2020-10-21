@@ -1,16 +1,20 @@
 import {get} from './requests'
 
-export default class JokeTimer{
+export default class CowTimer{
 
-    constructor(min, max, out="moo"){
-        this.min = min;
-        this.max = max;
-        this.out = out;
+    constructor(){
+        this.min = 0;
+        this.max = 0;
+        this.out = "";
         this.cowJokes = [];
         this.time = null;
     }
 
-    startTimer(){
+    startTimer(min, max, out){
+        clearTimeout(this.time);
+        this.min = min;
+        this.max = max;
+        this.out = out;
         switch (this.out) {
             case "joke":
                 this.getCowJokes();
@@ -27,6 +31,8 @@ export default class JokeTimer{
 
     endTimer(){
         clearTimeout(this.time);
+        document.removeEventListener("mousemove", this.resetTimer);
+        document.removeEventListener("keypress", this.resetTimer);
     }
 
     getCowJokes = async () => {
@@ -42,7 +48,7 @@ export default class JokeTimer{
                 this.tellHint();
                 break;
             default:
-                this.moo();
+                this.moo(this.out);
                 break;
         }
         this.resetTimer();
@@ -61,7 +67,6 @@ export default class JokeTimer{
     resetTimer = () => {
         clearTimeout(this.time);
         let interval = this.randomInterval(this.min, this.max);
-        console.log(interval)
         this.time = setTimeout(this.output, interval);
     }
 
@@ -172,7 +177,7 @@ export default class JokeTimer{
         }
     }
 
-    moo = () => {
+    moo = (out) => {
         document.getElementById("setup").classList.add("fade-out");
         document.getElementById("punchline").classList.add("fade-out");
         document.getElementById("setup").style.fontSize="3em"
@@ -189,7 +194,7 @@ export default class JokeTimer{
             document.getElementById("setup").classList.remove("fade-out");
             document.getElementById("setup").style.visibility="visible"
             document.getElementById("setup").classList.add("fade-in")
-            document.getElementById("setup").innerHTML="MOOOOOOO"
+            document.getElementById("setup").innerHTML= out
             setTimeout(removeSetup, 2000)
         }
 
