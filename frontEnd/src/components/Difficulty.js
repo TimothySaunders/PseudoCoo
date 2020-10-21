@@ -17,8 +17,8 @@ const Difficulty = (props) => {
     }
 
     function makeChoice(event) {
-        props.chooseMenu(event.target.value)
         props.cowTimer.endTimer();
+        props.chooseMenu(event.target.value)
     }
 
     return (
