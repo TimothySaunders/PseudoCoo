@@ -8,6 +8,7 @@ import CowTimer from '../helpers/CowTimer'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
+
 recognition.addEventListener('end', recognition.start);//! THIS WORKS - it will will run indefinately but will crash out when changing views. 
 
 export default class MenuContainer extends Component {
@@ -243,6 +244,12 @@ export default class MenuContainer extends Component {
                 if (transcript === 'play' || transcript === ' play') {
                     this.setState({ viewOption: "DifficultyMenu" })
                 }
+
+                // if (transcript === 'exit sound' || transcript === ' stop listening') {
+                   if (this.contains(transcript, ['exit sound', 'stop listening', 'abort'])) {
+                    recognition.removeEventListener('end', recognition.start);
+                }
+
 
                 if (this.state.viewOption === "DifficultyMenu") {
                     if (this.contains(transcript, ['laughing', 'coo', 'cow'])) {

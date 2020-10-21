@@ -53,9 +53,6 @@ export default class GameGrid extends Component {
 
        
         this.setState({currentOrder: this.props.voiceOrder}, this.executeOrder66)
-
-        
-
     }
   
     // componentDidUpdate(){
