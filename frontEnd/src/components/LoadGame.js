@@ -5,12 +5,11 @@ import LoadGameItem from "./LoadGameItem.js";
 
 export default function LoadGame(props) {
 
-    const moo = new CowTimer(12, 15, "moo")
-    moo.startTimer();
+    props.cowTimer.startTimer(12, 25, "MOOOOOOOOO")
 
     const handleLoadGame = (game) => {
         const gameId = game.id;
-        moo.endTimer();
+        props.cowTimer.endTimer();
         props.loadGame(gameId);
     }
 
@@ -26,7 +25,7 @@ export default function LoadGame(props) {
     })
 
     const returnHome = () => {
-        moo.endTimer();
+        props.cowTimer.endTimer();
         props.returnHome();
     }
 

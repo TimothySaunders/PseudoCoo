@@ -3,8 +3,9 @@ import './ImageUpload.css';
 import sudoku from '../helpers/sudoku';
 import { uploadImage } from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
-import CowTimer from '../helpers/CowTimer'
+
 import ValidateGrid from "../components/ValidateGrid";
+
 
 export default class ImageUpload extends Component {
     constructor(props) {
@@ -44,8 +45,7 @@ export default class ImageUpload extends Component {
     }
 
     analyseImage = async () => {
-        const joke = new CowTimer(12, 12, "joke")
-        joke.startTimer()
+        this.props.cowTimer.startTimer(12,12, "joke");
         const secondImageBox = document.getElementById("processed-preview");
         secondImageBox.style.display = "initial";
         secondImageBox.src = "uploading.gif";
@@ -57,8 +57,8 @@ export default class ImageUpload extends Component {
             secondImageBox.src = "processing.gif";
             output = await ImageParser(fileReader2.result, false, false)
             secondImageBox.src = fileReader2.result;
-            this.setState({ parsedOutput: output });
-            joke.endTimer();
+            this.setState ({ parsedOutput: output })
+            this.props.cowTimer.endTimer();
         }
         fileReader2.readAsDataURL(cleanImage)
     }

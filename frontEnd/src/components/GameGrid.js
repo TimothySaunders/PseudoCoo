@@ -4,13 +4,9 @@ import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
 // import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
-import CowTimer from '../helpers/CowTimer'
 import Parser from "../helpers/StringParser";
-
 import confetti from "canvas-confetti";
 
-// const hint = new CowTimer(20, 20, "hint")
-// hint.startTimer()
 
 const sp = new Parser();
 const psc = new PsChecker();
@@ -46,6 +42,10 @@ export default class GameGrid extends Component {
         }
         let getGrid = sp.getRawStringFromObjects(gameState);
         this.setState({ gameState: gameState, grid: getGrid });
+
+        if (this.props.cowTimer){
+            this.props.cowTimer.startTimer(18, 25, "hint")
+        }
     }
 
 
@@ -238,7 +238,7 @@ export default class GameGrid extends Component {
     }
 
     returnHome = () => {
-        // this.hint.endTimer();
+        this.props.cowTimer.endTimer()
         this.props.returnHome();
     }
 
