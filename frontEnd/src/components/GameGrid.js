@@ -44,7 +44,8 @@ export default class GameGrid extends Component {
         this.setState({ gameState: gameState, grid: getGrid });
 
         if (this.props.cowTimer){
-            this.props.cowTimer.startTimer(18, 25, "hint")
+            this.props.cowTimer.startTimer(1, 2, "PSEUDOCOO!")
+            setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 1500)
         }
     }
 

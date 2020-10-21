@@ -179,11 +179,9 @@ export default class CowTimer{
 
     moo = (out) => {
 
-
-
         document.getElementById("setup").classList.add("fade-out");
         document.getElementById("punchline").classList.add("fade-out");
-        if (out.length <= 12){
+        if (out.length <= 15){
             document.getElementById("setup").style.fontSize="3em"
         }
 
