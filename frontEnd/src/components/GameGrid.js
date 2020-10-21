@@ -2,7 +2,7 @@ import React, { Component, Fragment, } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
-import PsChecker from '../helpers/PsChecker';ga
+import PsChecker from '../helpers/PsChecker';
 import Parser from "../helpers/StringParser";
 import confetti from "canvas-confetti";
 
