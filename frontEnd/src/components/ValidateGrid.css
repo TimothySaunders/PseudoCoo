@@ -3,6 +3,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     width: 400px;
     height: 400px;
+    margin: auto;
 }
 
 .validate-cell {
@@ -18,4 +19,6 @@
     height: 100%;
     border: 1px solid black;
     text-align: center;
+    font-weight: 900;
+    font-size: 1.3em;
 }
