@@ -9,7 +9,7 @@ import CowTimer from '../helpers/CowTimer'
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 
-recognition.addEventListener('end', recognition.start);//! THIS WORKS - it will will run indefinately but will crash out when changing views. 
+recognition.addEventListener('end', recognition.start); //! <<=== Permanent surveillance               THIS WORKS - it will will run indefinately but will crash out when changing views. 
 
 export default class MenuContainer extends Component {
     constructor(props) {
@@ -45,7 +45,7 @@ export default class MenuContainer extends Component {
     // !--- --- VOICE  START --- --- 
     // ------------------------------
 
-    contains(checkedarray, arrayOfWords) {
+    contains(checkedarray, arrayOfWords) { 
         var result = false;
         for (let word of arrayOfWords) {
             if (checkedarray.includes(word)) {
@@ -56,64 +56,7 @@ export default class MenuContainer extends Component {
         return result;
     }
 
-    // !Currently not used?
-    voiceCommandsContain(arrayOfWords) {
-
-        // recognition.start();
-        // // recognition.addEventListener('end', recognition.start); //! ADDED TESTING
-        // var result = false;
-        // recognition.onresult = (e) => {
-        //     let current = e.resultIndex;
-        //     let transcript = e.results[current][0].transcript;
-        //     let adjusted = (current === 1 && transcript === e.results[0[0].transcript])
-        //     if (!adjusted) {
-        //         // var result = false;
-        //         var match = ""
-        //         for (let word of arrayOfWords) {
-        //             if (transcript.includes(word)) {
-        //                 result = true
-        //                 match = word;
-        //                 console.log("trn: " + transcript + "  - >" + word + " was detected hence result = " + result)
-        //             }
-        //         }
-        //     }
-        // }
-        // recognition.abort();  //! ADDED TESTING
-
-
-        // return result;
-    }
-
-    voiceCommandsGameGrid() {
-        // try {
-
-        //     recognition.onresult = (e) => {
-        //         let current = e.resultIndex;
-        //         let transcript = e.results[current][0].transcript;
-        //         let output = "";
-        //         let adjusted = (current === 1 && transcript === e.results[0[0].transcript])
-        //         if (!adjusted) {
-        //             if (transcript === 'verify' || transcript === ' verify') {
-        //                 output = "Grid 1";
-        //             }
-        //             if (transcript === 'back' || transcript === ' back') {
-        //                 output = "Grid2";
-        //             }
-        //             if (transcript === 'verify' || transcript === ' verify') {
-        //                 output = "Grid 3";
-        //             }
-
-        //         }
-        //         return output;
-        //     }
-
-        // } catch (error) {
-        //     console.log(error + "   oops i broke");
-
-        // }
-        
-    }
-
+    
 
 
     // Currently Passed down to gameGrid and then to each cell - clicking on a cell activates this and tk
@@ -207,7 +150,6 @@ export default class MenuContainer extends Component {
                     this.setState({ viewOption: "mainMenu" })
                 }
                 if (this.contains(transcript, ['solve', 'solve', 'resolve', 'endgame'])) {
-                    console.log("solve called")
                     this.setState({ voiceOrder: "solve" }) 
                 }
 
