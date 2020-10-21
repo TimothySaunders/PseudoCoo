@@ -11,7 +11,6 @@ import confetti from "canvas-confetti";
 const sp = new Parser();
 const psc = new PsChecker();
 
-
 export default class GameGrid extends Component {
 
     constructor(props) {
@@ -45,8 +44,8 @@ export default class GameGrid extends Component {
 
         if (this.props.cowTimer){
             this.props.cowTimer.endTimer()
-            this.props.cowTimer.startTimer(20, 20, "PSEUDOCOO!")
-            setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 28000)
+            this.props.cowTimer.startTimer(30, 30, "PSEUDOCOO!")
+            setTimeout(()=>{this.props.cowTimer.startTimer(14, 20, "hint")}, 28000)
         }
     }
 
@@ -184,8 +183,9 @@ export default class GameGrid extends Component {
     handleSaveGame = () => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
+        this.props.cowTimer.endTimer()
         this.props.cowTimer.startTimer(20, 20, "Saved!")
-            setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 18000)
+        setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
     }
 
 
@@ -226,7 +226,9 @@ export default class GameGrid extends Component {
         /// pick a random index
         /// pass the solution into that cells notes. 
         
-
+        this.props.cowTimer.endTimer();
+        this.props.cowTimer.startTimer(18, 18, "Mooston, we have a problem...")
+        setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
     }
     
     toggleShowConflict = (event) => {
