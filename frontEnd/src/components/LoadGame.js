@@ -1,16 +1,17 @@
 import React, {Fragment} from 'react';
-import CowTimer from '../helpers/CowTimer';
 import "./LoadGame.css";
 import LoadGameItem from "./LoadGameItem.js";
 
 export default function LoadGame(props) {
 
-    const moo = new CowTimer(12, 15, "moo")
-    moo.startTimer();
+    if (props.cowTimer) {
+        props.cowTimer.startTimer(18, 18, "Here's one I did earlier...")
+        setTimeout(()=>{props.cowTimer.startTimer(12, 25, "MOOOOOOOOO")}, 12000)
+    }
 
     const handleLoadGame = (game) => {
         const gameId = game.id;
-        moo.endTimer();
+        props.cowTimer.endTimer();
         props.loadGame(gameId);
     }
 
@@ -26,7 +27,7 @@ export default function LoadGame(props) {
     })
 
     const returnHome = () => {
-        moo.endTimer();
+        props.cowTimer.endTimer();
         props.returnHome();
     }
 

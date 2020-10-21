@@ -1,5 +1,9 @@
 #load-games {
-    display: flex;
-    flex-flow: row wrap;
+    overflow-y: auto;
+    height: 60vh;
+    display: grid;
+    /* flex-flow: row wrap; */
+    grid-template-columns: 1fr;
     margin: auto;
+    width: 90%;
 }
