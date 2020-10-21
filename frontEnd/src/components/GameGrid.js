@@ -58,13 +58,6 @@ export default class GameGrid extends Component {
         this.setState({currentOrder: this.props.voiceOrder}, this.executeOrder66)
     }
   
-    // componentDidUpdate(){
-    //     let order = this.state.currentOrder;
-    //     if (order==="solve"){
-    //         console.log("solve called within gamegrid")
-            
-    //     }
-    // }
     executeVoiceOrders = (order) => {
         console.log("Execute order");
         let prev = this.state.preventDoubleExecution
@@ -159,14 +152,10 @@ export default class GameGrid extends Component {
             solvable = false;
         }
         return solvable;
-
     }
 
     gridIsFilled = () => {
-        // let grid = sp.getRawStringFromObjects(this.state.gameState);
         return !sp.getRawStringFromObjects(this.state.gameState).includes(".")
-        // return !(grid).includes(".")
-        
     }
 
     gridIsSolved = () => {
@@ -297,17 +286,7 @@ export default class GameGrid extends Component {
         if (this.gridIsSolved()) {
             this.confettiCannon();
         }
-        // this.setState({gameState[index].editable: false})
-            
-            
-            // ,gameState[hints[0][0]].value=hints[0][1])
-        // console.log("hints: " + hints[0] + "< --- " );
-        // console.log("hints: " + hints[1] + "< --- " );
-        // console.log("hints: " + hints[2] + "< --- " );
-
-        /// comlpile a list of all the indexes for the editable cells
-        /// pick a random index
-        /// pass the solution into that cells notes. 
+     
         clearTimeout(timeout);
         this.props.cowTimer.endTimer();
         this.props.cowTimer.startTimer(18, 18, "Mooston, we have a problem...")
@@ -321,13 +300,13 @@ export default class GameGrid extends Component {
             event.target.textContent = "Verify";
         }
         this.setState({ showConflictToggle: !this.state.showConflictToggle })
-        // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
+
 
     }
 
     showConflict(i, grid, cell) {
 
-        // let grid  = sp.getRawStringFromObjects(this.state.gameState);
+    
         if (this.toggleShowConflict) {
             return psc.validateEntry(i, grid, cell.value)
         }
@@ -354,16 +333,7 @@ export default class GameGrid extends Component {
     }
 
     render() {
-        // console.log("solve:  " + this.props.voiceOrder + '< ---')
-        // let order = this.props.voiceOrder;
      
-        // if (order!==""){
-
-        //     this.executeVoiceOrders(order)
-            
-        
-        // }
-
         const gridCells = this.state.gameState.map((cell, i) => {
 
 

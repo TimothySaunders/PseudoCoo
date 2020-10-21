@@ -103,9 +103,7 @@ export default class MenuContainer extends Component {
                         output = "9";
                     }
                 }
-                // setTimeout(() => {
-                //     recognition.start();
-                // }, 50);
+           
                 recognition.stop();
 
                 console.log("tr " + transcript)
