@@ -224,7 +224,12 @@ export default class GameGrid extends Component {
 
     }
     
-    toggleShowConflict = () => {
+    toggleShowConflict = (event) => {
+        if (!this.state.showConflictToggle) {
+            event.target.textContent = "Hide verify";
+        } else {
+            event.target.textContent = "Verify";
+        }
         this.setState({ showConflictToggle: !this.state.showConflictToggle })
         // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
 
@@ -275,7 +280,7 @@ export default class GameGrid extends Component {
                         <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                         <button onClick={this.clear} >Clear</button>
                         <button onClick={this.toggleShowConflict} >Verify</button>
-                        <button onClick={this.hint} >Hint</button>
+                        <button onClick={this.hint} >Hint (£5)</button>
                         <button onClick={this.handleSaveGame} >Save</button>
                     </div>
                     {/* <button onClick={ () => this.props.voiceInput(['hello','apple'])} >test voice passed down</button> */}

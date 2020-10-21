@@ -11,4 +11,13 @@
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     border: 2px solid black;
     transform-origin: top left;
+    margin: auto;
+}
+#game-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* display: flex; */
+    /* width: 60%; */
+    /* margin: auto; */
+    /* grid-template-columns: 1fr 1fr; */
 }
