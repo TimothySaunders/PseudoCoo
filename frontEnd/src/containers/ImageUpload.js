@@ -3,9 +3,9 @@ import './ImageUpload.css';
 import sudoku from '../helpers/sudoku';
 import { uploadImage } from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
-
 import ValidateGrid from "../components/ValidateGrid";
 
+let timeout;
 
 export default class ImageUpload extends Component {
     constructor(props) {
@@ -19,7 +19,7 @@ export default class ImageUpload extends Component {
     componentDidMount(){
         if (this.props.cowTimer) {
             this.props.cowTimer.startTimer(18, 18, "I hate pen and paper too...")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 12000)
+            timeout = setTimeout(()=>{this.props.cowTimer.endTimer()}, 12000)
         }
     }
 
@@ -52,6 +52,8 @@ export default class ImageUpload extends Component {
     }
 
     analyseImage = async () => {
+        clearTimeout(timeout)
+        this.props.cowTimer.endTimer()
         this.props.cowTimer.startTimer(12,12, "joke");
         const secondImageBox = document.getElementById("processed-preview");
         secondImageBox.style.display = "initial";
@@ -109,7 +111,7 @@ export default class ImageUpload extends Component {
     }
 
     returnHome = () => {
-        clearTimeout("joke")
+        clearTimeout(timeout)
         this.props.returnHome();
     }
 

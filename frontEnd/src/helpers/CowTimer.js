@@ -1,5 +1,13 @@
 import {get} from './requests'
 
+let timeout1;
+let timeout2;
+let timeout3;
+let timeout4;
+let timeout5;
+let timeout6;
+let timeout7;
+
 export default class CowTimer{
 
     constructor(){
@@ -32,6 +40,15 @@ export default class CowTimer{
 
     endTimer(){
         clearTimeout(this.time);
+
+        clearTimeout(timeout1);
+        clearTimeout(timeout2);
+        clearTimeout(timeout3);
+        clearTimeout(timeout4);
+        clearTimeout(timeout5);
+        clearTimeout(timeout6);
+        clearTimeout(timeout7);
+
         document.removeEventListener("mousemove", this.resetTimer);
         document.removeEventListener("keypress", this.resetTimer);
 
@@ -87,7 +104,7 @@ export default class CowTimer{
     // functions for use in output()
 
     tellJoke = () => {
-        setTimeout(()=>{}, 2000)
+        timeout7 = setTimeout(()=>{}, 2000)
         const selectedJoke = this.randomItemFromList(this.cowJokes);
         const selectedIndex = this.cowJokes.findIndex((joke) => joke === selectedJoke);
         this.cowJokes.splice(selectedIndex, 1);
@@ -99,11 +116,11 @@ export default class CowTimer{
         document.getElementById("punchline").classList.add("fade-out");
 
         document.getElementById("cow-container").style.bottom="-10px";
-        setTimeout(showBubble, 2000)
+        timeout1 = setTimeout(showBubble, 2000)
 
         function showBubble() {
             document.getElementById("speech-bubble").style.visibility="visible"
-            setTimeout(tellSetup, 500)
+            timeout2 = setTimeout(tellSetup, 500)
         }
 
         function tellSetup(){
@@ -111,13 +128,13 @@ export default class CowTimer{
             document.getElementById("setup").style.visibility="visible"
             document.getElementById("setup").classList.add("fade-in")
             document.getElementById("setup").innerHTML=selectedJoke.setup;
-            setTimeout(removeSetup, 3000)
+            timeout3 = setTimeout(removeSetup, 3000)
         }
 
         function removeSetup(){
             document.getElementById("setup").classList.remove("fade-in")
             document.getElementById("setup").classList.add("fade-out")
-            setTimeout(tellPunchline, 500)
+            timeout4 = setTimeout(tellPunchline, 500)
         }
         
         function tellPunchline(){
@@ -126,13 +143,13 @@ export default class CowTimer{
             document.getElementById("punchline").style.visibility="visible"
             document.getElementById("punchline").classList.add("fade-in")
             document.getElementById("punchline").innerHTML=selectedJoke.punchline;
-            setTimeout(removePunchline, 3000)
+            timeout5 = setTimeout(removePunchline, 3000)
         }
 
         function removePunchline(){
             document.getElementById("punchline").classList.remove("fade-in")
             document.getElementById("punchline").classList.add("fade-out")
-            setTimeout(removeCow, 500)
+            timeout6 = setTimeout(removeCow, 500)
         }
 
         function removeCow(){
@@ -148,11 +165,11 @@ export default class CowTimer{
         document.getElementById("punchline").style.fontSize="2em"
 
         document.getElementById("cow-container").style.bottom="-10px";
-        setTimeout(showBubble, 2000)
+        timeout1 = setTimeout(showBubble, 2000)
 
         function showBubble() {
             document.getElementById("speech-bubble").style.visibility="visible"
-            setTimeout(tellHint, 500)
+            timeout2 = setTimeout(tellHint, 500)
         }
 
         function tellHint() {
@@ -160,13 +177,13 @@ export default class CowTimer{
             document.getElementById("setup").style.visibility="visible"
             document.getElementById("setup").classList.add("fade-in")
             document.getElementById("setup").innerHTML="..... Need a hint?"
-            setTimeout(removeSetup, 3000)
+            timeout3 = setTimeout(removeSetup, 3000)
         }
 
         function removeSetup(){
             document.getElementById("setup").classList.remove("fade-in")
             document.getElementById("setup").classList.add("fade-out")
-            setTimeout(tellPunchline, 500)
+            timeout4 = setTimeout(tellPunchline, 500)
         }
 
         function tellPunchline(){
@@ -175,7 +192,7 @@ export default class CowTimer{
             document.getElementById("punchline").style.visibility="visible"
             document.getElementById("punchline").classList.add("fade-in")
             document.getElementById("punchline").innerHTML="Just ask!"
-            setTimeout(removePunchline, 3000)
+            timeout5 = setTimeout(removePunchline, 3000)
         }
 
         function removePunchline(){
@@ -183,7 +200,7 @@ export default class CowTimer{
             document.getElementById("punchline").classList.add("fade-out")
             document.getElementById("setup").style.fontSize="1.5em"
             document.getElementById("punchline").style.fontSize="1.5em"
-            setTimeout(removeCow, 500)
+            timeout6 = setTimeout(removeCow, 500)
         }
 
         function removeCow(){
@@ -203,11 +220,11 @@ export default class CowTimer{
         }
 
         document.getElementById("cow-container").style.bottom="-10px";
-        setTimeout(showBubble, 2000)
+        timeout1 = setTimeout(showBubble, 2000)
 
         function showBubble() {
             document.getElementById("speech-bubble").style.visibility="visible"
-            setTimeout(tellHint, 500)
+            timeout2 = setTimeout(tellHint, 500)
         }
 
         function tellHint() {
@@ -215,14 +232,14 @@ export default class CowTimer{
             document.getElementById("setup").style.visibility="visible"
             document.getElementById("setup").classList.add("fade-in")
             document.getElementById("setup").innerHTML= out
-            setTimeout(removeSetup, 2000)
+            timeout3 = setTimeout(removeSetup, 2000)
         }
 
         function removeSetup(){
             document.getElementById("setup").classList.remove("fade-in")
             document.getElementById("setup").classList.add("fade-out")
             document.getElementById("setup").style.fontSize="1.5em"
-            setTimeout(removeCow, 2000)
+            timeout4 = setTimeout(removeCow, 2000)
         }
 
         function removeCow(){
