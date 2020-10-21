@@ -178,9 +178,14 @@ export default class CowTimer{
     }
 
     moo = (out) => {
+
+
+
         document.getElementById("setup").classList.add("fade-out");
         document.getElementById("punchline").classList.add("fade-out");
-        document.getElementById("setup").style.fontSize="3em"
+        if (out.length <= 12){
+            document.getElementById("setup").style.fontSize="3em"
+        }
 
         document.getElementById("cow-container").style.bottom="-10px";
         setTimeout(showBubble, 2000)
