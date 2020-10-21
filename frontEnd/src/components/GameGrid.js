@@ -10,6 +10,8 @@ import confetti from "canvas-confetti";
 const sp = new Parser();
 const psc = new PsChecker();
 
+let timeout;
+
 export default class GameGrid extends Component {
 
     constructor(props) {
@@ -46,9 +48,10 @@ export default class GameGrid extends Component {
         this.setState({ gameState: gameState, grid: getGrid });
 
         if (this.props.cowTimer){
+            clearTimeout(timeout);
             this.props.cowTimer.endTimer()
             this.props.cowTimer.startTimer(30, 30, "PSEUDOCOO!")
-            setTimeout(()=>{this.props.cowTimer.startTimer(14, 20, "hint")}, 28000)
+            timeout = setTimeout(()=>{this.props.cowTimer.startTimer(14, 20, "hint")}, 28000)
         }
 
        
@@ -130,9 +133,10 @@ export default class GameGrid extends Component {
             });
             this.setState({ gameState: prevState });
             this.confettiCannon();
+            clearTimeout(timeout);
             this.props.cowTimer.endTimer();
-            this.props.cowTimer.startTimer(18, 18, "I solved it! That confetti is for me, not you!!")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 15000)
+            this.props.cowTimer.startTimer(18, 18, "*I* solved it! That confetti is for me, not you!!")
+            timeout = setTimeout(()=>{this.props.cowTimer.endTimer()}, 15000)
         }
     }
 
@@ -232,9 +236,10 @@ export default class GameGrid extends Component {
         updated[index] = cell;
         if (this.gridIsSolved()) {
             this.confettiCannon();
+            clearTimeout(timeout);
             this.props.cowTimer.endTimer()
             this.props.cowTimer.startTimer(18, 18, "Cow-gratulations!!")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 15000)
+            timeout = setTimeout(()=>{this.props.cowTimer.endTimer()}, 15000)
         }
         display.textContent = ["0", "."].includes(cell.value) ? "" : cell.value;
         this.setState({ gameState: updated });
@@ -243,9 +248,10 @@ export default class GameGrid extends Component {
     handleSaveGame = () => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
+        clearTimeout(timeout);
         this.props.cowTimer.endTimer()
         this.props.cowTimer.startTimer(20, 20, "Saved!")
-        setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
+        timeout = setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
     }
 
 
@@ -302,10 +308,10 @@ export default class GameGrid extends Component {
         /// comlpile a list of all the indexes for the editable cells
         /// pick a random index
         /// pass the solution into that cells notes. 
-        
+        clearTimeout(timeout);
         this.props.cowTimer.endTimer();
         this.props.cowTimer.startTimer(18, 18, "Mooston, we have a problem...")
-        setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
+        timeout = setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
     }
     
     toggleShowConflict = (event) => {
@@ -332,6 +338,7 @@ export default class GameGrid extends Component {
     }
 
     returnHome = () => {
+        clearTimeout(timeout);
         this.props.cowTimer.endTimer()
         this.props.returnHome();
     }

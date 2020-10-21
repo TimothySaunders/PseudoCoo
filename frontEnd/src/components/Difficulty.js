@@ -3,9 +3,9 @@ import sudoku from '../helpers/sudoku'
 
 import "./Difficulty.css";
 
-const Difficulty = (props) => {
+let timeout;
 
-    let timeout;
+const Difficulty = (props) => {
 
     if (props.cowTimer) {
         props.cowTimer.startTimer(18, 18, "Feelin' tough?")
@@ -14,12 +14,13 @@ const Difficulty = (props) => {
 
     function setDifficulty(event){
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
+        window.clearTimeout(timeout);
         props.cowTimer.endTimer();
         props.createGameString(generatedString);
     }
 
     function makeChoice(event) {
-        window.clearTimeout(timeout)
+        window.clearTimeout(timeout);
         props.cowTimer.endTimer();
         props.chooseMenu(event.target.value)
     }
