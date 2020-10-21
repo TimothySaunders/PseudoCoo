@@ -1,9 +1,9 @@
 #validate-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    width: 50vw;
+    width: 60vw;
     max-width: 500px;
-    height: 50vw;
+    height: 60vw;
     max-height: 500px;
     margin: auto;
 }
