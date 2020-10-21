@@ -2,12 +2,7 @@ import React, { Component, Fragment, } from "react";
 import GridCell from "./GridCell";
 import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
-import PsChecker from '../helpers/PsChecker';
-<<<<<<< HEAD
-import CowTimer from '../helpers/CowTimer'
-=======
-// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition' //! 
->>>>>>> develop
+import PsChecker from '../helpers/PsChecker';ga
 import Parser from "../helpers/StringParser";
 import confetti from "canvas-confetti";
 
