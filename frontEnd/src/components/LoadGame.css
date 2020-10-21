@@ -1,6 +1,6 @@
 #load-games {
     overflow-y: auto;
-    height: 60vh;
+    max-height: 60vh;
     display: grid;
     /* flex-flow: row wrap; */
     grid-template-columns: 1fr;
