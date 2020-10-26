@@ -1,13 +1,11 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
-recognition.continous = true;
+// recognition.continous = true;
 recognition.start();
+recognition.addEventListener('end', recognition.start);
 
 VoiceCommands =() => {
-    // recognition.abort();
-    // recognition.start();
-    // recognition.continous =true;
-    console.log("inVoiceCommands")
+  
     recognition.onstart = () => {
         console.log("voice recog initialised");
     }
