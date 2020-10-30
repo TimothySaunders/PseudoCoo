@@ -109,8 +109,7 @@ export default class ImageUpload extends Component {
     }
 
     returnHome = () => {
-        clearTimeout(timeout)
-        this.props.returnHome();
+        this.props.returnHome("mainMenu");
     }
 
     editParsedOutput = (index, value) => {

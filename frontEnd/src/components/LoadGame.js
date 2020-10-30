@@ -2,19 +2,15 @@ import React, {Fragment} from 'react';
 import "./LoadGame.css";
 import LoadGameItem from "./LoadGameItem.js";
 
-let timeout;
-
 export default function LoadGame(props) {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(18, 18, "Here's one I did earlier...")
-        timeout = setTimeout(()=>{props.cowTimer.startTimer(12, 25, "MOOOOOOOOO")}, 12000)
+        props.cowTimer.startTimer(2, 18, 18, false, "Here's one I did earlier...", "Finish it off for me, will ya?")
+        .then(() => {if (props.viewOption==="SavedGames") {props.cowTimer.startTimer(12, 15, 25, false, "", "")}})
     }
 
     const handleLoadGame = (game) => {
         const gameId = game.id;
-        clearTimeout(timeout);
-        props.cowTimer.endTimer();
         props.loadGame(gameId);
     }
 
@@ -30,9 +26,7 @@ export default function LoadGame(props) {
     })
 
     const returnHome = () => {
-        clearTimeout(timeout);
-        props.cowTimer.endTimer();
-        props.returnHome();
+        props.returnHome("mainMenu");
     }
 
     return (

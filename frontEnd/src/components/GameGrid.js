@@ -326,7 +326,7 @@ export default class GameGrid extends Component {
     }
 
     returnHome = () => {
-        this.props.returnHome();
+        this.props.returnHome("mainMenu");
     }
 
 
