@@ -18,8 +18,8 @@ export default class ImageUpload extends Component {
 
     componentDidMount(){
         if (this.props.cowTimer) {
-            this.props.cowTimer.startTimer(18, 18, "I hate pen and paper too...")
-            timeout = setTimeout(()=>{this.props.cowTimer.endTimer()}, 12000)
+            this.props.cowTimer.startTimer(2, 18, 18, false, "This is where you can upload an image", "I dislike pen and paper sometimes too")
+            .then(() => this.props.cowTimer.endTimer())
         }
     }
 
@@ -52,9 +52,7 @@ export default class ImageUpload extends Component {
     }
 
     analyseImage = async () => {
-        clearTimeout(timeout)
-        this.props.cowTimer.endTimer()
-        this.props.cowTimer.startTimer(12,12, "joke");
+        this.props.cowTimer.startTimer(2, 12, 12, false);
         const secondImageBox = document.getElementById("processed-preview");
         secondImageBox.style.display = "initial";
         secondImageBox.src = "uploading.gif";

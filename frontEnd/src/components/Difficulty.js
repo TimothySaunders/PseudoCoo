@@ -3,25 +3,23 @@ import sudoku from '../helpers/sudoku'
 
 import "./Difficulty.css";
 
-let timeout;
-
 const Difficulty = (props) => {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(18, 18, "Feelin' tough?")
-        timeout = window.setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 15000)
+        props.cowTimer.startTimer(2, 18, 18, false, "How brave you feelin'?", "You don't look so tough to me!")
+        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(2, 18, 18, false, "May I suggest 'Mooooodium Rare'?", "You look like you love a challenge...")}})
+        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(12, 18, 18, false, "Oh, hurry up and choose!", "...or maybe I'll just choose for you...")}})
+        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(12, 18, 18, false, "MOOOOOOOO", "BAAAAAA")}})
+        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(2, 15, 25, false, "", "")}})
     }
 
     function setDifficulty(event){
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
-        window.clearTimeout(timeout);
-        props.cowTimer.endTimer();
+        props.chooseMenu("inGame")
         props.createGameString(generatedString);
     }
 
     function makeChoice(event) {
-        window.clearTimeout(timeout);
-        props.cowTimer.endTimer();
         props.chooseMenu(event.target.value)
     }
 

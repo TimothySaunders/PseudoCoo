@@ -5,6 +5,7 @@ import GameGrid from '../components/GameGrid'
 import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
 import CowTimer from '../helpers/CowTimer'
+import '../helpers/CowTimer.css'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -371,9 +372,9 @@ export default class MenuContainer extends Component {
             return (
                 <Fragment>
 
-                    <GameGrid game={this.state.game} saveGame={this.saveGame} listenForDigit={this.voiceCommandsContainsDigit}
+                    <GameGrid game={this.state.game} saveGame={this.saveGame} listenForDigit={this.voiceCommandsContainsDigit} viewOption={this.state.viewOption}
                         resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} cowTimer={this.state.cowTimer}></GameGrid>
-=
+
                 </Fragment>
             )
         }
