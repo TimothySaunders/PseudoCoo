@@ -46,10 +46,10 @@ export default class GameGrid extends Component {
         this.setState({ gameState: gameState, grid: getGrid });
 
         if (this.props.cowTimer){
-            this.props.cowTimer.startTimer(2, 30, 30, false, "PSEUDOCOO!", "Oh, I love this game!!")
-            .then(() => {if (this.props.viewOption==="inGame") {this.props.cowTimer.startTimer(16, 16, 24, true, "Need a hint?", "Just ask!!")}})
+            this.props.cowTimer.clearAll()
+            this.props.cowTimer.addImmediately(2, "PSEUDOCOO!", "Oh, I love this game!!")
+            this.props.cowTimer.addToQueue(16, "Need a hint?", "Just ask!!", true, 20, 30, true)
         }
-
        
         this.setState({currentOrder: this.props.voiceOrder}, this.executeOrder66)
     }
@@ -129,8 +129,8 @@ export default class GameGrid extends Component {
             });
             this.setState({ gameState: prevState });
             this.confettiCannon();
-            this.props.cowTimer.startTimer(2, 18, 18, false, "I think you'll find *I* solved it...", "That confetti is for me, not you!!")
-            .then(() => this.props.cowTimer.endTimer())
+            this.props.cowTimer.clearAll()
+            this.props.cowTimer.addImmediately(2, "I think you'll find *I* solved it...", "That confetti is for me, not you!!")
         }
     }
 
@@ -240,10 +240,8 @@ export default class GameGrid extends Component {
     handleSaveGame = () => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
-        this.props.cowTimer.startTimer(2, 20, 20, false, "Saved!")
-        .then(() => {if (this.props.viewOption==="inGame") {this.props.cowTimer.startTimer(16, 16, 24, true, "Need a hint?", "Just ask!!")}})
+        this.props.cowTimer.addImmediately(2, "Saved!", "")
     }
-
 
     hint = () => {
         /// solve the sudoku
@@ -298,8 +296,7 @@ export default class GameGrid extends Component {
         /// comlpile a list of all the indexes for the editable cells
         /// pick a random index
         /// pass the solution into that cells notes. 
-        this.props.cowTimer.startTimer(2, 18, 18, false, "Mooston, we have a problem...")
-        .then(() => {if (this.props.viewOption==="inGame") {this.props.cowTimer.startTimer(16, 16, 24, true, "It *is* a toughy...", "If you'd like another hint, just ask!")}})
+        this.props.cowTimer.addImmediately(2, "Mooston, we have a problem...have a clue!")
     }
     
     toggleShowConflict = (event) => {

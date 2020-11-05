@@ -8,12 +8,13 @@ import LoadGame from './LoadGame'
 const MenuView = (props) => {
 
         if (props.cowTimer){
-            props.cowTimer.startTimer(2, 12, 12, false, "Welcome to PseudoCoo!", "moooooo")
-            .then(() => {if (props.viewOption==="mainMenu") {props.cowTimer.startTimer(10, 15, 25, false, "", "")}})
+            props.cowTimer.clearAll()
+            props.cowTimer.addImmediately(2, "mooooooooo", "Welcome to PseudoCoo!")
+            props.cowTimer.addToQueue(12, "", "", true, 15, 20)
         }
 
         function makeChoice(event) {
-            props.cowTimer.endTimer()
+            props.cowTimer.clearAll()
             props.chooseMenu(event.target.value)
         }
         

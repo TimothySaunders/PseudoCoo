@@ -3,11 +3,14 @@ import {get} from './requests'
 export default class CowTimer{
 
     constructor(){
-        this.initialDelay = 0;
-        this.min = 0;
-        this.max = 0;
-        this.out1 = "";
-        this.out2 = "";
+        this.currentMessage = {
+            initialDelay: 0,
+            min: 0,
+            max: 0,
+            out1: "",
+            out2: "",
+            repeat: false
+        }
         this.joke = false;
         this.jokes = [];
         this.timeoutMain = null;
@@ -25,6 +28,8 @@ export default class CowTimer{
         this.line2Delay = 0
         this.line2Life = 3000
         this.hideCowDelay = 2000
+        this.queue = []
+        this.running = false
         
         this.addDomElements()
     }
@@ -56,41 +61,102 @@ export default class CowTimer{
         parentNode.appendChild(container)
     }
 
-    //might need to make async to get cowjokes
-    async startTimer(initialDelay, min, max, resetTimerOnActivity=false, out1="", out2=""){
-        this.endTimer();
-        this.initialDelay = 1000 * initialDelay;
-        this.min = min;
-        this.max = max;
-        this.out1 = out1;
-        this.out2 = out2;
-
-        // if no output given fetches jokes from api
-        if (out1===""){
-            this.joke = true
-            await this.getJokes();
+    addToQueue(initialDelay, out1="", out2="", repeat=false, min=0, max=0, resetTimerOnActivity=false){
+        const message = {initialDelay: initialDelay*1000, out1: out1, out2: out2, repeat: repeat, min: min, max: max, resetTimerOnActivity: resetTimerOnActivity}
+        // this check is required for testing whilst react is in strict mode for development build
+        // consequentially wont be able to stack multiple of identical messages unless altered
+        if (this.messageNotInQueue(message)) {
+            this.queue.push(message);
+            this.startTimer(this.running ? false : true);
         } else {
-            this.joke = false
+            console.log("Already in queue")
         }
-
-        // adds event listeners for mouse and key presses - resets timer on these events
-        if (resetTimerOnActivity===true){
-            document.addEventListener("mousemove", this.resetTimer);
-            document.addEventListener("keypress", this.resetTimer);
-        }
-
-        this.line2Delay = this.out2 || this.joke ? 0 : 0
-        this.line2Life = this.out2 || this.joke ? 3000 : 1
-
-        this.timeoutInitialDelay = setTimeout(this.output, this.initialDelay)
-
-        // returns resolved promise afer delay so that function call can be used in async to run specified alert just once
-        await this.delay(this.initialDelay + this.bubbleDelay + this.line1Delay + this.line1Life + this.line2Delay + this.line2Life + this.hideCowDelay + 1200)
-        return Promise.resolve
+        return message
     }
 
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    addImmediately(initialDelay, out1="", out2="", repeat=false, min=0, max=0, resetTimerOnActivity=false){
+        const message = {initialDelay: initialDelay*1000, out1: out1, out2: out2, repeat: repeat, min: min, max: max, resetTimerOnActivity: resetTimerOnActivity}
+        if (this.messageNotInQueue(message)) {
+            this.queue.unshift(message);
+            this.startTimer(true);
+        } else {
+            console.log("Already in queue")
+        }
+        return message
+    }
+
+    messageNotInQueue(message){
+        return this.queue.every(queueItem => {
+            return (queueItem.initialDelay !== message.initialDelay ||
+                    queueItem.out1 !== message.out1 ||
+                    queueItem.out2 !== message.out2 ||
+                    queueItem.repeat !== message.repeat ||
+                    queueItem.min !== message.min ||
+                    queueItem.max !== message.max ||
+                    queueItem.resetTimerOnActivity !== message.resetTimerOnActivity)
+        })
+    }
+
+    removeFromQueue(message){
+        const index = this.queue.indexOf(message);
+        if (index !==-1) {
+            this.queue.splice(index, 1)
+        } else {
+            console.log("Not in queue")
+        }
+    }
+
+    clearAll(){
+        this.endTimer()
+        this.currentMessage = {
+            initialDelay: 0,
+            min: 0,
+            max: 0,
+            out1: "",
+            out2: "",
+            repeat: false
+        }
+        this.queue = []
+    }
+
+    async startTimer(immediate=false){
+        // end the loop if current message is on repeat
+        if (immediate) {
+            this.endTimer();
+
+            //set variables to first item in queue or clear all settings if empty
+            if (this.queue.length >= 1) {
+                this.currentMessage = this.queue[0]
+            } else {
+                this.clearAll()
+            }
+
+            //remove from queue if not on repeat
+            if (!this.currentMessage.repeat){
+                this.removeFromQueue(this.currentMessage)
+            }
+
+            // if no output given fetches jokes from api
+            if (this.currentMessage.out1===""){
+                this.joke = true
+                await this.getJokes();
+            } else {
+                this.joke = false
+            }
+
+            // adds event listeners for mouse and key presses - resets timer on these events
+            if (this.currentMessage.resetTimerOnActivity===true){
+                document.addEventListener("mousemove", this.resetTimer);
+                document.addEventListener("keypress", this.resetTimer);
+            }
+
+            //add animation delays if 2nd line of message
+            this.line2Delay = this.currentMessage.out2 || this.joke ? 1000 : 0
+            this.line2Life = this.currentMessage.out2 || this.joke ? 3000 : 1
+
+            this.running = true
+            this.timeoutInitialDelay = setTimeout(this.output, this.currentMessage.initialDelay)
+        }
     }
 
     endTimer(){
@@ -120,6 +186,9 @@ export default class CowTimer{
         document.getElementById("lineTwo").innerHTML=""
         document.getElementById("speech-bubble").style.visibility="hidden"
         document.getElementById("cow-container").style.bottom="-600px";
+
+        this.running = false
+        this.joke = false
     }
 
     getJokes = async () => {
@@ -127,21 +196,26 @@ export default class CowTimer{
     }
 
     output = () => {
+        // set line messages
         // if no output argument given then reply with joke instead
         if (this.joke === true){
+            // the following if statement is for a bug-fix avoiding an infinite loop
+            // originating from calling clearAll() when there is 
+            // if (this.queue.length === 0) {
+            //     this.clearAll()
+            // }
             const selectedJoke = this.randomItemFromList(this.jokes)
-            this.out1 = selectedJoke.setup
-            this.out2 = selectedJoke.punchline
+            document.getElementById("lineOne").innerHTML = selectedJoke.setup
+            document.getElementById("lineTwo").innerHTML = selectedJoke.punchline
             const selectedJokeIndex = this.jokes.findIndex((joke) => joke === selectedJoke);
             this.jokes.splice(selectedJokeIndex, 1);
             if (this.jokes.length === 0){
                 this.getJokes();
             }
+        } else {
+            document.getElementById("lineOne").innerHTML=this.currentMessage.out1;
+            document.getElementById("lineTwo").innerHTML=this.currentMessage.out2;
         }
-
-        // set line messages
-        document.getElementById("lineOne").innerHTML=this.out1;
-        document.getElementById("lineTwo").innerHTML=this.out2;
 
         // set sequential timestamps for use in timeouts
         const showBubbleTime = this.bubbleDelay
@@ -160,8 +234,16 @@ export default class CowTimer{
         this.timeout5 = setTimeout(this.hideLineTwo, hideLine2Time)
         this.timeout6 = setTimeout(this.removeCow, hideCowTime)
 
-        // reset timer for animation after delay to allow for final animation step
-        this.timeoutReset = setTimeout(this.resetTimer, hideCowTime + 1200);
+        // reset timer for animation after delay to allow for final animation step if animation is to repeat
+        this.timeoutReset = setTimeout(()=>{
+            if (this.currentMessage.repeat) {
+                this.resetTimer()
+             } else {
+                if (this.queue.length >= 1){
+                    this.startTimer(true)
+                }
+            }
+        }, hideCowTime + 1200);
     }
     
     randomInterval = (min, max) => {
@@ -176,9 +258,11 @@ export default class CowTimer{
 
     resetTimer = () => {
         clearTimeout(this.timeoutMain);
-        let interval = this.randomInterval(this.min, this.max);
+        let interval = this.randomInterval(this.currentMessage.min, this.currentMessage.max);
         this.timeoutMain = setTimeout(this.output, interval);
     }
+
+    // dom manipulation functions for cow animation
 
     showCow = () => {
         document.getElementById("cow-container").style.bottom="-10px";

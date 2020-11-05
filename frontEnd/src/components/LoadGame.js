@@ -5,8 +5,9 @@ import LoadGameItem from "./LoadGameItem.js";
 export default function LoadGame(props) {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(2, 18, 18, false, "Here's one I did earlier...", "Finish it off for me, will ya?")
-        .then(() => {if (props.viewOption==="SavedGames") {props.cowTimer.startTimer(12, 15, 25, false, "", "")}})
+        props.cowTimer.clearAll()
+        props.cowTimer.addImmediately(2, "Here's one I did earlier...", "Finish it off for me, will ya?")
+        props.cowTimer.addToQueue(15, "", "", true, 15, 20)
     }
 
     const handleLoadGame = (game) => {

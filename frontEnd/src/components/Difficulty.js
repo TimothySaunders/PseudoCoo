@@ -6,11 +6,12 @@ import "./Difficulty.css";
 const Difficulty = (props) => {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(2, 18, 18, false, "How brave you feelin'?", "You don't look so tough to me!")
-        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(2, 18, 18, false, "May I suggest 'Mooooodium Rare'?", "You look like you love a challenge...")}})
-        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(12, 18, 18, false, "Oh, hurry up and choose!", "...or maybe I'll just choose for you...")}})
-        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(12, 18, 18, false, "MOOOOOOOO", "BAAAAAA")}})
-        .then(() => {if (props.viewOption==="DifficultyMenu") {props.cowTimer.startTimer(2, 15, 25, false, "", "")}})
+        props.cowTimer.clearAll()
+        props.cowTimer.addImmediately(2, "How brave are you feeling today?", "")
+        props.cowTimer.addToQueue(10, "Might I suggest 'Mooooodium Rare'?", "You look like you love a challenge...")
+        props.cowTimer.addToQueue(10, "Oh, hurry up and choose!", "maybe I'll just choose for you...")
+        props.cowTimer.addToQueue(10, "MOOOOOO", "BAAAAA")
+        props.cowTimer.addToQueue(10, "", "", true, 15, 22)
     }
 
     function setDifficulty(event){
