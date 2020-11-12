@@ -5,8 +5,6 @@ import { uploadImage } from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
 import ValidateGrid from "../components/ValidateGrid";
 
-let timeout;
-
 export default class ImageUpload extends Component {
     constructor(props) {
         super(props);
@@ -18,8 +16,8 @@ export default class ImageUpload extends Component {
 
     componentDidMount(){
         if (this.props.cowTimer) {
-            this.props.cowTimer.startTimer(18, 18, "I hate pen and paper too...")
-            timeout = setTimeout(()=>{this.props.cowTimer.endTimer()}, 12000)
+            this.props.cowTimer.clearAll()
+            this.props.cowTimer.addImmediately(2, "This is where you can upload an image", "I dislike pen and paper sometimes too")
         }
     }
 
@@ -52,9 +50,8 @@ export default class ImageUpload extends Component {
     }
 
     analyseImage = async () => {
-        clearTimeout(timeout)
-        this.props.cowTimer.endTimer()
-        this.props.cowTimer.startTimer(12,12, "joke");
+        this.props.cowTimer.clearAll()
+        this.props.cowTimer.addImmediately(2, "", "", true, 12, 12)
         const secondImageBox = document.getElementById("processed-preview");
         secondImageBox.style.display = "initial";
         secondImageBox.src = "uploading.gif";
@@ -68,7 +65,7 @@ export default class ImageUpload extends Component {
             output = this.handleOutputNot81Chars(output);
             secondImageBox.src = fileReader2.result;
             this.setState ({ parsedOutput: output })
-            this.props.cowTimer.endTimer();
+            // this.props.cowTimer.clearAll();
         }
         fileReader2.readAsDataURL(cleanImage)
     }
@@ -122,8 +119,7 @@ export default class ImageUpload extends Component {
     }
 
     returnHome = () => {
-        clearTimeout(timeout)
-        this.props.returnHome();
+        this.props.returnHome("mainMenu");
     }
 
     editParsedOutput = (index, value) => {
@@ -147,17 +143,26 @@ export default class ImageUpload extends Component {
     renderValidateGrid() {
         const blankGrid = ".................................................................................";
         const solvable = this.gameIsSolvable();
-        let message = null;
-        if (this.state.parsedOutput === "") {
-            return (null);
-        }
-        if (solvable) {
-            message = (
-                <p>All looks good!</p>
-            );
-        } else {
-            message = (
-                <p>There's a few problems, try correcting the grid</p>
+        this.props.cowTimer.clearAll()
+        if (this.state.parsedOutput.length === 81) {
+            if (this.state.parsedOutput === blankGrid) {
+                this.props.cowTimer.addImmediately(0, "Uh-oh, that doesn't look right...", "Try using a better picture")
+                return (
+                    <p>Could not find a sudoku grid, try taking a better picture</p>
+                );
+            } else {
+                solvable ? this.props.cowTimer.addImmediately(0, "Hurray, that was magic, huh?", "Let's go!") : this.props.cowTimer.addImmediately(0, "Hmmm, it's not perfect...", "Can you spot and fix the mistakes for me?")
+                return (
+                    <Fragment>
+                        <ValidateGrid input={this.state.parsedOutput} onInput={this.editParsedOutput} />
+                        <button id="validate-upload" disabled={!solvable} onClick={this.handleValidate}>{solvable ? "Play the game" : "This grid is unsolvable!"}</button>
+                    </Fragment>
+                );
+            }
+        } else if (this.state.parsedOutput.length > 0) {
+            this.props.cowTimer.addImmediately(0, "Uh-oh, that doesn't look right...", "Try uploading the image again")
+            return (
+                <p>Something went wrong! Try uploading your image again.</p>
             );
         }
         return (

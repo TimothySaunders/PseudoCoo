@@ -3,25 +3,24 @@ import sudoku from '../helpers/sudoku'
 
 import "./Difficulty.css";
 
-let timeout;
-
 const Difficulty = (props) => {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(18, 18, "Feelin' tough?")
-        timeout = window.setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 15000)
+        props.cowTimer.clearAll()
+        props.cowTimer.addImmediately(2, "How brave are you feeling today?", "")
+        props.cowTimer.addToQueue(10, "Might I suggest 'Mooooodium Rare'?", "You look like you love a challenge...")
+        props.cowTimer.addToQueue(10, "Oh, hurry up and choose!", "maybe I'll just choose for you...")
+        props.cowTimer.addToQueue(10, "MOOOOOO", "BAAAAA")
+        props.cowTimer.addToQueue(10, "", "", true, 15, 22)
     }
 
     function setDifficulty(event){
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
-        window.clearTimeout(timeout);
-        props.cowTimer.endTimer();
+        props.chooseMenu("inGame")
         props.createGameString(generatedString);
     }
 
     function makeChoice(event) {
-        window.clearTimeout(timeout);
-        props.cowTimer.endTimer();
         props.chooseMenu(event.target.value)
     }
 
