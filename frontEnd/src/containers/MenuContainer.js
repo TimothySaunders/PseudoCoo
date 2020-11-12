@@ -23,17 +23,21 @@ export default class MenuContainer extends Component {
             cowTimer: null
         }
         this.voiceCommandConfig = [
-            {words: ["home", "menu"], function: this.chooseMenu, args: ["mainMenu"]},
-            {words: ["play", "start", "go"], function: this.chooseMenu, args: ["DifficultyMenu"]},
-            {words: ["upload", "image", "photo"], function: this.chooseMenu, args: ["ImportImage"]},
-            {words: ["load", "continue"], function: this.chooseMenu, args: ["SavedGames"]},  
+            { words: ["play", "start", "go"], function: this.chooseMenu, args: ["DifficultyMenu"] },
+            { words: ["upload", "image", "photo"], function: this.chooseMenu, args: ["ImportImage"] },
+            { words: ["load", "continue"], function: this.chooseMenu, args: ["SavedGames"] },  
         ];
+
+        
+       
     }
 
     componentDidMount() {
         this.getSaveGames();
         this.actingOnVoiceCommands();
         voice.setConfigureCommands(this.voiceCommandConfig);
+        voice.addToPermanentCommands({ words: ["home", "menu"], function: this.reset, args: [] })
+
         this.setState({cowTimer: new CowTimer()});
     }
 
@@ -46,9 +50,6 @@ export default class MenuContainer extends Component {
         voice.logWhatIsBeingSaid();
     }
 
-    showVoiceX = () => {
-        console.log(voice.getWordsHeardRecently())
-    }
     
     resetOrder = () => {
         this.setState({ voiceOrder: ""})
@@ -86,11 +87,11 @@ export default class MenuContainer extends Component {
         this.setState({ viewOption: chosen })
     }
 
-    creategameStringFromDifficulty = (choice) => {
-        const newGame = this.state.game;
-        newGame.gridValues = choice;
-        this.setState({ game: newGame })
-    }
+    // creategameStringFromDifficulty = (choice) => {
+    //     const newGame = this.state.game;
+    //     newGame.gridValues = choice;
+    //     this.setState({ game: newGame })
+    // }
     
     createGameString = (choice) => {
         const newGame = {
@@ -121,6 +122,12 @@ export default class MenuContainer extends Component {
     }
 
     render() {
+        if (this.state.viewOption === "mainMenu"){
+            voice.setConfigureCommands(this.voiceCommandConfig);
+        }
+
+        
+
         if (this.state.game.gridValues === "") {
             return (
                 <Fragment>
@@ -134,7 +141,7 @@ export default class MenuContainer extends Component {
             return (
                 <Fragment>
 
-                    <GameGrid game={this.state.game} saveGame={this.saveGame} listenForDigit={this.voiceCommandsContainsDigit}
+                    <GameGrid game={this.state.game} saveGame={this.saveGame} 
                         resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} cowTimer={this.state.cowTimer}></GameGrid>
 
                 </Fragment>

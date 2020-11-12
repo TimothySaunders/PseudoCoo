@@ -10,7 +10,7 @@ export default function GridCell(props) {
         showNotes();
     });
 
-    const visualiseConflict = function(){  // ! this could be improved to regodnised all conflicting items, currently identifies the most recent addition as the conflicting value.
+    const visualiseConflict = function(){  // ! this could be improved to recognise all conflicting items, currently identifies the most recent addition as the conflicting value.
         let value = false;
         if(props.cell.editable && props.showConflictToggle && (props.cell.value!=="." || props.cell.value!=="")){
             
@@ -69,7 +69,7 @@ export default function GridCell(props) {
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
         display.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
-        props.listenForDigit(giveNumToDisplay);
+        // props.listenForDigit(giveNumToDisplay);
     }
 
     const giveNumToDisplay = (num) => {

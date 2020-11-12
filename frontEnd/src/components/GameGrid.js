@@ -7,6 +7,7 @@ import Parser from "../helpers/StringParser";
 import confetti from "canvas-confetti";
 
 
+
 const sp = new Parser();
 const psc = new PsChecker();
 

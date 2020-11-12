@@ -3,6 +3,8 @@ import sudoku from '../helpers/sudoku'
 
 import "./Difficulty.css";
 
+import voice from '../helpers/PseudoMoo'
+
 let timeout;
 
 const Difficulty = (props) => {
@@ -12,7 +14,7 @@ const Difficulty = (props) => {
         timeout = window.setTimeout(()=>{props.cowTimer.startTimer(15, 25, "MOOOOOOOOO")}, 15000)
     }
 
-    function setDifficulty(event){
+    const setDifficulty = (event) => {
         const generatedString = sudoku.sudoku.generate(event.target.value, true);
         window.clearTimeout(timeout);
         props.cowTimer.endTimer();
@@ -25,6 +27,17 @@ const Difficulty = (props) => {
         props.chooseMenu(event.target.value)
     }
 
+    const difficultyVoiceCommands = [
+        { words: ['laughing', 'coo', 'cow'], function: setDifficulty, args: [{ target: { value: "easy" } }] },
+        { words: ['skimmed', 'milk'], function: setDifficulty, args: [{ target: { value: "medium" } }] },
+        { words: ['rare', 'medium'], function: setDifficulty, args: [{ target: { value: "hard" } }] },
+        { words: ['difficult', 'utterly', 'udder', 'elderly'], function: setDifficulty, args: [{ target: { value: "very-hard" } }] },
+        { words: ['mad', 'madcow'], function: setDifficulty, args: [{ target: { value: "insane" } }] },
+        { words: ['holy'], function: setDifficulty, args: [{ target: { value: "inhuman" } }] },
+    ];
+
+    voice.setConfigureCommands(difficultyVoiceCommands);
+    
     return (
         <Fragment>
             <div className="menu-grid">

@@ -7,6 +7,7 @@ class PseudoMoo {
 
     constructor() {
         this.configureCommands = [{}];
+        this.permanentCommands = [{}];
         this.logWhatIsBeingSaid();
     }
 
@@ -18,6 +19,14 @@ class PseudoMoo {
         this.configureCommands.push(newConfigObject);
     }
 
+    addToPermanentCommands(newConfigObject) {
+        this.permanentCommands.push(newConfigObject);
+    }
+
+    addManyCommands(newConfigArray) {
+        this.configureCommands += newConfigArray;
+    }
+ 
     startListeningToStuff() {
         console.log("in startListeningToStuff");
         if (!('webkitSpeechRecognition' in window)) {               // Will alert if browser
@@ -94,6 +103,11 @@ class PseudoMoo {
         self.configureCommands.forEach(command => {
             runCommands(command);
         });
+
+        self.permanentCommands.forEach(command => {
+            runCommands(command);
+        });
+
     }}
 
 
