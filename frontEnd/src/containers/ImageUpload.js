@@ -64,12 +64,23 @@ export default class ImageUpload extends Component {
         let fileReader2 = new FileReader();
         fileReader2.onload = async () => {
             secondImageBox.src = "processing.gif";
-            output = await ImageParser(fileReader2.result, false, false)
+            output = await ImageParser(fileReader2.result, false, false);
+            output = this.handleOutputNot81Chars(output);
             secondImageBox.src = fileReader2.result;
             this.setState ({ parsedOutput: output })
             this.props.cowTimer.endTimer();
         }
         fileReader2.readAsDataURL(cleanImage)
+    }
+
+    handleOutputNot81Chars = (output) => {
+        const len = output.length;
+        if (len < 81) {
+            output += ".".repeat(81 - len);
+        } else if (len > 81) {
+            output = output.substr(0, 81);
+        }
+        return output;
     }
 
     handleValidate = () => {
@@ -136,24 +147,45 @@ export default class ImageUpload extends Component {
     renderValidateGrid() {
         const blankGrid = ".................................................................................";
         const solvable = this.gameIsSolvable();
-        if (this.state.parsedOutput.length === 81) {
-            if (this.state.parsedOutput === blankGrid) {
-                return (
-                    <p>Could not find a sudoku grid, try taking a better picture</p>
-                );
-            } else {
-                return (
-                    <Fragment>
-                        <ValidateGrid input={this.state.parsedOutput} onInput={this.editParsedOutput} />
-                        <button id="validate-upload" disabled={!solvable} onClick={this.handleValidate}>{solvable ? "Play the game" : "This grid is unsolvable!"}</button>
-                    </Fragment>
-                );
-            }
-        } else if (this.state.parsedOutput.length > 0) {
-            return (
-                <p>Something went wrong! Try uploading your image again.</p>
+        let message = null;
+        if (this.state.parsedOutput === "") {
+            return (null);
+        }
+        if (solvable) {
+            message = (
+                <p>All looks good!</p>
+            );
+        } else {
+            message = (
+                <p>There's a few problems, try correcting the grid</p>
             );
         }
+        return (
+            <Fragment>
+                {message}
+                <ValidateGrid input={this.state.parsedOutput} onInput={this.editParsedOutput} />
+                <button id="validate-upload" disabled={!solvable} onClick={this.handleValidate}>{solvable ? "Play the game" : "This grid is unsolvable!"}</button>
+            </Fragment>
+        )
+        
+        // if (this.state.parsedOutput.length === 81) {
+        //     if (this.state.parsedOutput === blankGrid) {
+        //         return (
+        //             <p>Could not find a sudoku grid, try taking a better picture</p>
+        //         );
+        //     } else {
+        //         return (
+        //             <Fragment>
+        //                 <ValidateGrid input={this.state.parsedOutput} onInput={this.editParsedOutput} />
+        //                 <button id="validate-upload" disabled={!solvable} onClick={this.handleValidate}>{solvable ? "Play the game" : "This grid is unsolvable!"}</button>
+        //             </Fragment>
+        //         );
+        //     }
+        // } else if (this.state.parsedOutput.length > 0) {
+        //     return (
+        //         <p>Something went wrong! Try uploading your image again.</p>
+        //     );
+        // }
     }
 
     render() {

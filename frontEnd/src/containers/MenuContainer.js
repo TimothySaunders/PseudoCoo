@@ -373,7 +373,7 @@ export default class MenuContainer extends Component {
 
                     <GameGrid game={this.state.game} saveGame={this.saveGame} listenForDigit={this.voiceCommandsContainsDigit}
                         resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} cowTimer={this.state.cowTimer}></GameGrid>
-=
+
                 </Fragment>
             )
         }
