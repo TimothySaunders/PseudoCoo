@@ -1,4 +1,4 @@
-const { createWorker } = require('tesseract.js');
+const { createWorker, createScheduler } = require('tesseract.js');
 // const sizeOf = require('image-size');
 
 
@@ -61,29 +61,48 @@ async function getGrid(grid, url){
 
   const outputGrid = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[]}
 
-  for (let index=0; index<9; index++){
-    const worker = createWorker();
+  // for (let index = 0; index < 9; index++) {
+   
+  const scheduler = createScheduler();
+  const worker1 = createWorker();
+  const worker2 = createWorker();
 
-      console.log(`Parsing Image, Row ${index+1}`);
 
-      await worker.load();
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
-      await worker.setParameters({
-        tessedit_char_whitelist: '123456789',
-      });
-      const values = [];
-      for (let i = 0; i < grid[index].length; i++) {
-        const { data: { text } } = await worker.recognize(url, { rectangle: grid[index][i] });
-        let number = ".";
-        if (text.length > 0){
-          number = parseInt(text.replace("\n", ""))
-        } 
-        values.push(number);
-      }
-      outputGrid[index] = values
-      await worker.terminate();
-  }
+  console.log(`Parsing Image, Row ${index + 1}`);
+
+  await worker1.load();
+  await worker1.loadLanguage('eng');
+  await worker1.initialize('eng');
+  await worker1.setParameters({
+    tessedit_char_whitelist: '123456789',
+    });
+  await worker2.load();
+  await worker2.loadLanguage('eng');
+  await worker2.initialize('eng');
+  await worker2.setParameters({
+    tessedit_char_whitelist: '123456789',
+  });
+  scheduler.addWorker(worker1);
+  scheduler.addWorker(worker2);
+    const values = [];
+  const results = await Promise.all(grid.map((rows, y) => {
+    return rows.map((cell, x) => {
+      const value = await scheduler.addJob('recognize', url, { cell });
+      outputGrid[y][x] = value;
+    });
+  })).then((r) => console.log(r));
+    // for (let i = 0; i < grid[index].length; i++) {
+    //   const { data: { text } } = await worker.recognize(url, { rectangle: grid[index][i] });
+    //   let number = ".";
+    //   if (text.length > 0) {
+    //     number = parseInt(text.replace("\n", ""))
+    //   }
+    //   values.push(number);
+    // }
+
+    outputGrid[index] = values
+    await worker.terminate();
+  // }
 
   return outputGrid;
 }
