@@ -3,15 +3,17 @@ import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
 import LoadGame from './LoadGame'
 
+import voice from "../helpers/PseudoMoo";
+
 /* eslint-disable */
 
 const MenuView = (props) => {
 
         if (props.cowTimer){
-            props.cowTimer.startTimer(12, 30, "moo")
+            // props.cowTimer.startTimer(12, 30, "moo")
         }
 
-        function makeChoice(event) {
+        const makeChoice = (event) => {
             props.cowTimer.endTimer()
             props.chooseMenu(event.target.value)
         }
