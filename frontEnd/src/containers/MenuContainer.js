@@ -28,8 +28,7 @@ export default class MenuContainer extends Component {
             { words: ["load", "continue"], function: this.chooseMenu, args: ["SavedGames"] },  
         ];
 
-        
-       
+    
     }
 
     componentDidMount() {
@@ -87,11 +86,6 @@ export default class MenuContainer extends Component {
         this.setState({ viewOption: chosen })
     }
 
-    // creategameStringFromDifficulty = (choice) => {
-    //     const newGame = this.state.game;
-    //     newGame.gridValues = choice;
-    //     this.setState({ game: newGame })
-    // }
     
     createGameString = (choice) => {
         const newGame = {
@@ -126,8 +120,6 @@ export default class MenuContainer extends Component {
             voice.setConfigureCommands(this.voiceCommandConfig);
         }
 
-        
-
         if (this.state.game.gridValues === "") {
             return (
                 <Fragment>
@@ -140,10 +132,8 @@ export default class MenuContainer extends Component {
         } else {
             return (
                 <Fragment>
-
                     <GameGrid game={this.state.game} saveGame={this.saveGame} 
                         resizeGrid={this.props.resizeGrid} returnHome={this.reset} voiceOrder={this.state.voiceOrder} resetOrder={this.resetOrder} cowTimer={this.state.cowTimer}></GameGrid>
-
                 </Fragment>
             )
         }

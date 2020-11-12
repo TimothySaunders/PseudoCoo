@@ -10,11 +10,13 @@ import voice from "../helpers/PseudoMoo";
 const MenuView = (props) => {
 
         if (props.cowTimer){
-            // props.cowTimer.startTimer(12, 30, "moo")
+            props.cowTimer.clearAll()
+            props.cowTimer.addImmediately(2, "mooooooooo", "Welcome to PseudoCoo!")
+            props.cowTimer.addToQueue(12, "", "", true, 15, 20)
         }
 
-        const makeChoice = (event) => {
-            props.cowTimer.endTimer()
+        function makeChoice(event) {
+            props.cowTimer.clearAll()
             props.chooseMenu(event.target.value)
         }
         
@@ -37,14 +39,14 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <Difficulty chooseMenu={props.chooseMenu} createGameString={props.createGameString} returnHome={props.chooseMenu} cowTimer={props.cowTimer} />
+                        <Difficulty chooseMenu={props.chooseMenu} createGameString={props.createGameString} returnHome={props.chooseMenu} cowTimer={props.cowTimer} viewOption={props.viewOption} />
                     </Fragment>
                 )
 
             case "ImportImage":
                 return (
                     <Fragment>
-                        <ImageUpload createGameString={props.createGameString} returnHome={props.chooseMenu} cowTimer={props.cowTimer} />
+                        <ImageUpload createGameString={props.createGameString} returnHome={props.chooseMenu} cowTimer={props.cowTimer} viewOption={props.viewOption} />
                     </Fragment>
                 )
 
@@ -52,7 +54,7 @@ const MenuView = (props) => {
                 return (
 
                     <Fragment>
-                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame} removeGame={props.removeGame} returnHome={props.chooseMenu} cowTimer={props.cowTimer}/>
+                        <LoadGame savedGames={props.savedGames} loadGame={props.loadGame} removeGame={props.removeGame} returnHome={props.chooseMenu} cowTimer={props.cowTimer} viewOption={props.viewOption} />
                     </Fragment>
                 )
         }
