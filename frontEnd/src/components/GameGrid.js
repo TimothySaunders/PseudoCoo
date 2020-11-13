@@ -4,7 +4,7 @@ import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
 import Parser from "../helpers/StringParser";
-import confetti from "canvas-confetti";
+import confettiCannon from "../helpers/ConfettiCannon";
 
 
 
@@ -86,10 +86,10 @@ export default class GameGrid extends Component {
             this.handleSaveGame(); 
             this.setState({preventDoubleExecution:prev}) 
         }
-        if (order==="confetti"){
-            this.confettiCannon();  
-            this.setState({preventDoubleExecution:prev})
-        }
+        // if (order==="confetti"){
+        //     confettiCannon();  
+        //     this.setState({preventDoubleExecution:prev})
+        // }
         // }
         // if (order==="joke"){
         //     this.getCowWithAjoke?();  
@@ -122,7 +122,7 @@ export default class GameGrid extends Component {
                 return cell;
             });
             this.setState({ gameState: prevState });
-            this.confettiCannon();
+            confettiCannon();
             this.props.cowTimer.clearAll()
             this.props.cowTimer.addImmediately(2, "I think you'll find *I* solved it...", "That confetti is for me, not you!!")
         }
@@ -164,41 +164,6 @@ export default class GameGrid extends Component {
         return false;
     }
 
-    confettiCannon() {
-        var count = 250;
-        var defaults = {
-            origin: { y: 0.8 }
-        };
-
-        function fire(particleRatio, opts) {
-            confetti(Object.assign({}, defaults, opts, {
-                particleCount: Math.floor(count * particleRatio)
-            }));
-        }
-
-        fire(0.25, {
-            spread: 56,
-            startVelocity: 55,
-        });
-        fire(0.2, {
-            spread: 120,
-        });
-        fire(0.55, {
-            spread: 180,
-            decay: 0.90,
-            scalar: 0.8
-        });
-        fire(0.1, {
-            spread: 120,
-            startVelocity: 25,
-            decay: 0.92,
-            scalar: 1.2
-        });
-        fire(0.2, {
-            spread: 120,
-            startVelocity: 55,
-        });
-    }
 
     // handleNumberInput(index, newCell, display) {
     handleNumberInput(index, cell, display, input) {
@@ -219,7 +184,7 @@ export default class GameGrid extends Component {
         }
         updated[index] = cell;
         if (this.gridIsSolved()) {
-            this.confettiCannon();
+            confettiCannon();
             this.props.cowTimer.startTimer(2, 18, 18, false, "Cow-gratulations!!")
             .then(() => this.props.cowTimer.endTimer())
         }
@@ -273,7 +238,7 @@ export default class GameGrid extends Component {
         }
         }
         if (this.gridIsSolved()) {
-            this.confettiCannon();
+            confettiCannon();
         }
 
         this.props.cowTimer.addImmediately(2, "Mooston, we have a problem...have a clue!")
@@ -308,13 +273,24 @@ export default class GameGrid extends Component {
     }
 
 
-    componentDidUpdate() {
-        let order = this.props.voiceOrder;
-        if (order!==""){
-            this.executeVoiceOrders(order)
-        }
+    // componentDidUpdate() {
+    //     let order = this.props.voiceOrder;
+    //     if (order!==""){
+    //         this.executeVoiceOrders(order)
+    //     }
 
-    }
+    // }
+
+    const cellManipulationVoiceCommands = [
+        { words: ['laughing', 'coo', 'cow'], function: setDifficulty, args: [{ target: { value: "easy" } }] },
+        { words: ['skimmed', 'milk'], function: setDifficulty, args: [{ target: { value: "medium" } }] },
+        { words: ['rare', 'medium'], function: setDifficulty, args: [{ target: { value: "hard" } }] },
+        { words: ['difficult', 'utterly', 'udder', 'elderly'], function: setDifficulty, args: [{ target: { value: "very-hard" } }] },
+        { words: ['mad', 'madcow'], function: setDifficulty, args: [{ target: { value: "insane" } }] },
+        { words: ['holy'], function: setDifficulty, args: [{ target: { value: "inhuman" } }] },
+    ];
+
+    voice.setConfigureCommands(difficultyVoiceCommands);
 
     render() {
      
@@ -329,9 +305,9 @@ export default class GameGrid extends Component {
         } else { return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} grid={this.state.grid} showConflict={this.showConflict} showConflictToggle={this.state.showConflictToggle} hint={this.state.hint}/>)  }
         });
 
-
         return (
             <Fragment>
+                
                 <div className="menu-grid">
                     <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
                 </div>

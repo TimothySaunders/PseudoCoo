@@ -5,6 +5,7 @@ import GameGrid from '../components/GameGrid'
 import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
 import CowTimer from '../helpers/CowTimer'
+import '../helpers/CowTimer.css'
 import ImageUpload from './ImageUpload'
 import voice from '../helpers/PseudoMoo'
 
@@ -115,6 +116,7 @@ export default class MenuContainer extends Component {
         voice.stopListeningToStuff();
     }
 
+    
     render() {
         if (this.state.viewOption === "mainMenu"){
             voice.setConfigureCommands(this.voiceCommandConfig);
