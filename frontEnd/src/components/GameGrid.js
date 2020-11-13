@@ -5,7 +5,7 @@ import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
 import Parser from "../helpers/StringParser";
 import confettiCannon from "../helpers/ConfettiCannon";
-
+import voice from '../helpers/PseudoMoo'
 
 
 const sp = new Parser();
@@ -28,6 +28,14 @@ export default class GameGrid extends Component {
         this.toggleNotes = this.toggleNotes.bind(this);
         this.showConflict = this.showConflict.bind(this);
         this.hint = this.hint.bind(this);
+        this.cellManipulationVoiceCommands = [
+            // { words: ['laughing', 'coo', 'cow'], function: setDifficulty, args: [{ target: { value: "easy" } }] },
+            // { words: ['skimmed', 'milk'], function: setDifficulty, args: [{ target: { value: "medium" } }] },
+            // { words: ['rare', 'medium'], function: setDifficulty, args: [{ target: { value: "hard" } }] },
+            // { words: ['difficult', 'utterly', 'udder', 'elderly'], function: setDifficulty, args: [{ target: { value: "very-hard" } }] },
+            // { words: ['mad', 'madcow'], function: setDifficulty, args: [{ target: { value: "insane" } }] },
+            // { words: ['holy'], function: setDifficulty, args: [{ target: { value: "inhuman" } }] },
+        ];
         
 
     }
@@ -281,19 +289,12 @@ export default class GameGrid extends Component {
 
     // }
 
-    const cellManipulationVoiceCommands = [
-        { words: ['laughing', 'coo', 'cow'], function: setDifficulty, args: [{ target: { value: "easy" } }] },
-        { words: ['skimmed', 'milk'], function: setDifficulty, args: [{ target: { value: "medium" } }] },
-        { words: ['rare', 'medium'], function: setDifficulty, args: [{ target: { value: "hard" } }] },
-        { words: ['difficult', 'utterly', 'udder', 'elderly'], function: setDifficulty, args: [{ target: { value: "very-hard" } }] },
-        { words: ['mad', 'madcow'], function: setDifficulty, args: [{ target: { value: "insane" } }] },
-        { words: ['holy'], function: setDifficulty, args: [{ target: { value: "inhuman" } }] },
-    ];
+    
 
-    voice.setConfigureCommands(difficultyVoiceCommands);
+   
 
     render() {
-     
+        // voice.setConfigureCommands(difficultyVoiceCommands); //! 
         const gridCells = this.state.gameState.map((cell, i) => {
 
 
