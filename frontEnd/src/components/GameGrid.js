@@ -57,7 +57,6 @@ export default class GameGrid extends Component {
             this.props.cowTimer.addToQueue(20, 2, "Need a hint?", "Just ask!!", true, 20, 30, true)
         }
 
-        this.setState({ currentOrder: this.props.voiceOrder }, this.executeOrder66);
         voice.setConfigureCommands(this.voiceConfigCommands);
     }
 
@@ -66,7 +65,7 @@ export default class GameGrid extends Component {
     }
 
     solve = () => {
-        // this.clear(); //! Needs to be run so that it eliminates any invalid entries, trying to solve 
+        this.clear(); //! Needs to be run so that it eliminates any invalid entries, trying to solve 
         // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
         // let toConvert = sp.getRawStringFromObjects(this.state.gameState)
         // toConvert.replace("0", ".");
@@ -114,9 +113,7 @@ export default class GameGrid extends Component {
 
     gridIsSolved = () => {
         const currentGameState = sp.getRawStringFromObjects(this.state.gameState);
-        console.log(currentGameState);
         const solution = sudoku.sudoku.solve(currentGameState);
-        console.log(solution);
         if (currentGameState === solution) {
             return true;
         }
@@ -164,7 +161,6 @@ export default class GameGrid extends Component {
             const solution = sudoku.sudoku.solve(toConvert);
             let hints = []
             if (solution) {
-                console.log("solution: " + solution + "< --- ");
                 let gridObjects = this.state.gameState
                 for (let i = 0; i < gridObjects.length; i++) {                  //
                     if (gridObjects[i].editable) {                     //
@@ -174,7 +170,6 @@ export default class GameGrid extends Component {
             }
             if (hints.length > 0) {
                 this.setState({ hint: hints[0] });
-                // this.setState(gameState[hints[0][0]].editable:false,gameState[hints[0][0]].value=hints[0][1])
                 let index = hints[0][0];
                 let value = hints[0][1];
                 let updated = this.state.gameState;

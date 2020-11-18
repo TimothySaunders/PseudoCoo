@@ -34,11 +34,8 @@ class PseudoMoo {
             return false;   // does not support
         }
         try { // prevent crash should this be called while recording is still taking place.
-            // console.log("in TRY");
             recognition.continuous = true;
-            // console.log("in TRY1");
             recognition.interimResults = true;
-            // console.log("in TRY2");
             recognition.start();
             console.log("in TRY3");
             this.recognition.addEventListener('end', recognition.start); // if recognition stops, start again.
