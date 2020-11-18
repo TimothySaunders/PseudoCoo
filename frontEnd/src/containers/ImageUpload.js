@@ -214,7 +214,6 @@ export default class ImageUpload extends Component {
                             <img
                                 id="preview-pic"
                                 className="image hidden-pic fill-div"
-                                // src="uploading.gif"
                                 alt="uploadImage"
                                 draggable="false"
                             />
