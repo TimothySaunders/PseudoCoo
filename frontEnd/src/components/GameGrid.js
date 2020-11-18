@@ -188,11 +188,12 @@ export default class GameGrid extends Component {
         this.props.cowTimer.addImmediately(1, 1.5, "Mooston, we have a problem...", "This should make it a bit easier!")
     }
 
-    toggleShowConflict = (event) => {
+    toggleShowConflict = () => {
+        const button = document.getElementById("verify_button");
         if (!this.state.showConflictToggle) {
-            event.target.textContent = "Hide verify";
+            button.textContent = "Hide verify";
         } else {
-            event.target.textContent = "Verify";
+            button.textContent = "Verify";
         }
         this.setState({ showConflictToggle: !this.state.showConflictToggle })
     }
@@ -248,7 +249,7 @@ export default class GameGrid extends Component {
                         <button onClick={this.solve} >Solve</button>
                         <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                         <button onClick={this.clear} >Clear</button>
-                        <button onClick={this.toggleShowConflict} >Verify</button>
+                        <button id="verify_button" onClick={this.toggleShowConflict} >Verify</button>
                         <button onClick={this.hint} >Hint</button>
                         <button onClick={this.handleSaveGame} >Save</button>
                     </div>

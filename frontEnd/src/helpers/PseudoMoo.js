@@ -61,6 +61,7 @@ class PseudoMoo {
         recognition.onresult = function (event) {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {                     // Verify if the recognized text is the last with the isFinal property
+                    console.log(event.results[i][0].transcript);
                     self.actOnCommands(self, event.results[i][0].transcript.trim());
                     return event.results[i][0].transcript;
                 }
