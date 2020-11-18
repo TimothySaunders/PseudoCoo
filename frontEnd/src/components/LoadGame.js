@@ -6,8 +6,8 @@ export default function LoadGame(props) {
 
     if (props.cowTimer) {
         props.cowTimer.clearAll()
-        props.cowTimer.addImmediately(2, "Here's one I did earlier...", "Finish it off for me, will ya?")
-        props.cowTimer.addToQueue(15, "", "", true, 15, 20)
+        props.cowTimer.addImmediately(1, 1.5, "Here's one I did earlier...", "Finish it off for me, will ya?")
+        props.cowTimer.addToQueue(15, 3, "", "", true, 15, 20)
     }
 
     const handleLoadGame = (game) => {

@@ -5,6 +5,7 @@ export default class CowTimer{
     constructor(){
         this.currentMessage = {
             initialDelay: 0,
+            duration: 0,
             min: 0,
             max: 0,
             out1: "",
@@ -24,9 +25,9 @@ export default class CowTimer{
         this.timeoutReset = null;
         this.bubbleDelay = 2000
         this.line1Delay = 500
-        this.line1Life = 3000
-        this.line2Delay = 0
-        this.line2Life = 3000
+        this.line1Life = null //depends on duration argument passed in
+        this.line2Delay = 500
+        this.line2Life = null //depends on if second line of speech exists AND duration argument passed in
         this.hideCowDelay = 2000
         this.queue = []
         this.running = false
@@ -61,8 +62,8 @@ export default class CowTimer{
         parentNode.appendChild(container)
     }
 
-    addToQueue(initialDelay, out1="", out2="", repeat=false, min=0, max=0, resetTimerOnActivity=false){
-        const message = {initialDelay: initialDelay*1000, out1: out1, out2: out2, repeat: repeat, min: min, max: max, resetTimerOnActivity: resetTimerOnActivity}
+    addToQueue(initialDelay, duration = 3, out1 = "", out2 = "", repeat = false, min = 0, max = 0, resetTimerOnActivity = false) {
+        const message = { initialDelay: initialDelay * 1000, duration: duration * 1000, out1: out1, out2: out2, repeat: repeat, min: min, max: max, resetTimerOnActivity: resetTimerOnActivity }
         // this check is required for testing whilst react is in strict mode for development build
         // consequentially wont be able to stack multiple of identical messages unless altered
         if (this.messageNotInQueue(message)) {
@@ -74,8 +75,8 @@ export default class CowTimer{
         return message
     }
 
-    addImmediately(initialDelay, out1="", out2="", repeat=false, min=0, max=0, resetTimerOnActivity=false){
-        const message = {initialDelay: initialDelay*1000, out1: out1, out2: out2, repeat: repeat, min: min, max: max, resetTimerOnActivity: resetTimerOnActivity}
+    addImmediately(initialDelay, duration = 3, out1 = "", out2 = "", repeat = false, min = 0, max = 0, resetTimerOnActivity = false) {
+        const message = { initialDelay: initialDelay * 1000, duration: duration * 1000, out1: out1, out2: out2, repeat: repeat, min: min, max: max, resetTimerOnActivity: resetTimerOnActivity }
         if (this.messageNotInQueue(message)) {
             this.queue.unshift(message);
             this.startTimer(true);
@@ -150,9 +151,11 @@ export default class CowTimer{
                 document.addEventListener("keypress", this.resetTimer);
             }
 
-            //add animation delays if 2nd line of message
-            this.line2Delay = this.currentMessage.out2 || this.joke ? 1000 : 0
-            this.line2Life = this.currentMessage.out2 || this.joke ? 3000 : 1
+            //set animation delays
+            this.line1Life = this.currentMessage.duration
+            // //add animation delays dependant on 2nd line of message content
+            this.line2Delay = this.currentMessage.out2 || this.joke ? 500 : 0
+            this.line2Life = this.currentMessage.out2 || this.joke ? this.currentMessage.duration : 0
 
             this.running = true
             this.timeoutInitialDelay = setTimeout(this.output, this.currentMessage.initialDelay)

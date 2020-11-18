@@ -7,6 +7,15 @@
     border-radius: 5px;
     padding: 0;
 }
+
+.overlaid {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
 .uploader {
     cursor: pointer;
 }
@@ -17,6 +26,21 @@
 
 #processed-preview {
     display: none;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+}
+
+#processed_container {
+    display: none;
+}
+
+
+#processed-pic {
+    display: none;
+    z-index: 90;
+    width: 100%;
+    height: 100%;
 }
 
 #upload-images-container {
@@ -25,6 +49,14 @@
     justify-content: space-evenly;
     margin-top: 20px;
     align-items: flex-start;
+}
+
+#upload-images-container > div {
+    position: relative;
+    width: 40%;
+    height: 100%;
+    max-width: 200px;
+    padding: 0px;
 }
 
 #validate-upload {

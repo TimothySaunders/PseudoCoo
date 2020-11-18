@@ -29,7 +29,7 @@ export default class GameGrid extends Component {
         this.showConflict = this.showConflict.bind(this);
         this.hint = this.hint.bind(this);
         this.voiceConfigCommands = [
-            { words: ["solve", "soul", "souls"], function: this.solve, args: [] },
+            { words: ["solve", "soul", "souls", "song"], function: this.solve, args: [] },
             { words: ["save", "shave", "slave"], function: this.handleSaveGame, args: [] },
             { words: ["notes", "goats", "nods"], function: this.toggleNotes, args: [] },
             { words: ["verify"], function: this.toggleShowConflict, args: [] },
@@ -53,8 +53,8 @@ export default class GameGrid extends Component {
 
         if (this.props.cowTimer) {
             this.props.cowTimer.clearAll()
-            this.props.cowTimer.addImmediately(2, "PSEUDOCOO!", "Oh, I love this game!!")
-            this.props.cowTimer.addToQueue(16, "Need a hint?", "Just ask!!", true, 20, 30, true)
+            this.props.cowTimer.addImmediately(1, 1.5, "PSEUDOCOO!", "Oh, I love this game!!")
+            this.props.cowTimer.addToQueue(20, 2, "Need a hint?", "Just ask!!", true, 20, 30, true)
         }
 
         this.setState({ currentOrder: this.props.voiceOrder }, this.executeOrder66);
@@ -83,7 +83,7 @@ export default class GameGrid extends Component {
             this.setState({ gameState: prevState });
             confettiCannon();
             this.props.cowTimer.clearAll()
-            this.props.cowTimer.addImmediately(2, "I think you'll find *I* solved it...", "That confetti is for me, not you!!")
+            this.props.cowTimer.addImmediately(2, 1.5, "I think you'll find *I* solved it...", "That confetti is for me, not you!!")
         }
     }
 
@@ -153,7 +153,7 @@ export default class GameGrid extends Component {
     handleSaveGame = () => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
-        this.props.cowTimer.addImmediately(2, "Saved!", "")
+        this.props.cowTimer.addImmediately(1, 1.5, "Saved!", "")
     }
 
     hint = () => {
@@ -190,7 +190,7 @@ export default class GameGrid extends Component {
             confettiCannon();
         }
         
-        this.props.cowTimer.addImmediately(2, "Mooston, we have a problem...", "This should make it a bit easier!")
+        this.props.cowTimer.addImmediately(1, 1.5, "Mooston, we have a problem...", "This should make it a bit easier!")
     }
 
     toggleShowConflict = (event) => {
@@ -254,7 +254,7 @@ export default class GameGrid extends Component {
                         <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                         <button onClick={this.clear} >Clear</button>
                         <button onClick={this.toggleShowConflict} >Verify</button>
-                        <button onClick={this.hint} >Hint (£5)</button>
+                        <button onClick={this.hint} >Hint</button>
                         <button onClick={this.handleSaveGame} >Save</button>
                     </div>
                 </div>

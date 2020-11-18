@@ -17,7 +17,7 @@ export default class ImageUpload extends Component {
     componentDidMount(){
         if (this.props.cowTimer) {
             this.props.cowTimer.clearAll()
-            this.props.cowTimer.addImmediately(2, "This is where you can upload an image", "I dislike pen and paper sometimes too")
+            this.props.cowTimer.addImmediately(1.5, 2, "This is where you can upload an image", "None of that pen and paper nonsense!")
         }
     }
 
@@ -51,23 +51,32 @@ export default class ImageUpload extends Component {
 
     analyseImage = async () => {
         this.props.cowTimer.clearAll()
-        this.props.cowTimer.addImmediately(2, "", "", true, 12, 12)
+        this.props.cowTimer.addImmediately(2, 3, "", "", true, 12, 12)
         const secondImageBox = document.getElementById("processed-preview");
+        const thirdImageBox = document.getElementById("processed-pic");
+        const container = document.getElementById("processed_container");
+        container.style.display = "initial";
         secondImageBox.style.display = "initial";
         secondImageBox.src = "uploading.gif";
         const cleanImage = await uploadImage(this.state.imageFile);
         let output = "";
-
+        
         let fileReader2 = new FileReader();
         fileReader2.onload = async () => {
+            secondImageBox.style.opacity = 0.5;
+            thirdImageBox.style.display = "initial";
             secondImageBox.src = "processing.gif";
             output = await ImageParser(fileReader2.result, false, false);
             output = this.handleOutputNot81Chars(output);
-            secondImageBox.src = fileReader2.result;
-            this.setState ({ parsedOutput: output })
-            // this.props.cowTimer.clearAll();
+            this.setState({ parsedOutput: output })
         }
-        fileReader2.readAsDataURL(cleanImage)
+        let fileReader3 = new FileReader();
+        fileReader3.onload = () => {
+            thirdImageBox.src = fileReader3.result;
+        }
+        fileReader3.readAsDataURL(cleanImage);
+        fileReader2.readAsDataURL(cleanImage);
+        secondImageBox.style.display = "none";
     }
 
     handleOutputNot81Chars = (output) => {
@@ -109,6 +118,7 @@ export default class ImageUpload extends Component {
 
     handleOnDrop = async (event) => {
         event.preventDefault();
+        this.setState({ parsedOutput: "" });
         if (event.dataTransfer.files[0].type.includes("image")) {
             await this.setState({ imageFile: event.dataTransfer.files[0] });
             this.createPreview();
@@ -146,12 +156,12 @@ export default class ImageUpload extends Component {
         this.props.cowTimer.clearAll()
         if (this.state.parsedOutput.length === 81) {
             if (this.state.parsedOutput === blankGrid) {
-                this.props.cowTimer.addImmediately(0, "Uh-oh, that doesn't look right...", "Try using a better picture")
+                this.props.cowTimer.addImmediately(0.5, 1.5, "Uh-oh, that doesn't look right...", "Try using a better picture")
                 return (
                     <p>Could not find a sudoku grid, try taking a better picture</p>
                 );
             } else {
-                solvable ? this.props.cowTimer.addImmediately(0, "Hurray, that was magic, huh?", "Let's go!") : this.props.cowTimer.addImmediately(0, "Hmmm, it's not perfect...", "Can you spot and fix the mistakes for me?")
+                solvable ? this.props.cowTimer.addImmediately(0.5, 1.5, "Hurray, that was magic, huh?", "Let's go!") : this.props.cowTimer.addImmediately(0.5, 1.5, "Hmmm, it's not perfect...", "Can you spot and fix the mistakes for me?")
                 return (
                     <Fragment>
                         <ValidateGrid input={this.state.parsedOutput} onInput={this.editParsedOutput} />
@@ -160,7 +170,7 @@ export default class ImageUpload extends Component {
                 );
             }
         } else if (this.state.parsedOutput.length > 0) {
-            this.props.cowTimer.addImmediately(0, "Uh-oh, that doesn't look right...", "Try uploading the image again")
+            this.props.cowTimer.addImmediately(1, 1.5, "Uh-oh, that doesn't look right...", "Try uploading the image again")
             return (
                 <p>Something went wrong! Try uploading your image again.</p>
             );
@@ -192,13 +202,22 @@ export default class ImageUpload extends Component {
                             onDragOver={this.handleDragOver}
                             onDrop={this.handleOnDrop}
                         />
-                        <img
-                            id="processed-preview"
-                            className="image"
-                            src="uploading.gif"
-                            alt="uploadImage"
-                            draggable="false"
-                        />
+                        <div id="processed_container">
+                            <img
+                                id="processed-pic"
+                                className="image "
+                                // src="uploading.gif"
+                                alt="uploadImage"
+                                draggable="false"
+                            />
+                            <img
+                                id="processed-preview"
+                                className="image overlaid"
+                                src="uploading.gif"
+                                alt="uploadImage"
+                                draggable="false"
+                            />
+                        </div>
                     </div>
                 </div>
             </Fragment>

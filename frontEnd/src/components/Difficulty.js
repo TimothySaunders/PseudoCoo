@@ -7,11 +7,11 @@ const Difficulty = (props) => {
 
     if (props.cowTimer) {
         props.cowTimer.clearAll()
-        props.cowTimer.addImmediately(2, "How brave are you feeling today?", "")
-        props.cowTimer.addToQueue(10, "Might I suggest 'Mooooodium Rare'?", "You look like you love a challenge...")
-        props.cowTimer.addToQueue(10, "Oh, hurry up and choose!", "maybe I'll just choose for you...")
-        props.cowTimer.addToQueue(10, "MOOOOOO", "BAAAAA")
-        props.cowTimer.addToQueue(10, "", "", true, 15, 22)
+        props.cowTimer.addImmediately(2, 2.5, "How brave are you feeling today?", "")
+        props.cowTimer.addToQueue(10, 1.5, "Might I suggest 'Mooooodium Rare'?", "You look like you love a challenge...")
+        props.cowTimer.addToQueue(10, 1.5, "Oh, hurry up and choose!", "maybe I'll just choose for you...")
+        props.cowTimer.addToQueue(10, 1.5, "MOOOOOO", "BAAAAA")
+        props.cowTimer.addToQueue(10, 3, "", "", true, 15, 22)
     }
 
     const setDifficulty = (event) => {

@@ -9,8 +9,8 @@ const MenuView = (props) => {
 
         if (props.cowTimer){
             props.cowTimer.clearAll()
-            props.cowTimer.addImmediately(2, "mooooooooo", "Welcome to PseudoCoo!")
-            props.cowTimer.addToQueue(12, "", "", true, 15, 20)
+            props.cowTimer.addImmediately(2, 1.5, "mooooooooo", "Welcome to PseudoCoo!")
+            props.cowTimer.addToQueue(12, 3, "", "", true, 15, 20)
         }
 
         function makeChoice(event) {

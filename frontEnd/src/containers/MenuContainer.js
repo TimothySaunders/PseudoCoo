@@ -37,10 +37,10 @@ export default class MenuContainer extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.listening !== this.props.listening) {
             if (this.props.listening) {
-                this.state.cowTimer.addImmediately(0.5, "I'm listening!", "Try out these commands:<br />'menu' or 'confetti'")
+                this.state.cowTimer.addImmediately(0.5, 1.5, "I'm listening!", "Try out these commands:<br />'menu' or 'confetti'")
             } else {
                 if (this.props.firstTime === 0) {
-                    this.state.cowTimer.addImmediately(0.5, "Okay, I'll close my ears...", "")
+                    this.state.cowTimer.addImmediately(0.5, 1.5, "Okay, I'll close my ears...", "")
                 }
             }
         }
