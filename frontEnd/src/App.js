@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MenuContainer from './containers/MenuContainer'
 import './App.css';
+import voice from "./helpers/PseudoMoo";
 
 function App() {
+
+  const [listening, setListening] = useState(false);
+  const [firstTime, setFirstTime] = useState(1);
+
   let mainContainer;
 
   const resizeGrid = () => {
@@ -23,20 +28,35 @@ function App() {
         gameContainer.style.gridTemplateRows = "600px 1fr";
         buttons.style.width = ``;
       }
-    } catch(e) {}
+    } catch (e) { }
   }
 
   window.onresize = () => {
     // resize the game grid
     resizeGrid();
-    
+  }
+
+  const clickListenButton = () => {
+    setFirstTime(0);
+    if (listening) {
+      voice.stopListeningToStuff();
+      setListening(false);
+    } else {
+      voice.startListeningToStuff();
+      setListening(true);
+    }
   }
   return (
 
     <main id="main_container" ref={div => mainContainer = div}>
+      <button id="listen_button" onClick={clickListenButton}>
+        <div>
+          {listening ? "Stop voice recog" : "Start voice recog"}
+        </div>
+      </button>
       {/* Psuedocoo */}
-      <MenuContainer resizeGrid={resizeGrid} />
-    </main>
+      <MenuContainer resizeGrid={resizeGrid} listening={listening} firstTime={firstTime} />
+    </main >
 
   );
 }

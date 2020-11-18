@@ -198,12 +198,7 @@ export default class CowTimer{
     output = () => {
         // set line messages
         // if no output argument given then reply with joke instead
-        if (this.joke === true){
-            // the following if statement is for a bug-fix avoiding an infinite loop
-            // originating from calling clearAll() when there is 
-            // if (this.queue.length === 0) {
-            //     this.clearAll()
-            // }
+        if (this.joke === true) {
             const selectedJoke = this.randomItemFromList(this.jokes)
             document.getElementById("lineOne").innerHTML = selectedJoke.setup
             document.getElementById("lineTwo").innerHTML = selectedJoke.punchline
