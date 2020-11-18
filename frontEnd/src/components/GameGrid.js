@@ -32,7 +32,7 @@ export default class GameGrid extends Component {
             { words: ["solve", "soul", "souls", "song"], function: this.solve, args: [] },
             { words: ["save", "shave", "slave"], function: this.handleSaveGame, args: [] },
             { words: ["notes", "goats", "nods"], function: this.toggleNotes, args: [] },
-            { words: ["verify"], function: this.toggleShowConflict, args: [] },
+            { words: ["verify", "verified"], function: this.toggleShowConflict, args: [] },
             { words: ["hint", "hence", "mint", "paint", "hills"], function: this.hint, args: [] },
             { words: ["clear", "claire", "clare", "glare"], function: this.clear, args: [] },
         ];
