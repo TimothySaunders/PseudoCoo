@@ -68,7 +68,6 @@ export default class MenuContainer extends Component {
     }
 
     loadGame = (id) => {
-        console.log(id)
         const game = this.state.savedGames.find(game => game.id === parseInt(id));
         this.setState({ game: game });
     }

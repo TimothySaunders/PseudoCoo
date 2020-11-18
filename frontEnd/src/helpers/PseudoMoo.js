@@ -28,7 +28,6 @@ class PseudoMoo {
     }
  
     startListeningToStuff() {
-        console.log("in startListeningToStuff");
         if (!('webkitSpeechRecognition' in window)) {               // Will alert if browser
             alert("Browser does not support Speech recognition");
             return false;   // does not support
@@ -37,15 +36,12 @@ class PseudoMoo {
             recognition.continuous = true;
             recognition.interimResults = true;
             recognition.start();
-            console.log("in TRY3");
             this.recognition.addEventListener('end', recognition.start); // if recognition stops, start again.
         } catch (error) {
             console.log(error + " You are not the problem, I am.")
         }
-        console.log(this);
         recognition.onstart = function () {                         // verifies voice recognition has started.
             console.log('MooVoice recognition has started')
-
         }
 
     }
@@ -65,7 +61,6 @@ class PseudoMoo {
         recognition.onresult = function (event) {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {                     // Verify if the recognized text is the last with the isFinal property
-                    console.log(event.results[i][0].transcript.trim())
                     self.actOnCommands(self, event.results[i][0].transcript.trim());
                     return event.results[i][0].transcript;
                 }

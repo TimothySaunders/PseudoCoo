@@ -1,6 +1,4 @@
 .image {
-    /* width: 200px;
-    height: 200px; */
     width: 40%;
     max-width: 200px;
     border: 3px lightblue solid;
@@ -8,13 +6,6 @@
     padding: 0;
 }
 
-.overlaid {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    margin: 0px;
-    padding: 0px;
-}
 
 .uploader {
     cursor: pointer;
@@ -25,22 +16,54 @@
 }
 
 #processed-preview {
+    position: relative;
     display: none;
-    z-index: 99;
+    z-index: 999;
     width: 100%;
+    height: 100%;
+    top: 0px;
+}
+
+.hidden-pic {
+    display: none;
     height: 100%;
 }
 
-#processed_container {
-    display: none;
-}
-
-
 #processed-pic {
+    position: relative;
     display: none;
     z-index: 90;
     width: 100%;
     height: 100%;
+    top: 0px;
+}
+#preview-pic {
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 8;
+
+}
+#processing-gif {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 97%;
+    opacity: 0.8;
+    z-index: 99;
+    border: 0;
+    margin: 3px 3px;
+}
+
+#processed_container {
+    position: relative;
+    width: 40%;
+    height: 100%;
+    max-width: 200px;
+    padding: 0px;
+    display: none;
 }
 
 #upload-images-container {
@@ -51,13 +74,6 @@
     align-items: flex-start;
 }
 
-#upload-images-container > div {
-    position: relative;
-    width: 40%;
-    height: 100%;
-    max-width: 200px;
-    padding: 0px;
-}
 
 #validate-upload {
     width: 60%;
