@@ -40,25 +40,8 @@ function buildTemplate(url, includeMargin, includeFudgeFactor){
   return grid
 }
 
-function getTextGrid(objectOfArrays){
-  console.log("Converting output to string")
-  let output = ""
-  Object.values(objectOfArrays).forEach(rowArray => {
-    rowArray.forEach(value => {
-      if (output === ""){
-        output += value
-      } else {
-        output += value
-      }
-    })
-  })
-  return output
-}
-
 async function getGrid(grid, url){
   console.log("Starting Image processing")
-
-  const outputGrid = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[]}
 
   const scheduler = createScheduler();
   const worker1 = createWorker();

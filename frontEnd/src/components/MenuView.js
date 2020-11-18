@@ -3,8 +3,6 @@ import ImageUpload from '../containers/ImageUpload'
 import Difficulty from "./Difficulty"
 import LoadGame from './LoadGame'
 
-import voice from "../helpers/PseudoMoo";
-
 /* eslint-disable */
 
 const MenuView = (props) => {

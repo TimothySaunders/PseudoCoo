@@ -5,7 +5,7 @@ import PsChecker from '../helpers/PsChecker'
 
 export default function GridCell(props) {
     let display, notes;
-    let psc = new PsChecker;
+    let psc = new PsChecker();
     useEffect( () => {
         showNotes();
     });

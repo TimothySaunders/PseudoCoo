@@ -85,7 +85,7 @@ class PseudoMoo {
 
                 const splitWords = RESULT_OF_SPEECH.split(" ")
                 splitWords.forEach(word => {
-                    if (command.words.includes(word)) {
+                    if (command.words.includes(word.toLowerCase())) {
                         command.function(...command.args);
                     }
                 });

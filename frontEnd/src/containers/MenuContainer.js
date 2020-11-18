@@ -2,10 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { get, post, patch, remove } from '../helpers/requests'
 import MenuView from '../components/MenuView'
 import GameGrid from '../components/GameGrid'
-import sudoku from '../helpers/sudoku'
 import './MenuContainer.css'
 import '../helpers/CowTimer.css'
-import ImageUpload from './ImageUpload'
 import voice from '../helpers/PseudoMoo'
 import CowTimer from '../helpers/CowTimer';
 
@@ -36,12 +34,14 @@ export default class MenuContainer extends Component {
         this.setState({ cowTimer: new CowTimer() });
     }
 
-    componentDidUpdate() {
-        if (this.props.listening) {
-            this.state.cowTimer.addImmediately(0.5, "I'm listening!", "Try out these commands:<br />'menu' or 'confetti'")
-        } else {
-            if (this.props.firstTime === 0) {
-                this.state.cowTimer.addImmediately(0.5, "Okay, I'll close my ears...", "")
+    componentDidUpdate(prevProps) {
+        if (prevProps.listening !== this.props.listening) {
+            if (this.props.listening) {
+                this.state.cowTimer.addImmediately(0.5, "I'm listening!", "Try out these commands:<br />'menu' or 'confetti'")
+            } else {
+                if (this.props.firstTime === 0) {
+                    this.state.cowTimer.addImmediately(0.5, "Okay, I'll close my ears...", "")
+                }
             }
         }
     }
