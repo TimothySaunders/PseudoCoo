@@ -1,0 +1,67 @@
+#cow-container {
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    bottom: -600px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(24, 1fr);
+    transition-timing-function: ease;
+    transition: bottom 2s;
+    max-width: 800px;
+    overflow: hidden;
+  }
+  
+  .cow-animation {
+    width: 100%;
+    position: relative;
+    grid-column: 1 / span 12;
+    grid-row: 1 / span 24; 
+  }
+  
+  #cow {
+    transition-timing-function: ease;
+    z-index: 10;
+  }
+  
+  #speech-bubble {
+    visibility: hidden;
+    z-index: 10;
+  }
+  
+  .cow-speech {
+    width: 100%;
+    position: relative;
+    color: darkorange;
+    font-size: min(3.5vw, 28px);
+    font-weight: 800;
+    margin: 0;
+    transition-timing-function: ease;
+    opacity: 0;
+    z-index:11;
+    white-space: initial;
+    overflow: hidden;
+    grid-column: 5 / span 7;
+  }
+  
+  #lineOne {
+    grid-row: 3 / span 4; 
+    visibility: hidden;
+  }
+  
+  #lineTwo {
+    grid-row: 7 / span 4;
+    text-align: right;
+    visibility: hidden;
+  }
+  
+  .fade-in {
+    opacity: 1;
+    transition: opacity 0s linear 2s, opacity 2000ms;
+  }
+  
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0s linear 2s, opacity 2500ms;
+  }

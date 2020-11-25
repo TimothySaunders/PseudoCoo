@@ -1,4 +1,4 @@
-const { createWorker } = require('tesseract.js');
+const { createWorker, createScheduler } = require('tesseract.js');
 // const sizeOf = require('image-size');
 
 
@@ -37,55 +37,53 @@ function buildTemplate(url, includeMargin, includeFudgeFactor){
           })
     }
   })
-  // console.log(grid)
   return grid
-}
-
-function getTextGrid(objectOfArrays){
-  console.log("Converting output to string")
-  let output = ""
-  Object.values(objectOfArrays).forEach(rowArray => {
-    rowArray.forEach(value => {
-      if (output === ""){
-        output += value
-      } else {
-        output += value
-      }
-    })
-  })
-  return output
 }
 
 async function getGrid(grid, url){
   console.log("Starting Image processing")
 
-  const outputGrid = {0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[], 7:[], 8:[]}
+  const scheduler = createScheduler();
+  const worker1 = createWorker();
+  const worker2 = createWorker();
+  const worker3 = createWorker();
 
-  for (let index=0; index<9; index++){
-    const worker = createWorker();
+  await worker1.load();
+  await worker1.loadLanguage('eng');
+  await worker1.initialize('eng');
+  await worker1.setParameters({
+    tessedit_char_whitelist: '123456789',
+    });
+  await worker2.load();
+  await worker2.loadLanguage('eng');
+  await worker2.initialize('eng');
+  await worker2.setParameters({
+    tessedit_char_whitelist: '123456789',
+  });
+  await worker3.load();
+  await worker3.loadLanguage('eng');
+  await worker3.initialize('eng');
+  await worker3.setParameters({
+    tessedit_char_whitelist: '123456789',
+  });
 
-      console.log(`Parsing Image, Row ${index+1}`);
+  scheduler.addWorker(worker1);
+  scheduler.addWorker(worker2);
+  scheduler.addWorker(worker3);
 
-      await worker.load();
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
-      await worker.setParameters({
-        tessedit_char_whitelist: '123456789',
-      });
-      const values = [];
-      for (let i = 0; i < grid[index].length; i++) {
-        const { data: { text } } = await worker.recognize(url, { rectangle: grid[index][i] });
-        let number = ".";
-        if (text.length > 0){
-          number = parseInt(text.replace("\n", ""))
-        } 
-        values.push(number);
-      }
-      outputGrid[index] = values
-      await worker.terminate();
-  }
+  return (async () => {
 
-  return outputGrid;
+    const results = await Promise.all(grid.flat().map((rectangle) => (
+      scheduler.addJob("recognize", url, { rectangle })
+    )));
+    await scheduler.terminate();
+    return results.map(r => r.data.text).map(cell => {
+      cell = cell.replace("\n", "");
+      return cell === "" ? "." : cell;
+    }).join("");
+
+  })();
+
 }
 
   function drawGridFromString(string){
@@ -117,8 +115,8 @@ async function getGrid(grid, url){
 
 export default async function parseImage(url, margins=false, fudgefactor=false){
   const gridTemplate = buildTemplate(url, margins, fudgefactor)
-  const outputGrid = await getGrid(gridTemplate, url)
-  const gridString = getTextGrid(outputGrid)
+  const gridString = await getGrid(gridTemplate, url)
+  console.log(gridString);
   drawGridFromString(gridString)
   return gridString
 }
