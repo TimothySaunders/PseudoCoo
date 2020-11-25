@@ -5,17 +5,16 @@ import PsChecker from '../helpers/PsChecker'
 
 export default function GridCell(props) {
     let display, notes;
-    let psc = new PsChecker;
+    let psc = new PsChecker();
     useEffect( () => {
         showNotes();
     });
 
-    const visualiseConflict = function(){  // ! this could be improved to regodnised all conflicting items, currently identifies the most recent addition as the conflicting value.
+    const visualiseConflict = function(){  // ! this could be improved to recognise all conflicting items, currently identifies the most recent addition as the conflicting value.
         let value = false;
         if(props.cell.editable && props.showConflictToggle && (props.cell.value!=="." || props.cell.value!=="")){
             
-            value = !psc.validateEntryStringGrid(props.index,props.grid,props.cell.value)
-            console.log("in cell + " + props.index + ", result :" + value)
+            value = !psc.validateEntryStringGrid(props.index, props.grid, props.cell.value)
         }
         return value;
     }
@@ -24,14 +23,9 @@ export default function GridCell(props) {
         return ( props.hint !=null && props.hint[0]===props.index)
     }
 
-    const showNotes = function() {
-        // if (["0", ".", ""].includes(display.textContent)) {
-            const sorted = props.cell.notes.sort();
-
-            notes.textContent = sorted.toString().split(",").join(" ");
-        // } else {
-            // notes.textContent = "";
-        // }
+    const showNotes = function () {
+        const sorted = props.cell.notes.sort();
+        notes.textContent = sorted.toString().split(",").join(" ");
     }
     const getClassName = function() {
         let className = "grid-cell ";
@@ -41,8 +35,7 @@ export default function GridCell(props) {
             className += "locked ";
         }
 
-        if (visualiseConflict()){
-            console.log("if visualise conflict is:  " + visualiseConflict())
+        if (visualiseConflict()) {
             className += "conflicting ";
         }
         if (isHint()){
@@ -69,7 +62,6 @@ export default function GridCell(props) {
         document.querySelectorAll(".display").forEach(el => el.style.backgroundColor = "");
         event.target.value = "";
         display.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
-        props.listenForDigit(giveNumToDisplay);
     }
 
     const giveNumToDisplay = (num) => {
@@ -79,22 +71,11 @@ export default function GridCell(props) {
         if (num.length > 1) {
             num = num.slice(-1);
         }
-        
-        // setGameGridState(num);
-        if (display) {
-        props.onNumberInput(props.index, props.cell, display, num);}
-        // showNotes();
-    }
 
-    // const setGameGridState = (input) => {
-        // let newCell = {
-        //     value: value,
-        //     editable: props.cell.editable,
-        //     notes: props.cell.notes
-        // }
-        
-    //     props.onNumberInput(props.index, props.cell, display, num);
-    // }
+        if (display) {
+            props.onNumberInput(props.index, props.cell, display, num);
+        }
+    }
 
     const setDisplay = (event) => {
         let num = event.target.value;

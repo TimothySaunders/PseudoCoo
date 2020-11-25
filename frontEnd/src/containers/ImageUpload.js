@@ -3,9 +3,7 @@ import './ImageUpload.css';
 import sudoku from '../helpers/sudoku';
 import { uploadImage } from "../helpers/requests.js";
 import ImageParser from '../helpers/ImageParser'
-
 import ValidateGrid from "../components/ValidateGrid";
-
 
 export default class ImageUpload extends Component {
     constructor(props) {
@@ -16,10 +14,10 @@ export default class ImageUpload extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         if (this.props.cowTimer) {
-            this.props.cowTimer.startTimer(18, 18, "I hate pen and paper too...")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 12000)
+            this.props.cowTimer.clearAll()
+            this.props.cowTimer.addImmediately(1.5, 2, "This is where you can upload an image", "None of that pen and paper nonsense!");
         }
     }
 
@@ -52,22 +50,44 @@ export default class ImageUpload extends Component {
     }
 
     analyseImage = async () => {
-        this.props.cowTimer.startTimer(12,12, "joke");
-        const secondImageBox = document.getElementById("processed-preview");
-        secondImageBox.style.display = "initial";
-        secondImageBox.src = "uploading.gif";
-        const cleanImage = await uploadImage(this.state.imageFile);
-        let output = "";
+        this.props.cowTimer.clearAll()
+        this.props.cowTimer.addImmediately(2, 3, "", "", true, 12, 12);
 
-        let fileReader2 = new FileReader();
-        fileReader2.onload = async () => {
-            secondImageBox.src = "processing.gif";
-            output = await ImageParser(fileReader2.result, false, false)
-            secondImageBox.src = fileReader2.result;
-            this.setState ({ parsedOutput: output })
-            this.props.cowTimer.endTimer();
+        const container = document.getElementById("processed_container");
+        const uploadingPic = document.getElementById("uploading-gif");
+        const previewPic = document.getElementById("preview-pic");
+        const processingPic = document.getElementById("processing-gif");
+        previewPic.style.display = "none";
+        container.style.display = "none";
+        uploadingPic.style.display = "initial";
+
+        const cleanImage = await uploadImage(this.state.imageFile);
+        let fileReader = new FileReader();
+        let output = "";
+        fileReader.onload = async () => {
+            container.style.display = "flex";
+            uploadingPic.style.display = "none";
+            previewPic.src = fileReader.result;
+            previewPic.style.display = "initial";
+            processingPic.style.display = "initial";
+
+            output = await ImageParser(fileReader.result, false, false);
+            output = this.handleOutputNot81Chars(output);
+            this.setState({ parsedOutput: output });
+            processingPic.style.display = "none";
         }
-        fileReader2.readAsDataURL(cleanImage)
+
+        fileReader.readAsDataURL(cleanImage);
+    }
+
+    handleOutputNot81Chars = (output) => {
+        const len = output.length;
+        if (len < 81) {
+            output += ".".repeat(81 - len);
+        } else if (len > 81) {
+            output = output.substr(0, 81);
+        }
+        return output;
     }
 
     handleValidate = () => {
@@ -99,6 +119,7 @@ export default class ImageUpload extends Component {
 
     handleOnDrop = async (event) => {
         event.preventDefault();
+        this.setState({ parsedOutput: "" });
         if (event.dataTransfer.files[0].type.includes("image")) {
             await this.setState({ imageFile: event.dataTransfer.files[0] });
             this.createPreview();
@@ -109,8 +130,7 @@ export default class ImageUpload extends Component {
     }
 
     returnHome = () => {
-        clearTimeout("joke")
-        this.props.returnHome();
+        this.props.returnHome("mainMenu");
     }
 
     editParsedOutput = (index, value) => {
@@ -119,22 +139,30 @@ export default class ImageUpload extends Component {
         this.setState({ parsedOutput: parsedGrid.join("") });
     }
     gameIsSolvable = () => {
-        if (this.state.parsedOutput.length > 0) {
-            const solution = sudoku.sudoku.solve(this.state.parsedOutput);
-            return solution ? true : false;
+        try {
+            if (this.state.parsedOutput.length > 0) {
+                const solution = sudoku.sudoku.solve(this.state.parsedOutput);
+                return solution ? true : false;
+            }
+            return false;
+        } catch (e) {
+            console.log(e);
+            return false;
         }
-        return false;
     }
 
     renderValidateGrid() {
         const blankGrid = ".................................................................................";
         const solvable = this.gameIsSolvable();
+        this.props.cowTimer.clearAll()
         if (this.state.parsedOutput.length === 81) {
             if (this.state.parsedOutput === blankGrid) {
+                this.props.cowTimer.addImmediately(0.5, 1.5, "Uh-oh, that doesn't look right...", "Try using a better picture");
                 return (
                     <p>Could not find a sudoku grid, try taking a better picture</p>
                 );
             } else {
+                solvable ? this.props.cowTimer.addImmediately(0.5, 1.5, "Hurray, that was magic, huh?", "Let's go!") : this.props.cowTimer.addImmediately(0.5, 1.5, "Hmmm, it's not perfect...", "Can you spot and fix the mistakes for me?");
                 return (
                     <Fragment>
                         <ValidateGrid input={this.state.parsedOutput} onInput={this.editParsedOutput} />
@@ -143,6 +171,7 @@ export default class ImageUpload extends Component {
                 );
             }
         } else if (this.state.parsedOutput.length > 0) {
+            this.props.cowTimer.addImmediately(1, 1.5, "Uh-oh, that doesn't look right...", "Try uploading the image again");
             return (
                 <p>Something went wrong! Try uploading your image again.</p>
             );
@@ -175,17 +204,30 @@ export default class ImageUpload extends Component {
                             onDrop={this.handleOnDrop}
                         />
                         <img
-                            id="processed-preview"
-                            className="image"
+                            id="uploading-gif"
+                            className="image hidden-pic fill-div"
                             src="uploading.gif"
                             alt="uploadImage"
                             draggable="false"
                         />
+                        <div id="processed_container">
+                            <img
+                                id="preview-pic"
+                                className="image hidden-pic fill-div"
+                                alt="uploadImage"
+                                draggable="false"
+                            />
+                            <img
+                                id="processing-gif"
+                                className="image hidden-pic fill-div"
+                                src="processing.gif"
+                                alt="uploadImage"
+                                draggable="false"
+                            />
+                        </div>
                     </div>
                 </div>
             </Fragment>
         )
     }
-
-
 }

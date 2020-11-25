@@ -5,13 +5,13 @@ import LoadGameItem from "./LoadGameItem.js";
 export default function LoadGame(props) {
 
     if (props.cowTimer) {
-        props.cowTimer.startTimer(18, 18, "Here's one I did earlier...")
-        setTimeout(()=>{props.cowTimer.startTimer(12, 25, "MOOOOOOOOO")}, 12000)
+        props.cowTimer.clearAll()
+        props.cowTimer.addImmediately(1, 1.5, "Here's one I did earlier...", "Finish it off for me, will ya?")
+        props.cowTimer.addToQueue(15, 3, "", "", true, 15, 20)
     }
 
     const handleLoadGame = (game) => {
         const gameId = game.id;
-        props.cowTimer.endTimer();
         props.loadGame(gameId);
     }
 
@@ -27,8 +27,7 @@ export default function LoadGame(props) {
     })
 
     const returnHome = () => {
-        props.cowTimer.endTimer();
-        props.returnHome();
+        props.returnHome("mainMenu");
     }
 
     return (

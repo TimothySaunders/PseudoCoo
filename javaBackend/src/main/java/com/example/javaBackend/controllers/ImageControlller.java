@@ -45,7 +45,5 @@ public class ImageControlller {
             e.printStackTrace();
             return new ResponseEntity(null, HttpStatus.I_AM_A_TEAPOT);
         }
-
     }
-
 }

@@ -4,7 +4,8 @@ import "./GameGrid.css";
 import sudoku from '../helpers/sudoku';
 import PsChecker from '../helpers/PsChecker';
 import Parser from "../helpers/StringParser";
-import confetti from "canvas-confetti";
+import confettiCannon from "../helpers/ConfettiCannon";
+import voice from '../helpers/PseudoMoo'
 
 
 const sp = new Parser();
@@ -18,19 +19,24 @@ export default class GameGrid extends Component {
             gameState: [],
             writeNotes: false,
             showConflictToggle: false,
-            grid:"",
-            hint:null,
-            currentOrder:"",
-            preventDoubleExecution:1
+            grid: "",
+            hint: null,
+            currentOrder: "",
+            preventDoubleExecution: 1
         }
         this.handleNumberInput = this.handleNumberInput.bind(this);
         this.toggleNotes = this.toggleNotes.bind(this);
         this.showConflict = this.showConflict.bind(this);
         this.hint = this.hint.bind(this);
-        
-
+        this.voiceConfigCommands = [
+            { words: ["solve", "soul", "souls", "song"], function: this.solve, args: [] },
+            { words: ["save", "shave", "slave"], function: this.handleSaveGame, args: [] },
+            { words: ["notes", "goats", "nods"], function: this.toggleNotes, args: [] },
+            { words: ["verify", "verified"], function: this.toggleShowConflict, args: [] },
+            { words: ["hint", "hence", "mint", "paint", "hills"], function: this.hint, args: [] },
+            { words: ["clear", "claire", "clare", "glare"], function: this.clear, args: [] },
+        ];
     }
-
 
     componentDidMount() {
         this.props.resizeGrid();
@@ -42,79 +48,24 @@ export default class GameGrid extends Component {
             gameState = sp.getObjectsFromSavedString(this.props.game.gridValues);
         }
         let getGrid = sp.getRawStringFromObjects(gameState);
-        
+
         this.setState({ gameState: gameState, grid: getGrid });
 
-        if (this.props.cowTimer){
-            this.props.cowTimer.endTimer()
-            this.props.cowTimer.startTimer(30, 30, "PSEUDOCOO!")
-            setTimeout(()=>{this.props.cowTimer.startTimer(14, 20, "hint")}, 28000)
+        if (this.props.cowTimer) {
+            this.props.cowTimer.clearAll()
+            this.props.cowTimer.addImmediately(1, 1.5, "PSEUDOCOO!", "Oh, I love this game!!")
+            this.props.cowTimer.addToQueue(20, 2, "Need a hint?", "Just ask!!", true, 20, 30, true)
         }
 
-       
-        this.setState({currentOrder: this.props.voiceOrder}, this.executeOrder66)
+        voice.setConfigureCommands(this.voiceConfigCommands);
     }
-  
-    // componentDidUpdate(){
-    //     let order = this.state.currentOrder;
-    //     if (order==="solve"){
-    //         console.log("solve called within gamegrid")
-            
-    //     }
-    // }
-    executeVoiceOrders = (order) => {
-        console.log("Execute order");
-        let prev = this.state.preventDoubleExecution
-        prev +=1;
-
-
-        // if (prev%2===0) {
-        if (order==="solve"){
-            this.solve();
-            this.setState({preventDoubleExecution:prev})  
-        }
-        if (order==="notes"){
-            this.toggleNotes();
-            this.setState({preventDoubleExecution:prev}) 
-        }
-        if (order==="clear"){
-            this.clear();  
-            this.setState({preventDoubleExecution:prev})
-        }
-        if (order==="verify"){
-            this.toggleShowConflict();  
-            this.setState({preventDoubleExecution:prev})
-        }
-        if (order==="hint"){
-            this.hint();  
-            this.setState({preventDoubleExecution:prev})
-        }
-        if (order==="save"){
-            this.handleSaveGame(); 
-            this.setState({preventDoubleExecution:prev}) 
-        }
-        if (order==="confetti"){
-            this.confettiCannon();  
-            this.setState({preventDoubleExecution:prev})
-        }
-        // }
-        // if (order==="joke"){
-        //     this.getCowWithAjoke?();  
-        // }
-        
-        this.props.resetOrder();
-        // prev = this.state.preventDoubleExecution
-        
-        // this.setState({preventDoubleExecution:prev})
-
-    }
-
 
     toggleNotes() {
         this.setState({ writeNotes: !this.state.writeNotes });
     }
+
     solve = () => {
-        // this.clear(); //! Needs to be run so that it eliminates any invalid entries, trying to solve 
+        this.clear(); //! Needs to be run so that it eliminates any invalid entries, trying to solve 
         // const solution = sudoku.sudoku.solve(this.props.game.gridValues);
         // let toConvert = sp.getRawStringFromObjects(this.state.gameState)
         // toConvert.replace("0", ".");
@@ -129,10 +80,9 @@ export default class GameGrid extends Component {
                 return cell;
             });
             this.setState({ gameState: prevState });
-            this.confettiCannon();
-            this.props.cowTimer.endTimer();
-            this.props.cowTimer.startTimer(18, 18, "I solved it! That confetti is for me, not you!!")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 15000)
+            confettiCannon();
+            this.props.cowTimer.clearAll()
+            this.props.cowTimer.addImmediately(2, 1.5, "I think you'll find *I* solved it...", "That confetti is for me, not you!!")
         }
     }
 
@@ -155,61 +105,19 @@ export default class GameGrid extends Component {
             solvable = false;
         }
         return solvable;
-
     }
 
     gridIsFilled = () => {
-        // let grid = sp.getRawStringFromObjects(this.state.gameState);
         return !sp.getRawStringFromObjects(this.state.gameState).includes(".")
-        // return !(grid).includes(".")
-        
     }
 
     gridIsSolved = () => {
         const currentGameState = sp.getRawStringFromObjects(this.state.gameState);
-        console.log(currentGameState);
         const solution = sudoku.sudoku.solve(currentGameState);
-        console.log(solution);
         if (currentGameState === solution) {
             return true;
         }
         return false;
-    }
-
-    confettiCannon() {
-        var count = 250;
-        var defaults = {
-            origin: { y: 0.8 }
-        };
-
-        function fire(particleRatio, opts) {
-            confetti(Object.assign({}, defaults, opts, {
-                particleCount: Math.floor(count * particleRatio)
-            }));
-        }
-
-        fire(0.25, {
-            spread: 56,
-            startVelocity: 55,
-        });
-        fire(0.2, {
-            spread: 120,
-        });
-        fire(0.55, {
-            spread: 180,
-            decay: 0.90,
-            scalar: 0.8
-        });
-        fire(0.1, {
-            spread: 120,
-            startVelocity: 25,
-            decay: 0.92,
-            scalar: 1.2
-        });
-        fire(0.2, {
-            spread: 120,
-            startVelocity: 55,
-        });
     }
 
     // handleNumberInput(index, newCell, display) {
@@ -231,10 +139,9 @@ export default class GameGrid extends Component {
         }
         updated[index] = cell;
         if (this.gridIsSolved()) {
-            this.confettiCannon();
-            this.props.cowTimer.endTimer()
-            this.props.cowTimer.startTimer(18, 18, "Cow-gratulations!!")
-            setTimeout(()=>{this.props.cowTimer.endTimer()}, 15000)
+            confettiCannon();
+            this.props.cowTimer.startTimer(2, 18, 18, false, "Cow-gratulations!!")
+                .then(() => this.props.cowTimer.endTimer())
         }
         display.textContent = ["0", "."].includes(cell.value) ? "" : cell.value;
         this.setState({ gameState: updated });
@@ -243,85 +150,55 @@ export default class GameGrid extends Component {
     handleSaveGame = () => {
         const gridValues = sp.convertObjectsToSaveString(this.state.gameState);
         this.props.saveGame(gridValues);
-        this.props.cowTimer.endTimer()
-        this.props.cowTimer.startTimer(20, 20, "Saved!")
-        setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
+        this.props.cowTimer.addImmediately(1, 1.5, "Saved!", "")
     }
-
 
     hint = () => {
         /// solve the sudoku
         let toConvert = sp.getRawStringFromObjects(this.state.gameState);
-        if(toConvert.indexOf(".") !== -1){ 
-        toConvert.replace("0", ".");
-        const solution = sudoku.sudoku.solve(toConvert);
-        let hints = []
-        if (solution) {
-            console.log("solution: " + solution + "< --- " );
-            let gridObjects = this.state.gameState
-           for(let i=0;i< gridObjects.length; i++){                  //
-               if (gridObjects[i].editable) {                     //
-                   hints.push([i,solution[i]])     // should create a list of the solutions (excluding uneditable cells) 
-               }
-           } 
+        if (toConvert.indexOf(".") !== -1) {
+            toConvert.replace("0", ".");
+            const solution = sudoku.sudoku.solve(toConvert);
+            let hints = []
+            if (solution) {
+                let gridObjects = this.state.gameState
+                for (let i = 0; i < gridObjects.length; i++) {                  //
+                    if (gridObjects[i].editable) {                     //
+                        hints.push([i, solution[i]])     // should create a list of the solutions (excluding uneditable cells) 
+                    }
+                }
+            }
+            if (hints.length > 0) {
+                this.setState({ hint: hints[0] });
+                let index = hints[0][0];
+                let value = hints[0][1];
+                let updated = this.state.gameState;
+                let cell = updated[index];
+                cell.editable = false;
+                cell.value = value;
+                updated[index] = cell;
 
-
-
-
-           
-        }
-        if (hints.length >0) {
-        this.setState({hint: hints[0]});
-        // this.setState(gameState[hints[0][0]].editable:false,gameState[hints[0][0]].value=hints[0][1])
-        let index = hints[0][0];
-        let value = hints[0][1];
-        let updated = this.state.gameState;
-        let cell = updated[index];
-        cell.editable = false;
-        cell.value = value;
-        updated[index]=cell;
-
-        let a = this.state.preventDoubleExecution;
-        if(a%2===0) {
-            // console.log("a: " + a)
-        this.setState({gameState: updated});
-        }
-        }
+                this.setState({ gameState: updated });
+            }
         }
         if (this.gridIsSolved()) {
-            this.confettiCannon();
+            confettiCannon();
         }
-        // this.setState({gameState[index].editable: false})
-            
-            
-            // ,gameState[hints[0][0]].value=hints[0][1])
-        // console.log("hints: " + hints[0] + "< --- " );
-        // console.log("hints: " + hints[1] + "< --- " );
-        // console.log("hints: " + hints[2] + "< --- " );
-
-        /// comlpile a list of all the indexes for the editable cells
-        /// pick a random index
-        /// pass the solution into that cells notes. 
         
-        this.props.cowTimer.endTimer();
-        this.props.cowTimer.startTimer(18, 18, "Mooston, we have a problem...")
-        setTimeout(()=>{this.props.cowTimer.startTimer(18, 25, "hint")}, 20000)
+        this.props.cowTimer.addImmediately(1, 1.5, "Mooston, we have a problem...", "This should make it a bit easier!")
     }
-    
-    toggleShowConflict = (event) => {
+
+    toggleShowConflict = () => {
+        const button = document.getElementById("verify_button");
         if (!this.state.showConflictToggle) {
-            event.target.textContent = "Hide verify";
+            button.textContent = "Hide verify";
         } else {
-            event.target.textContent = "Verify";
+            button.textContent = "Verify";
         }
         this.setState({ showConflictToggle: !this.state.showConflictToggle })
-        // this.setState({ grid : sp.getRawStringFromObjects(this.state.gameState)})
-
     }
 
     showConflict(i, grid, cell) {
-
-        // let grid  = sp.getRawStringFromObjects(this.state.gameState);
         if (this.toggleShowConflict) {
             return psc.validateEntry(i, grid, cell.value)
         }
@@ -332,45 +209,35 @@ export default class GameGrid extends Component {
     }
 
     returnHome = () => {
-        this.props.cowTimer.endTimer()
-        this.props.returnHome();
-    }
-
-
-    componentDidUpdate() {
-
-        let order = this.props.voiceOrder;
-        if (order!==""){
-            this.executeVoiceOrders(order)
-        }
-
+        this.props.returnHome("mainMenu");
     }
 
     render() {
-        // console.log("solve:  " + this.props.voiceOrder + '< ---')
-        // let order = this.props.voiceOrder;
-     
-        // if (order!==""){
-
-        //     this.executeVoiceOrders(order)
-            
-        
-        // }
-
         const gridCells = this.state.gameState.map((cell, i) => {
-
-
             if (!cell.editable) {
-            return (
-            
-                <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} hint={this.state.hint}/>
-            )
-        } else { return (<GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} grid={this.state.grid} showConflict={this.showConflict} showConflictToggle={this.state.showConflictToggle} hint={this.state.hint}/>)  }
+                return (
+                    <GridCell key={i} index={i} cell={cell} onNumberInput={this.handleNumberInput} listenForDigit={this.props.listenForDigit} hint={this.state.hint} />
+                )
+            } else {
+                return (
+                    <GridCell
+                        key={i}
+                        index={i}
+                        cell={cell}
+                        onNumberInput={this.handleNumberInput}
+                        listenForDigit={this.props.listenForDigit}
+                        grid={this.state.grid}
+                        showConflict={this.showConflict}
+                        showConflictToggle={this.state.showConflictToggle}
+                        hint={this.state.hint}
+                    />
+                )
+            }
         });
-
 
         return (
             <Fragment>
+
                 <div className="menu-grid">
                     <button className="return-home" onClick={this.returnHome}> Return to Menu</button>
                 </div>
@@ -382,13 +249,12 @@ export default class GameGrid extends Component {
                         <button onClick={this.solve} >Solve</button>
                         <button onClick={this.toggleNotes}>{this.state.writeNotes ? "Enter numbers" : "Enter notes"}</button>
                         <button onClick={this.clear} >Clear</button>
-                        <button onClick={this.toggleShowConflict} >Verify</button>
-                        <button onClick={this.hint} >Hint (£5)</button>
+                        <button id="verify_button" onClick={this.toggleShowConflict} >Verify</button>
+                        <button onClick={this.hint} >Hint</button>
                         <button onClick={this.handleSaveGame} >Save</button>
                     </div>
-                    
-
                 </div>
+
             </Fragment>
         )
     }
